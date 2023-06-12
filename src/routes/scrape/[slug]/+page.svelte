@@ -105,7 +105,8 @@
 		const data = await fetchRedditData(
 			`${subName == '""' ? '' : 'r/' + subName}?${nextSet == '' ? '' : 'after=' + nextSet}`,
 		);
-		if (data.error || data.html == undefined) {
+		console.log(data);
+		if (data.error) {
 			postsSuccess = false;
 			return;
 		}
