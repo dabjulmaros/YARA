@@ -2,12 +2,17 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Sveltekit + Electron</title>
+		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		<meta name="viewport" content="width=device-width" />
+    <!-- <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"> -->
+    <link rel="stylesheet" href="%sveltekit.assets%/css/pico.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sveltekit + Electron</title>
 		%sveltekit.head%
 	</head>
 	<body>
-		<div id="svelte">%sveltekit.body%</div>
+	  <div id="svelte">
+      %sveltekit.body%
+    </div>
 	</body>
 </html>

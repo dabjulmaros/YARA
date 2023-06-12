@@ -1,0 +1,79 @@
+<script context="module">
+	import { htmlDecode } from '$lib/utils/htmlDecode.js';
+</script>
+
+<!-- Need to fix issue where audio loads before video -->
+<script>
+	export let expando;
+	let video;
+	let audio;
+	let paused;
+	let currentTime;
+
+	$: if (paused != undefined) togglePlaying();
+
+	function toggleMute(e) {
+		video.muted = !video.muted;
+		audio.muted = video.muted;
+		e.preventDefault();
+	}
+	function togglePlaying() {
+		if (currentTime == undefined) return;
+
+		if (!paused) {
+			video.play();
+			audio.play();
+		} else {
+			video.pause();
+			audio.pause();
+		}
+		audio.currentTime = currentTime;
+	}
+
+	function getVideoSrc(expando) {
+		let baseURL = expando.match(/data-seek-preview-url="([^"]+)"/)[1];
+		const mpdList = expando.match(/data-mpd-url="([^"]+)"/)[1];
+		fetch(htmlDecode(mpdList))
+			.then((res) => {
+				if (res.ok) return res.text();
+			})
+			.then((text) => {
+				let audioExists = text.includes('DASH_audio.mp4');
+				let quality = text.match(/DASH_(\d+).mp4/g);
+				// let highest = 0
+				// for(let match of mpd.matchAll(/DASH_(\d+).mp4/g)) if(match[1]>highest) highest = match[1]
+				// let use =  `DASH_${highest}.mp4`
+				//assumes that the mpd file has the highest quality as the last
+				let use = quality[quality.length - 1];
+				video.src = baseURL.replace('DASH_96.mp4', use);
+				if (audioExists) {
+					const source = document.createElement('source');
+					source.src = baseURL.replace('DASH_96.mp4', 'DASH_audio.mp4');
+					audio.appendChild(source);
+				}
+			});
+	}
+</script>
+
+<video
+	muted
+	autoplay
+	loop
+	controls
+	src={getVideoSrc(expando)}
+	bind:this={video}
+	bind:paused
+	bind:currentTime
+	on:click={toggleMute}
+>
+	<audio muted autoplay loop bind:this={audio} />
+</video>
+
+<style>
+	video {
+		height: fit-content;
+		max-height: 47vh;
+		max-width: 100%;
+		margin: 0 auto;
+	}
+</style>
