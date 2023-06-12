@@ -17,6 +17,7 @@ What it does right now.
 - Simple UI that doesnt make me want to pull my eyes out
 - Videos, images, text post, and iframe all are being rendered
 
+As to why I'm using Electron for this application and not deploying it in a site somewhere... I wanted to use YARA as the name, and by being an electron app I can use app as tha A :).
 
 # Made using: Sveltekit + Electron
 
