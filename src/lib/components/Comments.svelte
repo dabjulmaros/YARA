@@ -5,17 +5,19 @@
 
 <div class="parent">
 	{#each commentsArr as comment}
-		<details open>
-			<summary>
-				<small class="author">{comment.data.author}</small>
-				<div class="comment">{htmlDecode(comment.data.body)}</div>
-			</summary>
-			<div class="child">
-				{#if comment.data.replies}
-					<svelte:self commentsArr={comment.data.replies.data.children} />
-				{/if}
-			</div>
-		</details>
+		{#if comment.kind !== 'more'}
+			<details open>
+				<summary>
+					<small class="author">{comment.data.author}</small>
+					<div class="comment">{htmlDecode(comment.data.body)}</div>
+				</summary>
+				<div class="child">
+					{#if comment.data.replies}
+						<svelte:self commentsArr={comment.data.replies.data.children} />
+					{/if}
+				</div>
+			</details>
+		{/if}
 	{/each}
 </div>
 
