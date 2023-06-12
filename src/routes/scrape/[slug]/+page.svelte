@@ -27,7 +27,6 @@
 
 <script>
 	import { onMount } from 'svelte';
-	import { PUBLIC_REDDIT_SCRAPE, PUBLIC_SCRAPE } from '$env/static/public';
 
 	import AncherNoreferrer from '$lib/components/AncherNoreferrer.svelte';
 	import Comments from '$lib/components/Comments.svelte';
@@ -37,6 +36,9 @@
 
 	//tools
 	import { htmlDecode } from '$lib/utils/htmlDecode.js';
+
+	//request
+	import { fetchRedditData } from '$lib/utils/fetchRedditData.js';
 
 	let posts = [];
 	let nextSet = '';
@@ -63,16 +65,12 @@
 	});
 
 	function fetchSelfText(id) {
-		fetch(
-			//TODO
-			//Make this server functions so they dont need proxy
-			`${PUBLIC_SCRAPE}https://old.reddit.com/api/expando?link_id=t3_${id}&renderstyle=html`,
-		)
+		fetch(`https://old.reddit.com/api/expando?link_id=t3_${id}&renderstyle=html`)
 			.then((res) => {
-				if (res.ok) return res.json();
+				if (res.ok) return res.text();
 			})
-			.then((json) => {
-				document.querySelector(`#self_${id}`).innerHTML = htmlDecode(json.html);
+			.then((text) => {
+				document.querySelector(`#self_${id}`).innerHTML = htmlDecode(text);
 			});
 	}
 
@@ -101,33 +99,22 @@
 			});
 	}
 
-	function load() {
+	async function load() {
 		loadButton.setAttribute('aria-busy', true);
 		loadButton.disabled = true;
-		fetch(
-			//TODO
-			//Make this server functions so they dont need proxy
-			`${PUBLIC_REDDIT_SCRAPE}${subName == '""' ? '' : 'r/' + subName}?${
-				nextSet == '' ? '' : 'after=' + nextSet
-			}`,
-		)
-			.then((res) => {
-				if (res.ok) {
-					postsSuccess = true;
-					return res.json();
-				}
-			})
-			.then((json) => {
-				posts.push(...json);
-				nextSet = json[json.length - 1].thingID;
-				posts = posts;
-				loadButton.setAttribute('aria-busy', false);
-				loadButton.disabled = false;
-			})
-			.catch((error) => {
-				postsSuccess = false;
-				console.error('Error:', error);
-			});
+		const data = await fetchRedditData(
+			`${subName == '""' ? '' : 'r/' + subName}?${nextSet == '' ? '' : 'after=' + nextSet}`,
+		);
+		if (data.error || data.html == undefined) {
+			postsSuccess = false;
+			return;
+		}
+		postsSuccess = true;
+		posts.push(...data);
+		nextSet = data[data.length - 1].thingID;
+		posts = posts;
+		loadButton.setAttribute('aria-busy', false);
+		loadButton.disabled = false;
 	}
 
 	function fullHeightImage(event) {

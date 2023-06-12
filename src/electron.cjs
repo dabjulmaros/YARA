@@ -56,6 +56,24 @@ function createWindow() {
 		windowState.saveState(mainWindow);
 	});
 
+  //cors
+  mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
+    (details, callback) => {
+      const { requestHeaders } = details;
+      UpsertKeyValue(requestHeaders, 'Access-Control-Allow-Origin', ['*']);
+      callback({ requestHeaders });
+    },
+  );
+  
+  mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+    const { responseHeaders } = details;
+    UpsertKeyValue(responseHeaders, 'Access-Control-Allow-Origin', ['*']);
+    UpsertKeyValue(responseHeaders, 'Access-Control-Allow-Headers', ['*']);
+    callback({
+      responseHeaders,
+    });
+  });
+
 	return mainWindow;
 }
 
@@ -102,3 +120,18 @@ app.on('window-all-closed', () => {
 ipcMain.on('to-main', (event, count) => {
 	return mainWindow.webContents.send('from-main', `next count is ${count + 1}`);
 });
+
+//cors work around https://pratikpc.medium.com/bypassing-cors-with-electron-ab7eaf331605
+function UpsertKeyValue(obj, keyToChange, value) {
+  const keyToChangeLower = keyToChange.toLowerCase();
+  for (const key of Object.keys(obj)) {
+    if (key.toLowerCase() === keyToChangeLower) {
+      // Reassign old key
+      obj[key] = value;
+      // Done
+      return;
+    }
+  }
+  // Insert at end instead
+  obj[keyToChange] = value;
+}
