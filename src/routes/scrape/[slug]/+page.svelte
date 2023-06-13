@@ -16,12 +16,17 @@
 	}
 
 	function getImgSrc(expando) {
-		let src = expando.match(/src="([^"]+)"/)[1];
-		src = htmlDecode(src);
-		if (src.includes('preview.redd.it')) {
-			src = src.replace('preview.redd.it', 'i.redd.it');
+		const imgSrcArr = [];
+		const expandoMatchAll = expando.matchAll(/src="([^"]+\.jpg[^"]+)"/g);
+
+		for (const match of expandoMatchAll) {
+			const parsed = htmlDecode(match[1])
+				.replace('preview.redd.it', 'i.redd.it')
+				.split('?')[0];
+			if (!imgSrcArr.includes(parsed)) imgSrcArr.push(parsed);
 		}
-		return src;
+
+		return imgSrcArr;
 	}
 </script>
 
@@ -48,6 +53,8 @@
 
 	let viewImage = false;
 	let imageSrc;
+	let postTitle;
+	let postLink;
 
 	let scrollElement;
 
@@ -122,7 +129,10 @@
 		const element = event.target;
 		// element.classList.toggle("fullHeight");
 		// element.scrollIntoView({ block: "center" });
+		const title = event.target.parentElement.previousElementSibling.querySelector('h2 a');
 		imageSrc = element.src;
+		postTitle = title.text;
+		postLink = title.href;
 		viewImage = true;
 	}
 
@@ -191,11 +201,17 @@
 			}}
 		>
 			<article style="display: flex;flex-direction:column;align-items:center;padding:1rem">
+				<header style="width: 100%;margin:-0.5rem 0 .5rem 0;padding: 1rem;">
+					<span aria-label="Close" class="close" on:click={() => (viewImage = false)} />
+					<div class="linkEllipsis">
+						<AncherNoreferrer style="" link={postLink} content={postTitle} />
+					</div>
+				</header>
 				<img src={imageSrc} class="fullHeight" alt="decoration" />
 				<AncherNoreferrer
 					link={imageSrc}
 					content="Open In a New Tab"
-					style="margin-top: 1rem"
+					style="margin-top: .5rem"
 				/>
 				<!-- <a
           rel="noopener noreferrer"
@@ -251,7 +267,7 @@
 						{#if data.expandoType == 'media'}
 							{#if data.thingDomain == 'i.redd.it'}
 								<img
-									src={getImgSrc(data.expando)}
+									src={getImgSrc(data.expando)[0]}
 									alt=""
 									loading="lazy"
 									on:dblclick={(event) => fullHeightImage(event)}
@@ -270,6 +286,15 @@
 									allowfullscreen=""
 									title={data.title}
 								/>
+							{:else if data.expando.includes('gallery')}
+								{#each getImgSrc(data.expando) as src}
+									<img
+										{src}
+										alt=""
+										loading="lazy"
+										on:dblclick={(event) => fullHeightImage(event)}
+									/>
+								{/each}
 							{:else}
 								no clue of what goes here
 							{/if}
@@ -413,7 +438,7 @@
 	}
 	:global(img.fullHeight) {
 		height: max-content !important;
-		max-height: 85vh !important;
+		max-height: 80vh !important;
 	}
 	#code {
 		cursor: pointer;
@@ -453,6 +478,7 @@
 	}
 	div.scroll {
 		overflow-y: scroll;
+		overflow-x: hidden;
 		height: 100vh;
 	}
 	button {
