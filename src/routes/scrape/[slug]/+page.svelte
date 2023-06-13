@@ -38,6 +38,7 @@
 	import InfiniteScroll from '$lib/components/InfiniteScroll.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import RVideo from '$lib/components/RVideo.svelte';
+	import PrivateSub from '$lib/components/PrivateSub.svelte';
 
 	//tools
 	import { htmlDecode } from '$lib/utils/htmlDecode.js';
@@ -45,6 +46,7 @@
 	//request
 	import { fetchRedditData } from '$lib/utils/fetchRedditData.js';
 
+	let status;
 	let posts = [];
 	let nextSet = '';
 	let viewComments = false;
@@ -115,6 +117,12 @@
 		console.log(data);
 		if (data.error || data.length == 0) {
 			postsSuccess = false;
+			return;
+		}
+		if (data.status == 403) {
+			postsSuccess = false;
+			status = 403;
+			posts.push(...data.message);
 			return;
 		}
 		postsSuccess = true;
@@ -352,6 +360,8 @@
 				Load More
 			</button>
 		</div>
+	{:else if status == 403}
+		<PrivateSub message={posts} />
 	{:else}
 		<div class="container">There was an error loading the post data</div>
 	{/if}
