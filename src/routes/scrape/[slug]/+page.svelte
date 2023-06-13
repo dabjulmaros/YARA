@@ -17,13 +17,13 @@
 
 	function getImgSrc(expando) {
 		const imgSrcArr = [];
-		const expandoMatchAll = expando.matchAll(/src="([^"]+\.jpg[^"]+)"/g);
+		const expandoMatchAll = expando.matchAll(/src="([^"]+)"/g);
 
 		for (const match of expandoMatchAll) {
 			const parsed = htmlDecode(match[1])
 				.replace('preview.redd.it', 'i.redd.it')
 				.split('?')[0];
-			if (!imgSrcArr.includes(parsed)) imgSrcArr.push(parsed);
+			if (!imgSrcArr.includes(parsed) && parsed.includes('i.redd.it')) imgSrcArr.push(parsed);
 		}
 
 		return imgSrcArr;
@@ -113,7 +113,7 @@
 			`${subName == '""' ? '' : 'r/' + subName}?${nextSet == '' ? '' : 'after=' + nextSet}`,
 		);
 		console.log(data);
-		if (data.error) {
+		if (data.error || data.length == 0) {
 			postsSuccess = false;
 			return;
 		}
@@ -323,6 +323,7 @@
 									muted
 									autoplay
 									loop
+									controls
 									on:click={toggleMute}
 								/>
 							{:else}
@@ -504,5 +505,11 @@
 		position: sticky;
 		top: -3rem;
 		z-index: 1;
+	}
+	:global(table) {
+		font-size: 0.8rem;
+	}
+	:global(th, td) {
+		padding: 0;
 	}
 </style>
