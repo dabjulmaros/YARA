@@ -109,7 +109,7 @@ export async function fetchRedditData(url) {
 
 
     returnArr.push({
-      "thingID": x.getAttribute('data-fullname').split('_')[1],
+      "thingID": x.getAttribute('data-fullname'),
       "thingDomain": x.getAttribute('data-domain'),
       "title": x.querySelector('a.title') ? x.querySelector('a.title').textContent : "",
       "href": x.querySelector('.flat-list .comments') ? x.querySelector('.flat-list .comments').href : "",

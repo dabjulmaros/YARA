@@ -72,7 +72,7 @@
 	});
 
 	function fetchSelfText(id) {
-		fetch(`https://old.reddit.com/api/expando?link_id=t3_${id}&renderstyle=html`)
+		fetch(`https://old.reddit.com/api/expando?link_id=${id}&renderstyle=html`)
 			.then((res) => {
 				if (res.ok) return res.text();
 			})
@@ -88,7 +88,7 @@
 		}
 		event.target.setAttribute('aria-busy', true);
 		event.target.disabled = true;
-		fetch(`https://api.reddit.com/${id}.json`)
+		fetch(`https://api.reddit.com/${id.split('_')[1]}.json`)
 			.then((res) => {
 				if (res.ok) return res.json();
 			})
