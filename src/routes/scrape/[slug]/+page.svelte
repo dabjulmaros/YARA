@@ -307,6 +307,8 @@
 							<div id={'self_' + data.thingID}>
 								{fetchSelfText(data.thingID)}
 							</div>
+						{:else if data.expandoType == 'none'}
+							<AncherNoreferrer style="" link={data.expando} content={data.expando} />
 						{:else}
 							<!-- <div
                 id="code"
