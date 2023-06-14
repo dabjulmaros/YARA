@@ -1,6 +1,6 @@
 {
-	"appId": "com.example.app",
-	"productName": "Sveltekit Electron",
+	"appId": "com.yara.app",
+	"productName": "YARA",
 	"directories": {
 		"output": "dist"
 	},
