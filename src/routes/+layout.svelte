@@ -12,11 +12,11 @@
 {/if}
 
 <style>
-	.dragbar {
+	/* .dragbar {
 		-webkit-app-region: drag;
 		position: absolute;
 		z-index: 100;
 		height: 40px;
 		width: 100%;
-	}
+	} */
 </style>
