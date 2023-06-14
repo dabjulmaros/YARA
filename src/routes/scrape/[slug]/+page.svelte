@@ -274,7 +274,7 @@
 					<div class={'body'}>
 						<!-- svelte-ignore a11y-click-events-have-key-events -->
 						{#if data.expandoType == 'media'}
-							{#if data.thingDomain == 'i.redd.it'}
+							{#if data.thingDomain == 'i.redd.it' || data.thingDomain == 'imgur.com'}
 								<img
 									src={getImgSrc(data.expando)[0]}
 									alt=""
@@ -382,6 +382,7 @@
 		text-align: center;
 		position: relative;
 		margin-bottom: 0;
+		z-index: 1;
 	}
 	header > h2 {
 		width: 90%;
