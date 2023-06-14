@@ -39,6 +39,7 @@
 	import Navbar from '$lib/components/Navbar.svelte';
 	import RVideo from '$lib/components/RVideo.svelte';
 	import PrivateSub from '$lib/components/PrivateSub.svelte';
+	import ImgGallery from '$lib/components/ImgGallery.svelte';
 
 	//tools
 	import { htmlDecode } from '$lib/utils/htmlDecode.js';
@@ -295,14 +296,10 @@
 									title={data.title}
 								/>
 							{:else if data.expando.includes('gallery')}
-								{#each getImgSrc(data.expando) as src}
-									<img
-										{src}
-										alt=""
-										loading="lazy"
-										on:dblclick={(event) => fullHeightImage(event)}
-									/>
-								{/each}
+								<ImgGallery
+									srcArr={getImgSrc(data.expando)}
+									on:dblclick={(event) => fullHeightImage(event)}
+								/>
 							{:else}
 								no clue of what goes here
 							{/if}
@@ -488,7 +485,7 @@
 		padding: 20px;
 	}
 	div.scroll {
-		overflow-y: scroll;
+		overflow-y: auto;
 		overflow-x: hidden;
 		height: 100vh;
 	}
