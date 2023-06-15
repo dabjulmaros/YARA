@@ -62,6 +62,7 @@
 	let scrollElement;
 
 	let postsSuccess = true;
+	let hasMore = true;
 
 	export let data;
 
@@ -91,7 +92,7 @@
 		}
 		event.target.setAttribute('aria-busy', true);
 		event.target.disabled = true;
-		fetch(`https://api.reddit.com/${id.split('_')[1]}.json`)
+		fetch(`${id}.json`)
 			.then((res) => {
 				if (res.ok) return res.json();
 			})
@@ -117,7 +118,8 @@
 		);
 		console.log(data);
 		if (data.error || data.length == 0) {
-			postsSuccess = false;
+			if (posts.length > 0) hasMore = false;
+			else postsSuccess = false;
 			return;
 		}
 		if (data.status == 403) {
@@ -303,7 +305,7 @@
 							{:else}
 								no clue of what goes here
 							{/if}
-						{:else if data.expandoType == 'text'}
+						{:else if data.expandoType == 'text' || data.expandoType == 'crossPost'}
 							<div id={'self_' + data.thingID}>
 								{fetchSelfText(data.thingID)}
 							</div>
@@ -339,10 +341,7 @@
 						{/if}
 					</div>
 					<footer class="footer">
-						<button
-							on:click={(event) =>
-								getComments(event, data.subreddit + '/comments/' + data.thingID)}
-						>
+						<button on:click={(event) => getComments(event, data.href)}>
 							view {data.comments}
 						</button>
 					</footer>
@@ -350,14 +349,16 @@
 				</article>
 			{/each}
 			<InfiniteScroll
-				hasMore={true}
+				hasMore
 				threshold={750}
 				elementScroll={scrollElement}
 				on:loadMore={load}
 			/>
-			<button style="margin: 2rem auto;" bind:this={loadButton} on:click={load}>
-				Load More
-			</button>
+			{#if hasMore}
+				<button style="margin: 2rem auto;" bind:this={loadButton} on:click={load}>
+					Load More
+				</button>
+			{/if}
 		</div>
 	{:else if status == 403}
 		<PrivateSub message={posts} />

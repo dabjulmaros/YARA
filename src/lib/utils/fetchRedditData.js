@@ -1,6 +1,6 @@
 export async function fetchRedditData(url) {
 	let status;
-	const html = await fetch('https://old.reddit.com/' + url)
+	const html = await fetch('https://old.reddit.com/' + url,{credentials:"include"})
 		.then((r) => {
 			status = r.status;
 			switch (r.status) {
@@ -120,6 +120,7 @@ function reddit200(html) {
 		if (expandoTypeEle.length)
 			if (expandoTypeEle[0].classList.contains('video')) expandoType = 'media';
 			else if (expandoTypeEle[0].classList.contains('selftext')) expandoType = 'text';
+      else if (expandoTypeEle[0].classList.contains('crosspost')) expandoType = 'crossPost';
 
 		returnArr.push({
 			thingID: x.getAttribute('data-fullname'),
