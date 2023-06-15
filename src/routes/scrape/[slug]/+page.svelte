@@ -303,7 +303,7 @@
 							{:else}
 								no clue of what goes here
 							{/if}
-						{:else if data.expandoType == 'text'}
+						{:else if data.expandoType == 'text' || data.expandoType == 'crossPost'}
 							<div id={'self_' + data.thingID}>
 								{fetchSelfText(data.thingID)}
 							</div>
