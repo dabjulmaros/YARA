@@ -1,6 +1,7 @@
 export async function fetchRedditData(url) {
 	let status;
-	const html = await fetch('https://old.reddit.com/' + url)
+  document.cookie = "over18=1";
+	const html = await fetch('https://old.reddit.com/' + url,{credentials:"include"})
 		.then((r) => {
 			status = r.status;
 			switch (r.status) {
