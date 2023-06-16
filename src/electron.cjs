@@ -82,15 +82,13 @@ function createWindow() {
   return mainWindow;
 }
 
+//https://github.com/sindresorhus/electron-context-menu
 contextMenu({
-  showLookUpSelection: false,
-  showSearchWithGoogle: false,
-  showCopyImage: false,
-  prepend: (defaultActions, params, browserWindow) => [
-    {
-      label: 'Make App 💻',
-    },
-  ],
+  showSelectAll:false,
+  showLookUpSelection: true,
+  // showSearchWithGoogle: true,
+  showCopyImage: true,
+  showSaveImageAs: true,
 });
 
 function loadVite(port) {
@@ -122,9 +120,6 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
 
-ipcMain.on('to-main', (event, count) => {
-  return mainWindow.webContents.send('from-main', `next count is ${count + 1}`);
-});
 
 //cors work around https://pratikpc.medium.com/bypassing-cors-with-electron-ab7eaf331605
 function UpsertKeyValue(obj, keyToChange, value) {
