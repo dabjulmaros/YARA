@@ -36,15 +36,16 @@
 </script>
 
 <div class="gallery">
+	<mark
+		style="position: absolute; z-index:1;opacity:.4;right:0;bottom:0"
+		class="mark"
+		data-tooltip={capArr[index]}
+		data-placement="left"
+	>
+		{index + 1}/{srcArr.length}
+	</mark>
 	<button class="outline" on:click={() => changeImg(-1)}>◀</button>
 	<div class="imgHolder" style="position:relative;">
-		<mark
-			style="position: absolute; z-index:1;opacity:.4;right:0;bottom:0"
-			class="mark"
-			data-tooltip={capArr[index]}
-		>
-			{index + 1}/{srcArr.length}
-		</mark>
 		<div class="carousel" style={`transform:translate(-${index * 100}%)`}>
 			{#each srcArr as src}
 				<div>
@@ -77,7 +78,7 @@
 		width: 100%;
 		display: flex;
 		align-items: center;
-		overflow: hidden;
+		position: relative;
 	}
 	.carousel {
 		display: flex;
@@ -91,6 +92,7 @@
 	.imgHolder {
 		width: calc(100% - 2px);
 		margin: 0 auto;
+		overflow: hidden;
 	}
 	.imgHolder div {
 		display: flex;

@@ -479,7 +479,8 @@
 	div.scroll {
 		overflow-y: auto;
 		overflow-x: hidden;
-		height: 100vh;
+		height: calc(100vh - 33px);
+		margin-top: 33px;
 	}
 	button {
 		margin: 0 auto;
