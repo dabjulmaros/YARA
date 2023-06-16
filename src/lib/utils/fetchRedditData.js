@@ -1,29 +1,29 @@
-export async function fetchRedditData(subName,nextSet) {
-
-  return await fetch('/api', {
-    method: 'POST',
-    body: JSON.stringify({
-      r: subName,
-      params: nextSet,
-    }),
-    headers: {
-      'content-type': 'application/json',
-    },
-  })
-    .then((r) => r.json())
-    .then(json=>{
-      if (json.html == undefined) {
-        console.log(json);
-        return { error: 'bad stuff happened' };
-      }
-      switch (json.status) {
-        case 200:
-          return reddit200(json.html);
-        case 403:
-          return reddit403(json.html);
-      }
-    });
-	
+export async function fetchRedditData(subName, nextSet) {
+	return await fetch('/api', {
+		method: 'POST',
+		body: JSON.stringify({
+			r: subName,
+			params: nextSet,
+		}),
+		headers: {
+			'content-type': 'application/json',
+		},
+	})
+		.then((r) => r.json())
+		.then((json) => {
+			if (json.html == undefined) {
+				console.log(json);
+				return { error: 'bad stuff happened' };
+			}
+			switch (json.status) {
+				case 200:
+					return reddit200(json.html);
+				case 403:
+					return reddit403(json.html);
+				case 404:
+					return reddit404(json.html);
+			}
+		});
 }
 //needs to refactor to fall more in line with 403
 function reddit200(html) {
@@ -46,7 +46,7 @@ function reddit200(html) {
 		if (expandoTypeEle.length)
 			if (expandoTypeEle[0].classList.contains('video')) expandoType = 'media';
 			else if (expandoTypeEle[0].classList.contains('selftext')) expandoType = 'text';
-      else if (expandoTypeEle[0].classList.contains('crosspost')) expandoType = 'crossPost';
+			else if (expandoTypeEle[0].classList.contains('crosspost')) expandoType = 'crossPost';
 
 		returnArr.push({
 			thingID: x.getAttribute('data-fullname'),
@@ -82,9 +82,19 @@ function reddit403(html) {
 		message: [
 			message.querySelector('h3').textContent,
 			message.querySelector('div h5').textContent,
-      ...[...htmlDoc.querySelectorAll('div.md > div > p')].map(e=>e.textContent),
+			...[...htmlDoc.querySelectorAll('div.md > div > p')].map((e) => e.textContent),
 		],
 	};
-	console.log(retunrObj);
+	return retunrObj;
+}
+
+function reddit404(html) {
+	const htmlDoc = document.createElement('html');
+	htmlDoc.innerHTML = html;
+	const message = htmlDoc.querySelector('.pagename').textContent;
+	const retunrObj = {
+		status: 404,
+		message: [message, 'The requested page was not found', ['']],
+	};
 	return retunrObj;
 }
