@@ -73,6 +73,18 @@
 	onMount(() => {
 		// load first batch onMount
 		load();
+		fetch('/api', {
+			method: 'POST',
+			body: JSON.stringify({
+				r: `${subName == '""' ? '' : 'r/' + subName}`,
+				params: `${nextSet == '' ? '' : 'after=' + nextSet}`,
+			}),
+			headers: {
+				'content-type': 'application/json',
+			},
+		})
+			.then((r) => r.text())
+			.then((t) => console.log(t));
 	});
 
 	function fetchSelfText(id) {
@@ -137,10 +149,13 @@
 	}
 
 	function fullHeightImage(event) {
-		const element = event.target;
+		let element;
+		if (event.type == 'dblclick') element = event.target;
+		else if (event.type == 'fullImgGall') element = event.detail.target;
+
 		// element.classList.toggle("fullHeight");
 		// element.scrollIntoView({ block: "center" });
-		const title = event.target.parentElement.previousElementSibling.querySelector('h2 a');
+		const title = getMe(element, 'article').querySelector('header h2 a');
 		imageSrc = element.src;
 		postTitle = title.text;
 		postLink = title.href;
@@ -300,7 +315,7 @@
 							{:else if data.expando.includes('gallery')}
 								<ImgGallery
 									srcArr={getImgSrc(data.expando)}
-									on:dblclick={(event) => fullHeightImage(event)}
+									on:fullImgGall={(event) => fullHeightImage(event)}
 								/>
 							{:else}
 								no clue of what goes here
@@ -385,7 +400,7 @@
 		text-align: center;
 		position: relative;
 		margin-bottom: 0;
-		z-index: 1;
+		z-index: 2;
 	}
 	header > h2 {
 		width: 90%;

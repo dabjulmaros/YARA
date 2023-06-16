@@ -1,22 +1,41 @@
 <script>
+	import { createEventDispatcher } from 'svelte';
+
 	export let srcArr;
+
+	const dispatch = createEventDispatcher();
+
 	let index = 0;
+
+	function fullHeightImage(e) {
+		console.log(e);
+		dispatch('fullImgGall', {
+			target: e.target,
+		});
+	}
 
 	function changeImg(change) {
 		index += change;
 		if (index >= srcArr.length) index = 0;
 		else if (index < 0) index = srcArr.length - 1;
-		console.log(index, change);
 	}
 </script>
 
 <div class="gallery">
 	<button class="outline" on:click={() => changeImg(-1)}>◀</button>
-	<div class="imgHolder">
+	<div class="imgHolder" style="position:relative;">
+		<mark style="position: absolute; z-index:1;opacity:.4;right:0;bottom:0" class="mark">
+			{index + 1}/{srcArr.length}
+		</mark>
 		<div class="carousel" style={`transform:translate(-${index * 100}%)`}>
 			{#each srcArr as src}
 				<div>
-					<img {src} alt="" loading="lazy" />
+					<img
+						{src}
+						alt=""
+						loading="lazy"
+						on:dblclick={(event) => fullHeightImage(event)}
+					/>
 				</div>
 			{/each}
 		</div>
