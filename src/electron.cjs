@@ -70,7 +70,7 @@ function createWindow() {
     UpsertKeyValue(responseHeaders, 'Access-Control-Allow-Origin', ['*']);
     UpsertKeyValue(responseHeaders, 'Access-Control-Allow-Headers', ['*']);
     callback({
-      responseHeaders,
+      responseHeaders,...details.requestHeaders,
     });
   });
 

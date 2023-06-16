@@ -1,6 +1,6 @@
 export async function fetchRedditData(url) {
 	let status;
-	const html = await fetch('https://old.reddit.com/' + url,{credentials:"include"})
+	const html = await fetch('https://old.reddit.com/' + url)
 		.then((r) => {
 			status = r.status;
 			switch (r.status) {
