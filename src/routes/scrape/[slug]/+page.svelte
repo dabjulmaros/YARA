@@ -4,31 +4,6 @@
   find a way to stop rendering collapsed posts
   Move the script module to a different file
 */-->
-<script context="module">
-	function getMe(element, targetId) {
-		let ele = element;
-		while (ele.parentElement != null) {
-			if (ele.id == targetId) {
-				return ele;
-			}
-			ele = ele.parentElement;
-		}
-	}
-
-	function getImgSrc(expando) {
-		const imgSrcArr = [];
-		const expandoMatchAll = expando.matchAll(/src="([^"]+)"/g);
-
-		for (const match of expandoMatchAll) {
-			const parsed = htmlDecode(match[1])
-				.replace('preview.redd.it', 'i.redd.it')
-				.split('?')[0];
-			if (!imgSrcArr.includes(parsed) && parsed.includes('i.redd.it')) imgSrcArr.push(parsed);
-		}
-
-		return imgSrcArr;
-	}
-</script>
 
 <script>
 	import { onMount } from 'svelte';
@@ -43,6 +18,8 @@
 
 	//tools
 	import { htmlDecode } from '$lib/utils/htmlDecode.js';
+	import { getImgSrc } from '$lib/utils/getImgSrc.js';
+	import { getMe } from '$lib/utils/getMe.js';
 
 	//request
 	import { fetchRedditData } from '$lib/utils/fetchRedditData.js';
@@ -117,13 +94,14 @@
 			`${subName == '""' ? '' : 'r/' + subName}`,
 			`${nextSet == '' ? '' : 'after=' + nextSet}`,
 		);
-		console.log(data);
 		if (data.error || data.length == 0) {
+			console.log(data);
 			if (posts.length > 0) hasMore = false;
 			else postsSuccess = false;
 			return;
 		}
-		if (data.status == 403) {
+		if (data.status == 403 || data.status == 404) {
+			console.log(data);
 			postsSuccess = false;
 			status = 403;
 			posts.push(...data.message);
@@ -168,6 +146,7 @@
 
 	function toggleMute(e) {
 		e.target.muted = !e.target.muted;
+		e.preventDefault();
 	}
 </script>
 
@@ -280,7 +259,7 @@
 					<div class={'body'}>
 						<!-- svelte-ignore a11y-click-events-have-key-events -->
 						{#if data.expandoType == 'media'}
-							{#if data.thingDomain == 'i.redd.it' || data.thingDomain == 'imgur.com'}
+							{#if data.thingDomain == 'i.redd.it' || (data.thingDomain.includes('imgur.com') && !data.expando.includes('.gifv'))}
 								<img
 									src={getImgSrc(data.expando)[0]}
 									alt=""
@@ -303,7 +282,7 @@
 								/>
 							{:else if data.expando.includes('gallery')}
 								<ImgGallery
-									srcArr={getImgSrc(data.expando)}
+									expando={data.expando}
 									on:fullImgGall={(event) => fullHeightImage(event)}
 								/>
 							{:else}
@@ -314,7 +293,22 @@
 								{fetchSelfText(data.thingID)}
 							</div>
 						{:else if data.expandoType == 'none'}
-							<AncherNoreferrer style="" link={data.expando} content={data.expando} />
+							{#if data.expando.includes('imgur') && data.expando.includes('gifv')}
+								<video
+									src={data.expando.replace('gifv', 'mp4')}
+									muted
+									autoplay
+									loop
+									controls
+									on:click={toggleMute}
+								/>
+							{:else}
+								<AncherNoreferrer
+									style=""
+									link={data.expando}
+									content={data.expando}
+								/>
+							{/if}
 						{:else}
 							<!-- <div
                 id="code"
@@ -330,18 +324,8 @@
                   >{JSON.stringify(data)}</code
                 >
               </div> -->
-							{#if data.expando.includes('imgur') && data.expando.includes('gifv')}
-								<video
-									src={data.expando.replace('gifv', 'mp4')}
-									muted
-									autoplay
-									loop
-									controls
-									on:click={toggleMute}
-								/>
-							{:else}
-								{@html data.expando}
-							{/if}
+
+							{@html data.expando}
 						{/if}
 					</div>
 					<footer class="footer">

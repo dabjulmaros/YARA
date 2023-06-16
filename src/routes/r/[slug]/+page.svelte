@@ -18,8 +18,6 @@
 <script>
 	import { onMount } from 'svelte';
 
-	import { dataset_dev, element } from 'svelte/internal';
-
 	import AncherNoreferrer from '$lib/components/AncherNoreferrer.svelte';
 	import Comments from '$lib/components/Comments.svelte';
 	import InfiniteScroll from '$lib/components/InfiniteScroll.svelte';
@@ -66,7 +64,6 @@
 				if (res.ok) return res.json();
 			})
 			.then((json) => {
-				console.log(json);
 				viewComments = true;
 				comments = json;
 				lastComments = id;
@@ -101,19 +98,6 @@
 				postsSuccess = false;
 				console.error('Error:', error);
 			});
-	}
-
-	function commentRecursor(list, depth) {
-		for (let x of list) {
-			console.log(padding(depth) + x.data.author + ': ' + htmlDecode(x.data.body));
-			if (x.data.replies) commentRecursor(x.data.replies.data.children, depth + 1);
-		}
-	}
-
-	function padding(amount) {
-		let pad = '';
-		for (let x = 0; x < amount; x++) pad = pad + '... ';
-		return pad;
 	}
 
 	function fullHeightImage(event) {
