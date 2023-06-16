@@ -1,9 +1,11 @@
 export async function fetchRedditData(subName, nextSet) {
+
 	return await fetch('/api', {
 		method: 'POST',
 		body: JSON.stringify({
 			r: subName,
 			params: nextSet,
+      over18: JSON.parse(localStorage.over18),
 		}),
 		headers: {
 			'content-type': 'application/json',
