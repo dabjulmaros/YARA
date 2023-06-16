@@ -73,18 +73,6 @@
 	onMount(() => {
 		// load first batch onMount
 		load();
-		fetch('/api', {
-			method: 'POST',
-			body: JSON.stringify({
-				r: `${subName == '""' ? '' : 'r/' + subName}`,
-				params: `${nextSet == '' ? '' : 'after=' + nextSet}`,
-			}),
-			headers: {
-				'content-type': 'application/json',
-			},
-		})
-			.then((r) => r.text())
-			.then((t) => console.log(t));
 	});
 
 	function fetchSelfText(id) {
@@ -126,7 +114,8 @@
 		loadButton.setAttribute('aria-busy', true);
 		loadButton.disabled = true;
 		const data = await fetchRedditData(
-			`${subName == '""' ? '' : 'r/' + subName}?${nextSet == '' ? '' : 'after=' + nextSet}`,
+			`${subName == '""' ? '' : 'r/' + subName}`,
+			`${nextSet == '' ? '' : 'after=' + nextSet}`,
 		);
 		console.log(data);
 		if (data.error || data.length == 0) {

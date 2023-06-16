@@ -1,108 +1,34 @@
-export async function fetchRedditData(url) {
-	let status;
-	const html = await fetch('https://old.reddit.com/' + url)
-		.then((r) => {
-			status = r.status;
-			switch (r.status) {
-				case 200:
-					return r.text();
-				case 403:
-					return r.text();
-				case 404:
-					console.log('sub not found');
-					break;
-			}
-		})
-		.then((html) => {
-			//success!
-			//remove script tags and content
-			let cleanHtml = html;
-			let x = 0;
-			let json = {};
-			let clean = true;
-			try {
-				var temp =
-					cleanHtml.substring(0, cleanHtml.match(/<head/).index) +
-					cleanHtml.substring(
-						cleanHtml.match(/<\/head>/).index + '</head>'.length,
-						cleanHtml.length,
-					);
-				cleanHtml = temp;
-			} catch (e) {
-				console.error(e);
-				console.log('Error: Header not Removed');
-			}
-			try {
-				while (cleanHtml.includes('<style')) {
-					x++;
-					//Screams in pain
-					var temp =
-						cleanHtml.substring(0, cleanHtml.match(/<style/).index) +
-						cleanHtml.substring(
-							cleanHtml.match(/<\/style>/).index + '</style>'.length,
-							cleanHtml.length,
-						);
-					cleanHtml = temp;
-					if (x == 500) {
-						console.log('500s cycle reached. Break');
-						break;
-					}
-				}
-			} catch (e) {
-				console.log('Error:style not removed');
-			}
+export async function fetchRedditData(subName,nextSet) {
 
-			try {
-				while (cleanHtml.includes('<script')) {
-					x++;
-					//Screams in pain
-					var temp =
-						cleanHtml.substring(0, cleanHtml.match(/<script/).index) +
-						cleanHtml.substring(
-							cleanHtml.match(/<\/script>/).index + '</script>'.length,
-							cleanHtml.length,
-						);
-					cleanHtml = temp;
-					if (x == 500) {
-						console.log('500s cycle reached. Break');
-						break;
-					}
-				}
-			} catch (e) {
-				console.log('Error:Scripts not removed');
-				clean = true;
-			}
-			if (!clean) {
-				json['html'] = html.data;
-			} else {
-				json['html'] = cleanHtml;
-			}
-			json['cycles'] = x;
-			return json;
-		})
-		.catch(function (err) {
-			console.log('ERROR:');
-			console.log(err);
-			return { error: 'bad stuff happened' };
-		});
-
-	if (html.html == undefined) {
-		console.log(html);
-		return { error: 'bad stuff happened' };
-	}
-
-	// res.send(html);
-	switch (status) {
-		case 200:
-			return reddit200(html);
-		case 403:
-			return reddit403(html);
-	}
+  return await fetch('/api', {
+    method: 'POST',
+    body: JSON.stringify({
+      r: subName,
+      params: nextSet,
+    }),
+    headers: {
+      'content-type': 'application/json',
+    },
+  })
+    .then((r) => r.json())
+    .then(json=>{
+      if (json.html == undefined) {
+        console.log(json);
+        return { error: 'bad stuff happened' };
+      }
+      switch (json.status) {
+        case 200:
+          return reddit200(json.html);
+        case 403:
+          return reddit403(json.html);
+      }
+    });
+	
 }
 //needs to refactor to fall more in line with 403
 function reddit200(html) {
 	const htmlDoc = document.createElement('html');
-	htmlDoc.innerHTML = html.html;
+	htmlDoc.innerHTML = html;
 	const things = htmlDoc.querySelectorAll('.thing:not(.promoted)');
 	const returnArr = [];
 	for (var x of things) {
@@ -149,7 +75,7 @@ function reddit200(html) {
 
 function reddit403(html) {
 	const htmlDoc = document.createElement('html');
-	htmlDoc.innerHTML = html.html;
+	htmlDoc.innerHTML = html;
 	const message = htmlDoc.querySelector('.md');
 	const retunrObj = {
 		status: 403,
