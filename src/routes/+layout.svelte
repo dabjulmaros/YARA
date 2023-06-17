@@ -6,7 +6,7 @@
 </script>
 
 <div class="dragbar">
-	<span style="margin-left:1rem">🆈ara</span>
+	<span>🆈ara</span>
 	<span />
 </div>
 
@@ -23,5 +23,10 @@
 		width: 100%;
 		top: 0;
 		color: var(--primary);
+	}
+	.dragbar span {
+		text-align: center;
+		width: 100%;
+		display: block;
 	}
 </style>
