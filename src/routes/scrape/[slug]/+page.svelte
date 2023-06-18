@@ -500,6 +500,7 @@
 	}
 	.comments {
 		width: 90%;
+		height: 100%;
 	}
 	.comments header {
 		position: sticky;
@@ -511,5 +512,9 @@
 	}
 	:global(th, td) {
 		padding: 0;
+	}
+	dialog {
+		min-height: calc(100% - 33px);
+		top: 33px;
 	}
 </style>
