@@ -13,7 +13,7 @@
 	import InfiniteScroll from '$lib/components/InfiniteScroll.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import RVideo from '$lib/components/RVideo.svelte';
-	import PrivateSub from '$lib/components/PrivateSub.svelte';
+	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 	import ImgGallery from '$lib/components/ImgGallery.svelte';
 
 	//tools
@@ -349,7 +349,7 @@
 			{/if}
 		</div>
 	{:else if status == 403}
-		<PrivateSub message={posts} />
+		<ErrorMessage message={posts} />
 	{:else}
 		<div class="container">There was an error loading the post data</div>
 	{/if}

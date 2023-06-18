@@ -1,6 +1,4 @@
 <script>
-	import { htmlDecode } from '$lib/utils/htmlDecode';
-
 	export let message;
 </script>
 
@@ -22,10 +20,12 @@
 	.holder {
 		height: calc(100vh - 9rem);
 		display: flex;
+		min-width: 900px;
 		align-items: center;
 	}
 	article {
 		max-width: 900px;
+		min-width: 450px;
 		margin: 1rem auto;
 		height: fit-content;
 	}
