@@ -43,7 +43,7 @@ function createWindow() {
 			contextIsolation: true,
 			nodeIntegration: true,
 			spellcheck: false,
-			devTools: dev,
+			devTools: true,//dev,
 			preload: path.join(__dirname, 'preload.cjs'),
 		},
 		x: windowState.x,
