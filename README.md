@@ -6,15 +6,18 @@ Due to recent changes with Reddit policies I have decided to make the project pu
 Laundry List of things that need to be improved:
 
 - move from old reddit to new reddit
-- make it so link post are clickable to the source
 - add customization
 - fix UI issues introduced by electron
+- get built working with electron and sveltkit adapters
+  - As of now the app works as expected while in dev mode, but when built issues arise when using +server routes
 - general improvements everywhere
 
 What it does right now.
 
 - Simple UI that doesnt make me want to pull my eyes out
 - Videos, images, galleries, text post, and iframe all are being rendered
+- Link posts are clickable to the source
+- Allow to opt into content tagged as NSFW
 - Uses Electron headers to pass cors requirements
 
 As to why I'm using Electron for this application and not deploying it in a site somewhere... I wanted to use YARA as the name, and by being an electron app I can use app as tha A :).
