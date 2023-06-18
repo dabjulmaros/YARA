@@ -5,7 +5,7 @@ export async function fetchRedditData(subName, nextSet) {
 		body: JSON.stringify({
 			r: subName,
 			params: nextSet,
-      over18: JSON.parse(localStorage.over18),
+      over18: localStorage.over18,
 		}),
 		headers: {
 			'content-type': 'application/json',

@@ -8,11 +8,11 @@
 	"author": "Dabjulmaros",
 	"scripts": {
 		"dev": "cross-env NODE_ENV=dev npm run dev:all",
-		"dev:all": "concurrently -n=svelte,electron -c='#ff3e00',blue \"npm run dev:svelte\" \"npm run dev:electron\"",
-		"dev:svelte": "vite dev",
+		"dev:all": "concurrently -n=svelte,electron -c='#ff3e00',blue \"npm run dev:vite\" \"npm run dev:electron\"",
+		"dev:vite": "vite dev",
 		"dev:electron": "electron src/electron.cjs",
-		"build": "cross-env NODE_ENV=production npm run build:svelte && npm run build:electron",
-		"build:svelte": "vite build",
+		"build": "cross-env NODE_ENV=production npm run build:vite && npm run build:electron",
+		"build:vite": "vite build",
 		"build:electron": "electron-builder -mwl --config build.config.json"
 	},
 	"engines": {
@@ -30,6 +30,7 @@
 		"electron-window-state": "^5.0.3"
 	},
 	"devDependencies": {
+		"@sveltejs/adapter-node": "^1.2.4",
 		"@sveltejs/adapter-static": "2.0.1",
 		"@sveltejs/kit": "^1.20.2",
 		"@typescript-eslint/eslint-plugin": "^5.56.0",
