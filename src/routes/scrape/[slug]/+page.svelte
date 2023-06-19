@@ -270,7 +270,8 @@
 								<RVideo expando={data.expando} />
 							{:else if data.expando.includes('iframe')}
 								<iframe
-									src={data.expando.match(/src="([^"]+)/)[1] +
+									src={'https://' +
+										data.expando.match(/src="([^"]+)/)[1] +
 										'?responsive=true&is_nightmode=true'}
 									frameborder="0"
 									style="border-radius:15px;overflow:hidden;margin:0 auto;height:47vh"
