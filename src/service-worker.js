@@ -1,7 +1,7 @@
 /// <reference types="@sveltejs/kit" />
 import { build, files, version } from '$service-worker';
 import axios from 'axios';
-import fetchAdapter from '@vespaiach/axios-fetch-adapter';
+// import fetchAdapter from '@vespaiach/axios-fetch-adapter';
 self.addEventListener('fetch', (event) => {
   // ignore POST requests etc
   if (event.request.method !== 'POST') return;
@@ -25,7 +25,6 @@ self.addEventListener('fetch', (event) => {
         validateStatus: function (status) {
           return status < 500; // Resolve only if the status code is less than 500
         },
-        adapter: fetchAdapter
       };
       const axiosResponse = await axios
         .request(options)
