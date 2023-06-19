@@ -23,7 +23,7 @@
 	let viewComments = false;
 
 	let comments = [];
-  let post;
+	let post;
 	let lastComments;
 
 	let viewImage = false;
@@ -39,10 +39,8 @@
 	export let data;
 
 	const subName = data.slug;
-  const postid  = data.postid;
-  const comSlug = `${subName}/comments/${postid}`;
-
-
+	const postid = data.postid;
+	const postSlug = `${subName}/comments/${postid}`;
 
 	let loadButton;
 
@@ -61,16 +59,14 @@
 			});
 	}
 
-	
-
 	async function load() {
 		loadButton.setAttribute('aria-busy', true);
 		loadButton.disabled = true;
-    let status;
-		await fetch(`https://old.reddit.com/r/${comSlug}.json`)
+		let status;
+		await fetch(`https://old.reddit.com/r/${postSlug}.json`)
 			.then((res) => {
-        status = res.status;
-        return res.json();
+				status = res.status;
+				return res.json();
 			})
 			.then((json) => {
 				comments = json;
@@ -86,8 +82,8 @@
 			return;
 		}
 		postsSuccess = true;
-    post = comments[0].data.children[0].data;
-    console.log(post);
+		post = comments[0].data.children[0].data;
+		console.log(post);
 		// loadButton.remove();
 	}
 
@@ -127,155 +123,152 @@
 </script>
 
 <div class="scroll">
-  <Navbar subNameField={comSlug} />
-  {#if comments.length > 0 && post !=undefined}
-    <article id="article">
-      <header style="position:sticky;top:4.5rem">
-        <h2
-          class="linkEllipsis"
-          on:mouseenter={(e) => mouseEnter(e)}
-          on:mouseleave={(e) => mouseOut(e)}
-        >
-          <AncherNoreferrer
-            style=""
-            link={'https://old.reddit.com' + post.permalink}
-            content={post.title}
-          />
-          <!-- <a
+	<Navbar subNameField={postSlug} />
+	{#if comments.length > 0 && post != undefined}
+		<article id="article">
+			<header style="position:sticky;top:4.5rem">
+				<h2
+					class="linkEllipsis"
+					on:mouseenter={(e) => mouseEnter(e)}
+					on:mouseleave={(e) => mouseOut(e)}
+				>
+					<AncherNoreferrer
+						style=""
+						link={'https://old.reddit.com' + post.permalink}
+						content={post.title}
+					/>
+					<!-- <a
             rel="noopener noreferrer"
             href="https://www.reddit.com{post.permalink}"
             target="_blank">{@html post.title}</a
           > -->
-        </h2>
-        <small class="postInfo">
-          r/<AncherNoreferrer
-            style=""
-            link={'https://old.reddit.com/r/' + post.subreddit}
-            content={post.subreddit}
-          />
-          by:
-          <AncherNoreferrer
-            style=""
-            link={'https://old.reddit.com/u/' + post.author}
-            content={post.author}
-          />
-        </small>
-        <div class="togglePost" on:click={(e) => collapsePost(e)}>▶</div>
-        <div on:click={() => console.log(post)} class="toggleCode">⚙️</div>
-      </header>
-      <div class={'body'}>
-        {#if post.preview && post.preview.images[0].source.url}
-            <img class="preview"
-              src={htmlDecode(post.preview.images[0].source.url)}
-              alt=""
-              on:dblclick={(event) => fullHeightImage(event)}
-            />
-          {/if}
-        {#if post.secure_media_embed && post.secure_media_embed.content}
-          {#if post.secure_media_embed.media_domain_url.includes('www.redditmedia.com')}
-            <iframe
-              src={post.secure_media_embed.media_domain_url +
-                '?responsive=true&is_nightmode=true'}
-              frameborder="0"
-              style="border-radius:15px;overflow:hidden;margin:0 auto;height:47vh"
-              scrolling="no"
-              width="550px"
-              height="511px"
-              allowfullscreen=""
-              title={post.title}
-            />
-          {:else}
-            <iframe
-              src={post.url
-                .replace('watch', 'ifr')
-                .replace('gfycat.com/', 'gfycat.com/ifr/')}
-              frameborder="0"
-              scrolling="no"
-              width="100%"
-              height="100%"
-              allowfullscreen=""
-              title={post.title}
-            />
-          {/if}
-          <div class="linkEllipsis" title={post.url}>
-            <AncherNoreferrer link={post.url} />
-          </div>
-        {:else if post.secure_media}
-          {#if post.secure_media.reddit_video}
-            <video
-              muted
-              autoplay
-              loop
-              controls
-              src={post.secure_media.reddit_video.fallback_url}
-              on:click={toggleMute}
-            />
-          {/if}
-        {:else if post.post_hint === 'image'}
-          <img
-            src={post.url}
-            alt=""
-            loading="lazy"
-            on:dblclick={(event) => fullHeightImage(event)}
-          />
-          <!-- {:else if post.media_embed!=null || post.media_embed!={}}
+				</h2>
+				<small class="postInfo">
+					r/<AncherNoreferrer
+						style=""
+						link={'https://old.reddit.com/r/' + post.subreddit}
+						content={post.subreddit}
+					/>
+					by:
+					<AncherNoreferrer
+						style=""
+						link={'https://old.reddit.com/u/' + post.author}
+						content={post.author}
+					/>
+				</small>
+				<div class="togglePost" on:click={(e) => collapsePost(e)}>▶</div>
+				<div on:click={() => console.log(post)} class="toggleCode">⚙️</div>
+			</header>
+			<div class={'body'}>
+				{#if post.preview && post.preview.images[0].source.url}
+					<img
+						class="preview"
+						src={htmlDecode(post.preview.images[0].source.url)}
+						alt=""
+						on:dblclick={(event) => fullHeightImage(event)}
+					/>
+				{/if}
+				{#if post.secure_media_embed && post.secure_media_embed.content}
+					{#if post.secure_media_embed.media_domain_url.includes('www.redditmedia.com')}
+						<iframe
+							src={post.secure_media_embed.media_domain_url +
+								'?responsive=true&is_nightmode=true'}
+							frameborder="0"
+							style="border-radius:15px;overflow:hidden;margin:0 auto;height:47vh"
+							scrolling="no"
+							width="550px"
+							height="511px"
+							allowfullscreen=""
+							title={post.title}
+						/>
+					{:else}
+						<iframe
+							src={post.url
+								.replace('watch', 'ifr')
+								.replace('gfycat.com/', 'gfycat.com/ifr/')}
+							frameborder="0"
+							scrolling="no"
+							width="100%"
+							height="100%"
+							allowfullscreen=""
+							title={post.title}
+						/>
+					{/if}
+					<div class="linkEllipsis" title={post.url}>
+						<AncherNoreferrer link={post.url} />
+					</div>
+				{:else if post.secure_media}
+					{#if post.secure_media.reddit_video}
+						<video
+							muted
+							autoplay
+							loop
+							controls
+							src={post.secure_media.reddit_video.fallback_url}
+							on:click={toggleMute}
+						/>
+					{/if}
+				{:else if post.post_hint === 'image'}
+					<img
+						src={post.url}
+						alt=""
+						loading="lazy"
+						on:dblclick={(event) => fullHeightImage(event)}
+					/>
+					<!-- {:else if post.media_embed!=null || post.media_embed!={}}
     <div class="embed">{post.media_embed.content}</div> -->
-        {:else if post.domain.includes('imgur') && post.url.includes('gifv')}
-          <video
-            src={post.url.replace('gifv', 'mp4')}
-            muted
-            autoplay
-            loop
-            on:click={toggleMute}
-          />
-        {:else if post.is_gallery === true}
-          {#each post.gallery_data.items as item}
-          <!-- Could be replaced by the new custom gallery -->
-          <!-- Need to check the captions tho -->
-            <img
-              src={htmlDecode(post.media_metadata[item.media_id].s.u)}
-              alt=""
-              on:dblclick={(event) => fullHeightImage(event)}
-            />
-          {/each}
-        {:else if post.selftext_html != null}
-          <div id="post">
-            {@html htmlDecode(post.selftext_html)}
-          </div>
-        {:else}
-          <div class="linkEllipsis" title={post.url}>
-            <AncherNoreferrer link={post.url} />
-          </div>
-          <div
-            id="code"
-            class="hidden"
-            on:click={(event) => {
-              getMe(event.target, 'code').classList.toggle('hidden');
-            }}
-          >
-            <span>Toggle Code</span>
-            <icon>◀</icon>
-            <code on:click={(event) => event.stopPropagation()}>
-              {JSON.stringify(data)}
-            </code>
-          </div>
-        {/if}
-      </div>
-      <footer class="footer">
-        <Comments commentsArr={comments[1].data.children} />
-      </footer>
-      <!-- </div> -->
-    </article>
-  {:else if status == 403}
+				{:else if post.domain.includes('imgur') && post.url.includes('gifv')}
+					<video
+						src={post.url.replace('gifv', 'mp4')}
+						muted
+						autoplay
+						loop
+						on:click={toggleMute}
+					/>
+				{:else if post.is_gallery === true}
+					{#each post.gallery_data.items as item}
+						<!-- Could be replaced by the new custom gallery -->
+						<!-- Need to check the captions tho -->
+						<img
+							src={htmlDecode(post.media_metadata[item.media_id].s.u)}
+							alt=""
+							on:dblclick={(event) => fullHeightImage(event)}
+						/>
+					{/each}
+				{:else if post.selftext_html != null}
+					<div id="post">
+						{@html htmlDecode(post.selftext_html)}
+					</div>
+				{:else}
+					<div class="linkEllipsis" title={post.url}>
+						<AncherNoreferrer link={post.url} />
+					</div>
+					<div
+						id="code"
+						class="hidden"
+						on:click={(event) => {
+							getMe(event.target, 'code').classList.toggle('hidden');
+						}}
+					>
+						<span>Toggle Code</span>
+						<icon>◀</icon>
+						<code on:click={(event) => event.stopPropagation()}>
+							{JSON.stringify(data)}
+						</code>
+					</div>
+				{/if}
+			</div>
+			<footer class="footer">
+				<Comments commentsArr={comments[1].data.children} />
+			</footer>
+			<!-- </div> -->
+		</article>
+	{:else if status == 403}
 		<ErrorMessage message={posts} />
-	{:else}
-    {#if postsSuccess==false}
+	{:else if postsSuccess == false}
 		<div class="container">There was an error loading the post data</div>
-    {/if}
-  {/if}
-  <button style="margin: 2rem auto;" bind:this={loadButton}>
-    Loading
-  </button>
+	{/if}
+	<button style="margin: 2rem auto;" bind:this={loadButton}>Loading</button>
 </div>
 
 <style>
@@ -312,17 +305,17 @@
 		flex-direction: column;
 		margin-top: 1rem;
 		margin-bottom: 1rem;
-    position:relative;
-    z-index:1;
+		position: relative;
+		z-index: 1;
 	}
-  img.preview{
-    z-index:0;
-    position:absolute;
-    top:0;
-    border-radius: 0 0 3rem 3rem;
-    opacity:.3;
-    filter:hue-rotate(195deg);
-  }
+	img.preview {
+		z-index: 0;
+		position: absolute;
+		top: 0;
+		border-radius: 0 0 3rem 3rem;
+		opacity: 0.3;
+		filter: hue-rotate(195deg);
+	}
 
 	.footer {
 		margin-top: 0;
