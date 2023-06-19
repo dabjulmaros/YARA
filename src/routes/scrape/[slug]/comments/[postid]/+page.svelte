@@ -18,7 +18,7 @@
 	import { fetchRedditData } from '$lib/utils/fetchRedditData.js';
 
 	let status;
-	let posts = [];
+	let error = [];
 	let nextSet = '';
 	let viewComments = false;
 
@@ -62,7 +62,6 @@
 	async function load() {
 		loadButton.setAttribute('aria-busy', true);
 		loadButton.disabled = true;
-		let status;
 		await fetch(`https://old.reddit.com/r/${postSlug}.json`)
 			.then((res) => {
 				status = res.status;
@@ -77,7 +76,9 @@
 			return;
 		}
 		if (status == 403 || status == 404) {
+			status = 403;
 			console.log(comments);
+			error.push(comments.error, comments.message);
 			postsSuccess = false;
 			return;
 		}
@@ -264,7 +265,7 @@
 			<!-- </div> -->
 		</article>
 	{:else if status == 403}
-		<ErrorMessage message={posts} />
+		<ErrorMessage message={error} />
 	{:else if postsSuccess == false}
 		<div class="container">There was an error loading the post data</div>
 	{/if}

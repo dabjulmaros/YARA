@@ -11,12 +11,16 @@ export async function fetchRedditData(subName, nextSet) {
 			'content-type': 'application/json',
 		},
 	})
-		.then((r) => r.json())
+		.then((r) => {return r.json()})
 		.then((json) => {
 			if (json.html == undefined) {
 				console.log(json);
 				return { error: 'bad stuff happened' };
 			}
+      console.log(json);
+      if(json.url.includes('com/over18')){
+        return notOver18();
+      }
 			switch (json.status) {
 				case 200:
 					return reddit200(json.html);
@@ -72,6 +76,9 @@ function reddit200(html) {
 			raw: x.outerHTML,
 		});
 	}
+  if(returnArr.length==0 && htmlDoc.querySelectorAll('#noresults'))
+    return subNotFound();
+  
 	return returnArr;
 }
 
@@ -97,6 +104,30 @@ function reddit404(html) {
 	const retunrObj = {
 		status: 404,
 		message: [message, 'The requested page was not found', ['']],
+	};
+	return retunrObj;
+}
+
+function notOver18(){
+  const retunrObj = {
+		status: 403,
+		message: [
+			"Forbidden",
+			"The content on this page is for adults only",
+			["You can enable this content by right clicking allowing Over 18 Content"],
+		],
+	};
+	return retunrObj;
+}
+
+function subNotFound(){
+  const retunrObj = {
+		status: 403,
+		message: [
+			"Not Found",
+			"The requested forum was not found",
+			["Please verify your spelling and that forum exists"],
+		],
 	};
 	return retunrObj;
 }

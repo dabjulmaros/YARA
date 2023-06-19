@@ -3,7 +3,6 @@
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import { error } from '@sveltejs/kit';
-	console.log($page);
 </script>
 
 <div class="scroll">
