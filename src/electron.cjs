@@ -1,8 +1,8 @@
-const windowStateManager = require('electron-window-state');
-const { app, BrowserWindow, shell } = require('electron');
-const contextMenu = require('electron-context-menu');
-const serve = require('electron-serve');
-const path = require('path');
+const windowStateManager = require ('electron-window-state');
+const { app, BrowserWindow, shell } = require ('electron');
+const contextMenu = require ('electron-context-menu');
+const serve = require ('electron-serve');
+const path = require ('path');
 
 try {
 	require('electron-reloader')(module);
