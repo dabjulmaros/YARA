@@ -1,8 +1,10 @@
 <script>
 	import { onMount, createEventDispatcher } from 'svelte';
 	import { getImgSrc } from '$lib/utils/getImgSrc';
+	import { htmlDecode } from '$lib/utils/htmlDecode';
 
 	export let expando;
+	export let metadata;
 	let srcArr = [];
 	let capArr = [];
 
@@ -16,8 +18,16 @@
 		});
 	}
 	onMount(() => {
-		srcArr = getImgSrc(expando);
-		capArr = getCaptions(expando);
+		if (expando !== '' && expando !== undefined) {
+			srcArr = getImgSrc(expando);
+			capArr = getCaptions(expando);
+		} else if (metadata !== undefined) {
+			for (var x of metadata.items) {
+				srcArr.push(htmlDecode(metadata.media[x.media_id].s.u));
+			}
+			//svelte quirk it wont refresh the page after array push if the array is not set to itself
+			srcArr = srcArr;
+		}
 	});
 
 	function changeImg(change) {
@@ -36,30 +46,32 @@
 </script>
 
 <div class="gallery">
-	<mark
-		style="position: absolute; z-index:1;opacity:.4;right:0;bottom:0"
-		class="mark"
-		data-tooltip={capArr[index]}
-		data-placement="left"
-	>
-		{index + 1}/{srcArr.length}
-	</mark>
-	<button class="outline" on:click={() => changeImg(-1)}>◀</button>
-	<div class="imgHolder" style="position:relative;">
-		<div class="carousel" style={`transform:translate(-${index * 100}%)`}>
-			{#each srcArr as src}
-				<div>
-					<img
-						{src}
-						alt=""
-						loading="lazy"
-						on:dblclick={(event) => fullHeightImage(event)}
-					/>
-				</div>
-			{/each}
+	{#if srcArr.length > 0}
+		<mark
+			style="position: absolute; z-index:1;opacity:.4;right:0;bottom:0"
+			class="mark"
+			data-tooltip={capArr[index]}
+			data-placement="left"
+		>
+			{index + 1}/{srcArr.length}
+		</mark>
+		<button class="outline" on:click={() => changeImg(-1)}>◀</button>
+		<div class="imgHolder" style="position:relative;">
+			<div class="carousel" style={`transform:translate(-${index * 100}%)`}>
+				{#each srcArr as src}
+					<div>
+						<img
+							{src}
+							alt=""
+							loading="lazy"
+							on:dblclick={(event) => fullHeightImage(event)}
+						/>
+					</div>
+				{/each}
+			</div>
 		</div>
-	</div>
-	<button class="outline" on:click={() => changeImg(1)}>▶</button>
+		<button class="outline" on:click={() => changeImg(1)}>▶</button>
+	{/if}
 </div>
 
 <style>

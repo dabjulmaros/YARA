@@ -227,15 +227,10 @@
 						on:click={toggleMute}
 					/>
 				{:else if post.is_gallery === true}
-					{#each post.gallery_data.items as item}
-						<!-- Could be replaced by the new custom gallery -->
-						<!-- Need to check the captions tho -->
-						<img
-							src={htmlDecode(post.media_metadata[item.media_id].s.u)}
-							alt=""
-							on:dblclick={(event) => fullHeightImage(event)}
-						/>
-					{/each}
+					<ImgGallery
+						metadata={{ items: post.gallery_data.items, media: post.media_metadata }}
+						on:fullImgGall={(event) => fullHeightImage(event)}
+					/>
 				{:else if post.selftext_html != null}
 					<div id="post">
 						{@html htmlDecode(post.selftext_html)}
@@ -315,7 +310,10 @@
 		top: 0;
 		border-radius: 0 0 3rem 3rem;
 		opacity: 0.3;
-		filter: hue-rotate(195deg);
+		z-index: -1;
+		filter: sepia(1) hue-rotate(195deg) brightness(0.3);
+		width: 100%;
+		max-height: none;
 	}
 
 	.footer {
