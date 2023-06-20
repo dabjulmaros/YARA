@@ -5,6 +5,7 @@
 <!-- Need to fix issue where audio loads before video -->
 <script>
 	export let expando;
+	export let data;
 	let video;
 	let audio;
 	let paused;
@@ -30,9 +31,16 @@
 		audio.currentTime = currentTime;
 	}
 
-	function getVideoSrc(expando) {
-		let baseURL = expando.match(/data-seek-preview-url="([^"]+)"/)[1];
-		const mpdList = expando.match(/data-mpd-url="([^"]+)"/)[1];
+	function getVideoSrc() {
+		let baseURL;
+		let mpdList;
+		if (expando !== undefined && expando !== '') {
+			baseURL = expando.match(/data-seek-preview-url="([^"]+)"/)[1];
+			mpdList = expando.match(/data-mpd-url="([^"]+)"/)[1];
+		} else if (data !== undefined) {
+			baseURL = data.scrubber_media_url;
+			mpdList = data.dash_url;
+		}
 		fetch(htmlDecode(mpdList))
 			.then((res) => {
 				if (res.ok) return res.text();
@@ -60,7 +68,7 @@
 	autoplay
 	loop
 	controls
-	src={getVideoSrc(expando)}
+	src={getVideoSrc()}
 	bind:this={video}
 	bind:paused
 	bind:currentTime

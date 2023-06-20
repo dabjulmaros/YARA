@@ -200,14 +200,7 @@
 					</div>
 				{:else if post.secure_media}
 					{#if post.secure_media.reddit_video}
-						<video
-							muted
-							autoplay
-							loop
-							controls
-							src={post.secure_media.reddit_video.fallback_url}
-							on:click={toggleMute}
-						/>
+						<RVideo data={post.secure_media.reddit_video} />
 					{/if}
 				{:else if post.post_hint === 'image'}
 					<img
