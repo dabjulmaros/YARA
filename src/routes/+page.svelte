@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 
-	let desktop: string;
+	// let desktop: string;
 
-	if (window.electron && browser) {
-		window.electron.receive('from-main', (data: any) => {
-			desktop = `Received Message "${data}" from Electron`;
-			console.log(desktop);
-		});
-	}
+	// if (window.electron && browser) {
+	// 	window.electron.receive('from-main', (data: any) => {
+	// 		desktop = `Received Message "${data}" from Electron`;
+	// 		console.log(desktop);
+	// 	});
+	// }
 
-	const agent = window.electron ? 'Electron' : 'Browser';
+	// const agent = window.electron ? 'Electron' : 'Browser';
 
 	//custom changes
 	import Search from '$lib/components/Search.svelte';
