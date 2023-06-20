@@ -5,7 +5,6 @@ export async function fetchRedditData(subName, nextSet) {
     console.log(json);
     return { error: 'bad stuff happened' };
   }
-  console.log(json);
   if (json.url.includes('com/over18')) {
     return notOver18();
   }
@@ -52,6 +51,7 @@ export async function fetchRedditData(subName, nextSet) {
 function reddit200(html) {
   const htmlDoc = document.createElement('html');
   htmlDoc.innerHTML = html;
+  if(htmlDoc.querySelector('.pagename').textContent == "over 18?") return notOver18();
   const things = htmlDoc.querySelectorAll('.thing:not(.promoted)');
   const returnArr = [];
   for (var x of things) {
