@@ -43,7 +43,7 @@ export async function POST({ url, request }) {
 			// console.log(response.data);
 			let cleanHtml = response.data;
 			let x = 0;
-			let json = { status: response.status };
+			let json = { status: response.status, url:response.config.url };
 			let clean = true;
 			try {
 				var temp =
