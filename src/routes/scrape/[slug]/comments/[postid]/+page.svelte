@@ -85,7 +85,7 @@
 		postsSuccess = true;
 		post = comments[0].data.children[0].data;
 		console.log(post);
-		// loadButton.remove();
+		loadButton.remove();
 	}
 
 	function fullHeightImage(event) {
