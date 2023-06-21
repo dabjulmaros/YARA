@@ -20,13 +20,13 @@ contextBridge.exposeInMainWorld('electron', {
 			command = `node -e "import(\\"file:\\\\${__dirname.replaceAll(
 				'\\',
 				'/',
-			)}/node/request.cjs\\").then( loadedModule => loadedModule.request('{\\"r\\":\\"${
+			)}/request.cjs\\").then( loadedModule => loadedModule.request('{\\"r\\":\\"${
 				_params.r + '\\'
 			}",\\"params\\":\\"${_params.params + '\\'}",\\"over18\\":\\"${
 				_params.over18 + '\\'
 			}"}')).then(r=>console.log(r))"`;
 		else
-			command = `node -e 'import("${__dirname}/node/request.cjs").then( loadedModule => loadedModule.request(JSON.stringify(${params})).then(r=>console.log(r)))'`;
+			command = `node -e 'import("${__dirname}/request.cjs").then( loadedModule => loadedModule.request(JSON.stringify(${params})).then(r=>console.log(r)))'`;
 		const out = await execute(command);
 		return out;
 	},
