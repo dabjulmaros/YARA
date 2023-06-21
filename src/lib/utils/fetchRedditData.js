@@ -53,7 +53,7 @@ export async function fetchRedditData(subName, nextSet) {
 function reddit200(html) {
 	const htmlDoc = document.createElement('html');
 	htmlDoc.innerHTML = html;
-	if (htmlDoc.querySelector('.pagename').textContent == 'over 18?') return notOver18();
+	if (htmlDoc.querySelector('.pagename') && htmlDoc.querySelector('.pagename').textContent == 'over 18?') return notOver18();
 	const things = htmlDoc.querySelectorAll('.thing:not(.promoted)');
 	const returnArr = [];
 	for (var x of things) {
@@ -156,19 +156,19 @@ function subNotFound() {
 function parseComment(element) {
 	const returnElement = {
 		post: {
-			postTitle: element.querySelector('.parent .title').textContent,
-			postUrl: element.querySelector('.parent .title').href,
-			opName: element.querySelector('.parent .author').textContent,
-			opUrl: element.querySelector('.parent .author').href,
-			subName: element.querySelector('.parent .subreddit').textContent,
-			subUrl: element.querySelector('.parent .subreddit').href,
+			postTitle: element.querySelector('.parent .title')?element.querySelector('.parent .title').textContent:"",
+			postUrl: element.querySelector('[data-event-action="full_comments"]')?element.querySelector('[data-event-action="full_comments"]').href:"",
+			opName: element.querySelector('.parent .author')?element.querySelector('.parent .author').textContent:"",
+			opUrl: element.querySelector('.parent .author')?element.querySelector('.parent .author').href:"",
+			subName: element.querySelector('.parent .subreddit')?element.querySelector('.parent .subreddit').textContent:"",
+			subUrl: element.querySelector('.parent .subreddit')?element.querySelector('.parent .subreddit').href:"",
 		},
 		comment: {
-			commentOp: element.querySelector('.entry .author ').textContent,
-			commentPoint: element.querySelector('.entry .unvoted').textContent,
-			commentAge: element.querySelector('.entry .live-timestamp').textContent,
-			commentText: element.querySelector('.md').textContent,
-			commentContext: element.querySelector('[data-event-action="context"]').href,
+			commentOp: element.querySelector('.entry .author ')?element.querySelector('.entry .author ').textContent:"",
+			commentPoint: element.querySelector('.entry .unvoted')?element.querySelector('.entry .unvoted').textContent:"",
+			commentAge: element.querySelector('.entry .live-timestamp')?element.querySelector('.entry .live-timestamp').textContent:"",
+			commentText: element.querySelector('.md')?element.querySelector('.md').textContent:"",
+			commentContext: element.querySelector('[data-event-action="context"]')?element.querySelector('[data-event-action="context"]').href:element.querySelector('[data-event-action="context"]'),
 		},
 	};
 	
