@@ -8,10 +8,9 @@
 	let srcArr = [];
 	let capArr = [];
 
-	const dispatch = createEventDispatcher();
-
 	let index = 0;
 
+	const dispatch = createEventDispatcher();
 	function fullHeightImage(e) {
 		dispatch('fullImgGall', {
 			target: e.target,

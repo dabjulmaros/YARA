@@ -16,6 +16,7 @@
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 	import ImgGallery from '$lib/components/ImgGallery.svelte';
 	import UserComment from '$lib/components/UserComment.svelte';
+	import Header from '$lib/components/Header.svelte';
 
 	//tools
 	import { htmlDecode } from '$lib/utils/htmlDecode.js';
@@ -224,40 +225,10 @@
 			{#each posts as data}
 				<!-- <div class="posts"> -->
 				<article class={'thing ' + data.thingID} id="article">
-					<header style="position:sticky;top:4.5rem">
-						<h2
-							class="linkEllipsis"
-							on:mouseenter={(e) => mouseEnter(e)}
-							on:mouseleave={(e) => mouseOut(e)}
-						>
-							<AncherNoreferrer link={data.href} content={data.title} style="" />
-							<!-- <a
-                rel="noopener noreferrer"
-                href="https://www.reddit.com{data.permalink}"
-                target="_blank">{@html data.title}</a
-              > -->
-						</h2>
-						<small class="postInfo">
-							<AncherNoreferrer
-								style=""
-								link={'https://old.reddit.com/' + data.subreddit}
-								content={data.subreddit}
-							/>
-							by:
-							<AncherNoreferrer
-								style=""
-								link={'https://old.reddit.com/u/' + data.author}
-								content={data.author}
-							/>
-							ᐧ {data.time}
-						</small>
-						<button class="togglePost outline" on:click={(e) => collapsePost(e)}>
-							▶
-						</button>
-						<button class="toggleCode outline" on:click={() => console.log(data)}>
-							⚙️
-						</button>
-					</header>
+					<Header
+						postData={data}
+						on:collapsePost={(event) => collapsePost(event.detail)}
+					/>
 					<div class={'body'}>
 						<!-- svelte-ignore a11y-click-events-have-key-events -->
 						{#if data.expandoType == 'media'}
@@ -334,9 +305,17 @@
 						{/if}
 					</div>
 					<footer class="footer">
-						<button on:click={(event) => getComments(event, data.href)}>
-							view {data.comments}
-						</button>
+						{#if data.expandoType == 'comment'}
+							<AncherNoreferrer
+								link={data.expando.comment.commentContext}
+								content="context"
+								role="button"
+							/>
+						{:else}
+							<button on:click={(event) => getComments(event, data.href)}>
+								view {data.comments}
+							</button>
+						{/if}
 					</footer>
 					<!-- </div> -->
 				</article>
@@ -380,15 +359,6 @@
 		margin-bottom: 0;
 		z-index: 2;
 	}
-	header > h2 {
-		width: 90%;
-		margin: 0 auto;
-		margin-bottom: 0.5rem;
-	}
-	header > small.postInfo {
-		display: block;
-		text-align: left;
-	}
 	div.body {
 		display: flex;
 		flex-direction: column;
@@ -397,6 +367,7 @@
 	}
 
 	.footer {
+		text-align: center;
 		margin-top: 0;
 	}
 

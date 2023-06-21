@@ -3,38 +3,28 @@
 
 	import AncherNoreferrer from '$lib/components/AncherNoreferrer.svelte';
 	import Comments from '$lib/components/Comments.svelte';
-	import InfiniteScroll from '$lib/components/InfiniteScroll.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import RVideo from '$lib/components/RVideo.svelte';
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 	import ImgGallery from '$lib/components/ImgGallery.svelte';
+	import Header from '$lib/components/Header.svelte';
 
 	//tools
 	import { htmlDecode } from '$lib/utils/htmlDecode.js';
-	import { getImgSrc } from '$lib/utils/getImgSrc.js';
 	import { getMe } from '$lib/utils/getMe.js';
-
-	//request
-	import { fetchRedditData } from '$lib/utils/fetchRedditData.js';
 
 	let status;
 	let error = [];
-	let nextSet = '';
-	let viewComments = false;
 
 	let comments = [];
 	let post;
-	let lastComments;
 
 	let viewImage = false;
 	let imageSrc;
 	let postTitle;
 	let postLink;
 
-	let scrollElement;
-
 	let postsSuccess = true;
-	let hasMore = true;
 
 	export let data;
 
@@ -48,16 +38,6 @@
 		// load first batch onMount
 		load();
 	});
-
-	function fetchSelfText(id) {
-		fetch(`https://old.reddit.com/api/expando?link_id=${id}&renderstyle=html`)
-			.then((res) => {
-				if (res.ok) return res.text();
-			})
-			.then((text) => {
-				document.querySelector(`#self_${id}`).innerHTML = htmlDecode(text);
-			});
-	}
 
 	async function load() {
 		loadButton.setAttribute('aria-busy', true);
@@ -110,13 +90,6 @@
 		else body.style.display = '';
 	}
 
-	function mouseEnter(e) {
-		e.target.classList.toggle('linkEllipsis');
-	}
-	function mouseOut(e) {
-		e.target.classList.toggle('linkEllipsis');
-	}
-
 	function toggleMute(e) {
 		e.target.muted = !e.target.muted;
 		e.preventDefault();
@@ -124,51 +97,41 @@
 </script>
 
 <div class="scroll">
+	{#if viewImage == true}
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<dialog
+			open
+			on:click={(event) => {
+				if (event.target.tagName == 'DIALOG') viewImage = false;
+			}}
+		>
+			<article style="display: flex;flex-direction:column;align-items:center;padding:1rem">
+				<header style="width: 100%;margin:-0.5rem 0 .5rem 0;padding: 1rem;">
+					<span aria-label="Close" class="close" on:click={() => (viewImage = false)} />
+					<div class="linkEllipsis">
+						<AncherNoreferrer style="" link={postLink} content={postTitle} />
+					</div>
+				</header>
+				<img src={imageSrc} class="fullHeight" alt="decoration" />
+				<AncherNoreferrer
+					link={imageSrc}
+					content="Open In a New Tab"
+					style="margin-top: .5rem"
+				/>
+				<!-- <a
+          rel="noopener noreferrer"
+          href={imageSrc}
+          target="_blank"
+          style="margin: 0.5rem;">Open In New Tab</a
+        > -->
+			</article>
+		</dialog>
+	{/if}
 	<Navbar subNameField={postSlug} />
 	{#if comments.length > 0 && post != undefined}
 		<article id="article">
-			<header style="position:sticky;top:4.5rem">
-				<h2
-					class="linkEllipsis"
-					on:mouseenter={(e) => mouseEnter(e)}
-					on:mouseleave={(e) => mouseOut(e)}
-				>
-					<AncherNoreferrer
-						style=""
-						link={'https://old.reddit.com' + post.permalink}
-						content={post.title}
-					/>
-					<!-- <a
-            rel="noopener noreferrer"
-            href="https://www.reddit.com{post.permalink}"
-            target="_blank">{@html post.title}</a
-          > -->
-				</h2>
-				<small class="postInfo">
-					r/<AncherNoreferrer
-						style=""
-						link={'https://old.reddit.com/r/' + post.subreddit}
-						content={post.subreddit}
-					/>
-					by:
-					<AncherNoreferrer
-						style=""
-						link={'https://old.reddit.com/u/' + post.author}
-						content={post.author}
-					/>
-				</small>
-				<div class="togglePost" on:click={(e) => collapsePost(e)}>▶</div>
-				<div on:click={() => console.log(post)} class="toggleCode">⚙️</div>
-			</header>
+			<Header postData={post} on:collapsePost={(event) => collapsePost(event.detail)} />
 			<div class={'body'}>
-				{#if post.preview && post.preview.images[0].source.url}
-					<img
-						class="preview"
-						src={htmlDecode(post.preview.images[0].source.url)}
-						alt=""
-						on:dblclick={(event) => fullHeightImage(event)}
-					/>
-				{/if}
 				{#if post.secure_media_embed && post.secure_media_embed.content}
 					{#if post.secure_media_embed.media_domain_url.includes('www.redditmedia.com')}
 						<iframe
@@ -228,6 +191,8 @@
 					<div id="post">
 						{@html htmlDecode(post.selftext_html)}
 					</div>
+				{:else if post.post_hint == 'link'}
+					<AncherNoreferrer link={post.url} />
 				{:else}
 					<div class="linkEllipsis" title={post.url}>
 						<AncherNoreferrer link={post.url} />
@@ -242,7 +207,7 @@
 						<span>Toggle Code</span>
 						<icon>◀</icon>
 						<code on:click={(event) => event.stopPropagation()}>
-							{JSON.stringify(data)}
+							{JSON.stringify(post)}
 						</code>
 					</div>
 				{/if}
@@ -280,15 +245,6 @@
 		margin-bottom: 0;
 		z-index: 2;
 	}
-	header > h2 {
-		width: 90%;
-		margin: 0 auto;
-		margin-bottom: 0.5rem;
-	}
-	header > small.postInfo {
-		display: block;
-		text-align: left;
-	}
 	div.body {
 		display: flex;
 		flex-direction: column;
@@ -313,9 +269,6 @@
 		margin-top: 0;
 	}
 
-	:global(.collapse .togglePost) {
-		transform: rotate(180deg) !important;
-	}
 	:global(.collapse .body) {
 		display: none;
 	}
@@ -323,18 +276,6 @@
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
-	}
-	.togglePost {
-		position: absolute;
-		top: calc(50% - 0.8rem);
-		right: 1rem;
-		transform: rotate(90deg);
-		cursor: pointer;
-		transition: transform ease-in-out 0.3s;
-		padding: 0;
-		border: none;
-		height: 1.5rem;
-		width: 1.5rem;
 	}
 
 	/* .posts {
@@ -404,26 +345,7 @@
 		margin: 0 auto;
 		width: fit-content;
 	}
-	.toggleCode {
-		position: absolute;
-		right: 0.5rem;
-		top: 0.5rem;
-		opacity: 0;
-		cursor: pointer;
-		padding: 0;
-		border: none;
-	}
-	.toggleCode:hover {
-		opacity: 1;
-	}
-	.comments {
-		width: 90%;
-	}
-	.comments header {
-		position: sticky;
-		top: -3rem;
-		z-index: 1;
-	}
+
 	:global(table) {
 		font-size: 0.8rem;
 	}
