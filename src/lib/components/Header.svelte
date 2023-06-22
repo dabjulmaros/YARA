@@ -53,7 +53,9 @@
 			content={postData.author}
 		/>
 	</small>
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div class="togglePost" on:click={(e) => collapsePost(e)}>▶</div>
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div on:click={() => console.log(postData)} class="toggleCode">⚙️</div>
 </header>
 
