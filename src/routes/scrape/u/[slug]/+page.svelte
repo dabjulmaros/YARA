@@ -79,11 +79,6 @@
 				viewComments = true;
 				comments = json;
 				lastComments = id;
-				// comments = [];
-				// comments.push(...json[1].data.children);
-				// console.log(comments);
-				// console.log("Cleaner Comments");
-				// commentRecursor(comments, 0);
 				event.target.setAttribute('aria-busy', false);
 				event.target.disabled = false;
 			});
@@ -284,21 +279,6 @@
 						{:else if data.expandoType == 'comment'}
 							<UserComment comment={data.expando} />
 						{:else}
-							<!-- <div
-                id="code"
-                class="hidden"
-                on:click={(event) => {
-                  getMe(event.target, "code").classList.toggle("hidden");
-                  if(getMe(event.target, "code").classList.contains('hidden')==false);
-                    console.log(data)
-                }}
-              >
-                <span>Toggle Code</span><span class="code">◀</span>
-                <code on:click={(event) => event.stopPropagation()}
-                  >{JSON.stringify(data)}</code
-                >
-              </div> -->
-
 							{@html data.expando}
 						{/if}
 					</div>
@@ -338,15 +318,6 @@
 </div>
 
 <style>
-	/* .home {
-    width: min-content;
-    padding: 0;
-    margin: 0 auto;
-    position: absolute;
-    top: 0.5rem;
-    z-index: 2;
-    right: 77%;
-  } */
 	article {
 		max-width: 900px;
 		margin: 1rem auto;
@@ -393,15 +364,6 @@
 		width: 1.5rem;
 	}
 
-	/* .posts {
-    display: flex;
-    flex-direction: column;
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    padding: 2rem;
-    max-width: 900px;
-    text-align: center;
-    margin: 1rem auto;
-  } */
 	video,
 	img,
 	iframe {
@@ -414,34 +376,6 @@
 		height: max-content !important;
 		max-height: 80vh !important;
 	}
-	#code {
-		cursor: pointer;
-		text-decoration: underline;
-		margin: 0 auto;
-		width: 100%;
-	}
-	/* #code.hidden {
-    width: 13ch;
-  }
-  .hidden code {
-    width: 0%;
-    height: 0;
-    padding: 0;
-  }
-  span.code {
-    transition: all 0.5s;
-    transform: rotate(-90deg);
-  }
-  .hidden span.code {
-    transform: rotate(0deg);
-  }
-  code {
-    display: block;
-    width: 100%;
-    height: 100%;
-    transition: all .5s;
-    overflow: hidden;
-  } */
 
 	div#post {
 		overflow: hidden;

@@ -13,7 +13,7 @@
 	import { htmlDecode } from '$lib/utils/htmlDecode.js';
 	import { getMe } from '$lib/utils/getMe.js';
 
-	let status;
+	let status = 200;
 	let error = [];
 
 	let comments = [];
@@ -45,20 +45,28 @@
 		await fetch(`https://old.reddit.com/r/${postSlug}.json`)
 			.then((res) => {
 				status = res.status;
-				return res.json();
+				if (res.ok) return res.json();
+				else return [];
 			})
 			.then((json) => {
 				comments = json;
 			});
-		if (comments.length == 0) {
-			console.log(comments);
-			postsSuccess = false;
-			return;
-		}
+
 		if (status == 403 || status == 404) {
-			status = 403;
 			console.log(comments);
 			error.push(comments.error, comments.message);
+			error = error;
+			postsSuccess = false;
+			return;
+		} else if (status > 500) {
+			status = 500;
+			error.push('Server Error', 'We are having trouble getting data.');
+			error = error;
+			postsSuccess = false;
+			console.log(error);
+			return;
+		} else if (comments.length == 0) {
+			console.log(comments);
 			postsSuccess = false;
 			return;
 		}
@@ -204,7 +212,7 @@
 			</footer>
 			<!-- </div> -->
 		</article>
-	{:else if status == 403}
+	{:else if status !== 200}
 		<ErrorMessage message={error} />
 	{:else if postsSuccess == false}
 		<div class="container">There was an error loading the post data</div>
@@ -213,15 +221,6 @@
 </div>
 
 <style>
-	/* .home {
-    width: min-content;
-    padding: 0;
-    margin: 0 auto;
-    position: absolute;
-    top: 0.5rem;
-    z-index: 2;
-    right: 77%;
-  } */
 	article {
 		max-width: 900px;
 		margin: 1rem auto;
@@ -252,16 +251,6 @@
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
-
-	/* .posts {
-    display: flex;
-    flex-direction: column;
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    padding: 2rem;
-    max-width: 900px;
-    text-align: center;
-    margin: 1rem auto;
-  } */
 	video,
 	img,
 	iframe {
@@ -274,35 +263,6 @@
 		height: max-content !important;
 		max-height: 80vh !important;
 	}
-	#code {
-		cursor: pointer;
-		text-decoration: underline;
-		margin: 0 auto;
-		width: 100%;
-	}
-	/* #code.hidden {
-    width: 13ch;
-  }
-  .hidden code {
-    width: 0%;
-    height: 0;
-    padding: 0;
-  }
-  span.code {
-    transition: all 0.5s;
-    transform: rotate(-90deg);
-  }
-  .hidden span.code {
-    transform: rotate(0deg);
-  }
-  code {
-    display: block;
-    width: 100%;
-    height: 100%;
-    transition: all .5s;
-    overflow: hidden;
-  } */
-
 	div#post {
 		overflow: hidden;
 		width: 100%;
