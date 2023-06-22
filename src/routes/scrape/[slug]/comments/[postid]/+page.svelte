@@ -197,19 +197,6 @@
 					<div class="linkEllipsis" title={post.url}>
 						<AncherNoreferrer link={post.url} />
 					</div>
-					<div
-						id="code"
-						class="hidden"
-						on:click={(event) => {
-							getMe(event.target, 'code').classList.toggle('hidden');
-						}}
-					>
-						<span>Toggle Code</span>
-						<icon>◀</icon>
-						<code on:click={(event) => event.stopPropagation()}>
-							{JSON.stringify(post)}
-						</code>
-					</div>
 				{/if}
 			</div>
 			<footer class="footer">
@@ -253,18 +240,6 @@
 		position: relative;
 		z-index: 1;
 	}
-	img.preview {
-		z-index: 0;
-		position: absolute;
-		top: 0;
-		border-radius: 0 0 3rem 3rem;
-		opacity: 0.3;
-		z-index: -1;
-		filter: sepia(1) hue-rotate(195deg) brightness(0.3);
-		width: 100%;
-		max-height: none;
-	}
-
 	.footer {
 		margin-top: 0;
 	}

@@ -230,14 +230,7 @@
 					<div class={'body'}>
 						<!-- svelte-ignore a11y-click-events-have-key-events -->
 						{#if data.expandoType == 'media'}
-							{#if data.thingDomain == 'i.redd.it' || (data.thingDomain.includes('imgur.com') && !data.expando.includes('.gifv'))}
-								<img
-									src={getImgSrc(data.expando)[0]}
-									alt=""
-									loading="lazy"
-									on:dblclick={(event) => fullHeightImage(event)}
-								/>
-							{:else if data.thingDomain == 'v.redd.it'}
+							{#if data.thingDomain == 'v.redd.it'}
 								<RVideo expando={data.expando} />
 							{:else if data.expando.includes('iframe')}
 								<iframe
@@ -258,7 +251,12 @@
 									on:fullImgGall={(event) => fullHeightImage(event)}
 								/>
 							{:else}
-								no clue of what goes here
+								<img
+									src={getImgSrc(data.expando)[0]}
+									alt=""
+									loading="lazy"
+									on:dblclick={(event) => fullHeightImage(event)}
+								/>
 							{/if}
 						{:else if data.expandoType == 'text' || data.expandoType == 'crossPost'}
 							<div id={'self_' + data.thingID}>
