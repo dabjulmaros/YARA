@@ -6,7 +6,7 @@
 </script>
 
 <div class="scroll">
-	<Navbar subNameField="" />
+	<Navbar subNameField={$page.url.pathname.replace('/scrape/', '')} />
 	<ErrorMessage message={[$page.status, $page.error.message]} />
 </div>
 
