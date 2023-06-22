@@ -45,13 +45,14 @@
 		await fetch(`https://old.reddit.com/r/${postSlug}.json`)
 			.then((res) => {
 				status = res.status;
-				if (res.ok) return res.json();
-				else return [];
+				return res.json();
 			})
 			.then((json) => {
-				comments = json;
+				if (json === undefined) comments = [];
+				else comments = json;
 			});
 
+		loadButton.remove();
 		if (status == 403 || status == 404) {
 			console.log(comments);
 			error.push(comments.error, comments.message);
@@ -73,7 +74,6 @@
 		postsSuccess = true;
 		post = comments[0].data.children[0].data;
 		console.log(post);
-		loadButton.remove();
 	}
 
 	function fullHeightImage(event) {
