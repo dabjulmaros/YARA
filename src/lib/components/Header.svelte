@@ -2,6 +2,10 @@
 	import { createEventDispatcher } from 'svelte';
 	import AncherNoreferrer from '$lib/components/AncherNoreferrer.svelte';
 
+	//utils
+	import { getPoints } from '$lib/utils/getPoints';
+	import { getTime } from '$lib/utils/getTime';
+
 	export let postData;
 
 	const dispatch = createEventDispatcher();
@@ -51,7 +55,10 @@
 			style=""
 			link={'https://old.reddit.com/u/' + postData.author}
 			content={postData.author}
-		/>
+		/> · {getTime(postData.time, postData.created)} - {getPoints(
+			postData.points,
+			postData.score,
+		)}
 	</small>
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div class="togglePost" on:click={(e) => collapsePost(e)}>▶</div>
