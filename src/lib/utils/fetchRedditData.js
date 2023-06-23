@@ -79,6 +79,9 @@ function reddit200(html) {
 		returnArr.push({
 			thingID: x.getAttribute('data-fullname'),
 			thingDomain: x.getAttribute('data-domain'),
+      subreddit: x.getAttribute('data-subreddit-prefixed'),
+      dataKind:x.getAttribute('data-kind'),
+      dataUrl:x.getAttribute('data-url'),
 			title: x.querySelector('a.title') ? x.querySelector('a.title').textContent : '',
 			href: x.querySelector('.flat-list .comments')
 				? x.querySelector('.flat-list .comments').href
@@ -92,7 +95,7 @@ function reddit200(html) {
 			time: x.querySelector('.tagline time')
 				? x.querySelector('.tagline time').textContent
 				: '',
-			subreddit: x.getAttribute('data-subreddit-prefixed'),
+      points:x.querySelector('.score.unvoted')?x.querySelector('.score.unvoted').textContent:"",
 			expando: expandoReturn,
 			expandoType: expandoType,
 			raw: x.outerHTML,
