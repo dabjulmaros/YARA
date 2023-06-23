@@ -26,7 +26,7 @@
 	//request
 	import { fetchRedditData } from '$lib/utils/fetchRedditData.js';
 
-	let status;
+	let status = 200;
 	let posts = [];
 	let nextSet = '';
 	let viewComments = false;
@@ -101,7 +101,6 @@
 		if (data.status == 403 || data.status == 404) {
 			console.log(data);
 			postsSuccess = false;
-			status = 403;
 			posts.push(...data.message);
 			return;
 		}
@@ -310,7 +309,7 @@
 				</button>
 			{/if}
 		</div>
-	{:else if status == 403}
+	{:else if status !== 403}
 		<ErrorMessage message={posts} />
 	{:else}
 		<div class="container">There was an error loading the post data</div>

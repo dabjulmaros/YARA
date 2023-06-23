@@ -25,7 +25,6 @@
 	//request
 	import { fetchRedditData } from '$lib/utils/fetchRedditData.js';
 
-	let status;
 	let posts = [];
 	let nextSet = '';
 	let viewComments = false;
@@ -40,6 +39,7 @@
 	let scrollElement;
 
 	let postsSuccess = true;
+	let status = 200;
 	let hasMore = true;
 
 	export let data;
@@ -303,7 +303,7 @@
 				</button>
 			{/if}
 		</div>
-	{:else if status == 403}
+	{:else if status !== 200}
 		<ErrorMessage message={posts} />
 	{:else}
 		<div class="container">There was an error loading the post data</div>
