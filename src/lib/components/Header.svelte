@@ -55,7 +55,7 @@
 			style=""
 			link={'https://old.reddit.com/u/' + postData.author}
 			content={postData.author}
-		/> · {getTime(postData.time, postData.created)} - {getPoints(
+		/> - {getTime(postData.time, postData.created)} · {getPoints(
 			postData.points,
 			postData.score,
 		)}
