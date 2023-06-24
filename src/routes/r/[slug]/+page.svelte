@@ -124,7 +124,6 @@
 	}
 
 	function toggleMute(e) {
-		console.log(e);
 		e.target.muted = !e.target.muted;
 	}
 </script>

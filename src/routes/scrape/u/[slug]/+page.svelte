@@ -91,7 +91,6 @@
 			`${subName == '""' ? '' : 'user/' + subName}`,
 			`${nextSet == '' ? '' : 'after=' + nextSet}`,
 		);
-		console.log(data);
 		if (data.error || data.length == 0) {
 			console.log(data);
 			if (posts.length > 0) hasMore = false;

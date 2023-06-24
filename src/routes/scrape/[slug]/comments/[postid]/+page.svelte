@@ -73,7 +73,6 @@
 		}
 		postsSuccess = true;
 		post = comments[0].data.children[0].data;
-		console.log(post);
 	}
 
 	function fullHeightImage(event) {

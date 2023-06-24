@@ -7,7 +7,6 @@
 	import { getTime } from '$lib/utils/getTime';
 
 	export let postData;
-	console.log(postData);
 
 	const dispatch = createEventDispatcher();
 	function collapsePost(e) {
