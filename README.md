@@ -8,8 +8,13 @@ Laundry List of things that need to be improved:
 - move from old reddit to new reddit
 - add customization
 - fix UI issues introduced by electron
-- get built working with electron and sveltkit adapters
-  - As of now the app works as expected while in dev mode, but when built issues arise when using +server routes
+- update the UI to take advantage of the desktop format
+- figure out how to use the electron updater
+  - The app builds correctly now, but is still under heavy development. 
+  - I still want to commit updates as they are done instead of realasing built updates.
+- make it so videos and other media is not redered while outside of view
+  - videos specially play in the background as I have autoplay on
+  - the easiest fix would be to disable autoplay and have the users click play but thats not my desired behaivor
 - general improvements everywhere
 
 What it does right now.
@@ -18,7 +23,9 @@ What it does right now.
 - Videos, images, galleries, text post, and iframe all are being rendered
 - Link posts are clickable to the source
 - Allow to opt into content tagged as NSFW
+- Views for subreddits, posts, and users
 - Uses Electron headers to pass cors requirements
+- app builts correctly
 
 As to why I'm using Electron for this application and not deploying it in a site somewhere... I wanted to use YARA as the name, and by being an electron app I can use app as tha A :).
 
