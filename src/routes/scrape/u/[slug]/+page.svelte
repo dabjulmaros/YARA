@@ -100,7 +100,11 @@
 		}
 		if (data.status == 403 || data.status == 404) {
 			console.log(data);
-			postsSuccess = false;
+			if (posts.length > 0) {
+				hasMore = false;
+				return;
+			} else postsSuccess = false;
+			status = 403;
 			posts.push(...data.message);
 			return;
 		}
