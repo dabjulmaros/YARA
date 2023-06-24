@@ -7,8 +7,6 @@
 	import { getTime } from '$lib/utils/getTime';
 
 	export let commentsArr;
-
-	console.log(commentsArr);
 </script>
 
 <div class="parent">
@@ -29,7 +27,7 @@
 					</small>
 				</summary>
 				<div class="comment border">{@html htmlDecode(comment.data.body_html)}</div>
-				{#if comment.data.replies !== '' && comment.data.replies.kind !== 'more' && comment.data.replies.data.children[0].kind !== 'more'}
+				{#if comment.data.replies !== '' && comment.data.replies.kind !== 'more'}
 					<div class="child border">
 						<svelte:self commentsArr={comment.data.replies.data.children} />
 					</div>
