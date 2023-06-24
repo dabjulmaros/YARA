@@ -7,6 +7,7 @@
 	import { getTime } from '$lib/utils/getTime';
 
 	export let postData;
+	console.log(postData);
 
 	const dispatch = createEventDispatcher();
 	function collapsePost(e) {
@@ -51,14 +52,22 @@
 			content={postData.subreddit.replace('r/', '')}
 		/>
 		by:
-		<AncherNoreferrer
-			style=""
-			link={'https://old.reddit.com/u/' + postData.author}
-			content={postData.author}
-		/> - {getTime(postData.time, postData.created)} · {getPoints(
-			postData.points,
-			postData.score,
-		)}
+		{#if postData.expandoType !== 'comment'}
+			<AncherNoreferrer
+				style=""
+				link={'https://old.reddit.com/u/' + postData.author}
+				content={postData.author}
+			/> - {getTime(postData.time, postData.created)} · {getPoints(
+				postData.points,
+				postData.score,
+			)}
+		{:else}
+			<AncherNoreferrer
+				style=""
+				link={'https://old.reddit.com/u/' + postData.expando.post.opName}
+				content={postData.expando.post.opName}
+			/>
+		{/if}
 	</small>
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div class="togglePost" on:click={(e) => collapsePost(e)}>▶</div>
