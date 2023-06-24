@@ -7,8 +7,6 @@
 	import { getTime } from '$lib/utils/getTime';
 
 	export let commentsArr;
-
-	console.log(commentsArr);
 </script>
 
 <div class="parent">

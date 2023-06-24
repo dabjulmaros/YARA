@@ -13,7 +13,7 @@
 		"dev:electron": "electron src/electron.cjs",
 		"build": "cross-env NODE_ENV=production npm run build:vite && npm run build:electron",
 		"build:vite": "vite build",
-		"build:electron": "electron-builder -w --config build.config.json"
+		"build:electron": "electron-builder -m --config build.config.json"
 	},
 	"engines": {
 		"npm": ">=7",
