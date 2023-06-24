@@ -27,11 +27,11 @@
 					</small>
 				</summary>
 				<div class="comment border">{@html htmlDecode(comment.data.body_html)}</div>
-				<div class="child border">
-					{#if comment.data.replies}
+				{#if comment.data.replies !== '' && comment.data.replies.kind !== 'more'}
+					<div class="child border">
 						<svelte:self commentsArr={comment.data.replies.data.children} />
-					{/if}
-				</div>
+					</div>
+				{/if}
 			</details>
 		{/if}
 	{/each}
@@ -43,12 +43,11 @@
 		border-left: solid 1px var(--accordion-border-color);
 	}
 	.comment {
-		padding-left: 0.5rem;
+		padding: 0.5rem 0 0 0.5rem;
 		width: 95%;
 	}
 	.child {
-		padding-top: 0.5rem;
-		padding-left: 1rem;
+		padding: 0.5rem 0 0 1rem;
 	}
 
 	summary {
@@ -76,5 +75,9 @@
 	}
 	details[open] {
 		border: none;
+		margin-bottom: 0;
+	}
+	:global(.comment .md p:last-child) {
+		margin-bottom: 0;
 	}
 </style>
