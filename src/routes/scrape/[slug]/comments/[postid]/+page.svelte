@@ -8,6 +8,7 @@
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 	import ImgGallery from '$lib/components/ImgGallery.svelte';
 	import Header from '$lib/components/Header.svelte';
+	import PostDetails from '$lib/components/PostDetails.svelte';
 	import SimpleIFrame from '$lib/components/SimpleIFrame.svelte';
 	import SimpleImg from '$lib/components/SimpleImg.svelte';
 	import SimpleVideo from '$lib/components/SimpleVideo.svelte';
@@ -133,6 +134,7 @@
 	{#if comments.length > 0 && post != undefined}
 		<article id="article">
 			<Header postData={post} on:collapsePost={(event) => collapsePost(event.detail)} />
+			<PostDetails postData={post} />
 			<div class={'body'}>
 				{#if post.secure_media_embed && post.secure_media_embed.content}
 					{#if post.secure_media_embed.media_domain_url.includes('www.redditmedia.com')}

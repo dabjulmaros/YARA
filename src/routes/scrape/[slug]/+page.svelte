@@ -14,6 +14,7 @@
 	import Navbar from '$lib/components/Navbar.svelte';
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 	import Header from '$lib/components/Header.svelte';
+	import PostDetails from '$lib/components/PostDetails.svelte';
 	import MediaElement from '$lib/components/MediaElement.svelte';
 
 	//tools
@@ -142,8 +143,8 @@
 				if (event.target.tagName == 'DIALOG') viewComments = false;
 			}}
 		>
-			<article class="comments">
-				<header style="margin-bottom:0.5rem">
+			<article class="modal">
+				<header>
 					<span
 						aria-label="Close"
 						class="close"
@@ -177,8 +178,8 @@
 				if (event.target.tagName == 'DIALOG') viewImage = false;
 			}}
 		>
-			<article style="display: flex;flex-direction:column;align-items:center;padding:1rem">
-				<header style="width: 100%;margin:-0.5rem 0 .5rem 0;padding: 1rem;">
+			<article class="modal">
+				<header>
 					<span aria-label="Close" class="close" on:click={() => (viewImage = false)} />
 					<div class="linkEllipsis">
 						<AncherNoreferrer style="" link={postLink} content={postTitle} />
@@ -209,12 +210,17 @@
 						postData={data}
 						on:collapsePost={(event) => collapsePost(event.detail)}
 					/>
-					<MediaElement {data} on:fullImg={fullHeightImage} />
-					<footer class="footer">
-						<button on:click={(event) => getComments(event, data.href)}>
-							view {data.comments}
-						</button>
-					</footer>
+					<div>
+						<PostDetails postData={data} />
+						<div>
+							<MediaElement {data} on:fullImg={fullHeightImage} />
+							<footer class="footer">
+								<button on:click={(event) => getComments(event, data.href)}>
+									view {data.comments}
+								</button>
+							</footer>
+						</div>
+					</div>
 					<!-- </div> -->
 				</article>
 			{/each}
@@ -279,7 +285,7 @@
 
 	:global(img.fullHeight) {
 		height: max-content !important;
-		max-height: 80vh !important;
+		max-height: calc(100vh - 12rem) !important;
 	}
 	div.scroll {
 		overflow-y: auto;
@@ -303,15 +309,24 @@
 	.toggleCode:hover {
 		opacity: 1;
 	}
-	.comments {
+	article.modal {
 		width: 90%;
 		height: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 0 1rem 1rem 1rem;
 	}
-	.comments header {
+
+	article.modal header {
 		position: sticky;
-		top: -3rem;
+		top: 0rem;
 		z-index: 1;
+		margin-top: 0rem;
+		margin-bottom: 0.5rem;
+		width: calc(100% + 2rem);
 	}
+
 	:global(table) {
 		font-size: 0.8rem;
 	}

@@ -14,6 +14,7 @@
 	import Navbar from '$lib/components/Navbar.svelte';
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 	import Header from '$lib/components/Header.svelte';
+	import PostDetails from '$lib/components/PostDetails.svelte';
 	import MediaElement from '$lib/components/MediaElement.svelte';
 
 	//tools
@@ -205,6 +206,7 @@
 						postData={data}
 						on:collapsePost={(event) => collapsePost(event.detail)}
 					/>
+					<PostDetails postData={data} />
 					<MediaElement {data} on:fullImg={fullHeightImage} />
 					<footer class="footer">
 						{#if data.expandoType == 'comment'}
