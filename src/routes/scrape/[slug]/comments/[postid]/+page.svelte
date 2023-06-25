@@ -8,6 +8,9 @@
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 	import ImgGallery from '$lib/components/ImgGallery.svelte';
 	import Header from '$lib/components/Header.svelte';
+	import SimpleIFrame from '$lib/components/SimpleIFrame.svelte';
+	import SimpleImg from '$lib/components/SimpleImg.svelte';
+	import SimpleVideo from '$lib/components/SimpleVideo.svelte';
 
 	//tools
 	import { htmlDecode } from '$lib/utils/htmlDecode.js';
@@ -76,10 +79,7 @@
 	}
 
 	function fullHeightImage(event) {
-		let element;
-		if (event.type == 'dblclick') element = event.target;
-		else if (event.type == 'fullImgGall') element = event.detail.target;
-
+		let element = event.detail.target;
 		// element.classList.toggle("fullHeight");
 		// element.scrollIntoView({ block: "center" });
 		const title = getMe(element, 'article').querySelector('header h2 a');
@@ -95,11 +95,6 @@
 		const body = article.querySelector('.body');
 		if (article.classList.contains('collapse')) body.style.display = 'none';
 		else body.style.display = '';
-	}
-
-	function toggleMute(e) {
-		e.target.muted = !e.target.muted;
-		e.preventDefault();
 	}
 </script>
 
@@ -141,27 +136,16 @@
 			<div class={'body'}>
 				{#if post.secure_media_embed && post.secure_media_embed.content}
 					{#if post.secure_media_embed.media_domain_url.includes('www.redditmedia.com')}
-						<iframe
+						<SimpleIFrame
 							src={post.secure_media_embed.media_domain_url +
 								'?responsive=true&is_nightmode=true'}
-							frameborder="0"
-							style="border-radius:15px;overflow:hidden;margin:0 auto;height:47vh"
-							scrolling="no"
-							width="550px"
-							height="511px"
-							allowfullscreen=""
 							title={post.title}
 						/>
 					{:else}
-						<iframe
+						<SimpleIFrame
 							src={post.url
 								.replace('watch', 'ifr')
 								.replace('gfycat.com/', 'gfycat.com/ifr/')}
-							frameborder="0"
-							scrolling="no"
-							width="100%"
-							height="100%"
-							allowfullscreen=""
 							title={post.title}
 						/>
 					{/if}
@@ -173,29 +157,19 @@
 						<RVideo data={post.secure_media.reddit_video} />
 					{/if}
 				{:else if post.post_hint === 'image'}
-					<img
-						src={post.url}
-						alt=""
-						loading="lazy"
-						on:dblclick={(event) => fullHeightImage(event)}
-					/>
+					<SimpleImg src={post.url} on:fullImg={(event) => fullHeightImage(event)} />
+
 					<!-- {:else if post.media_embed!=null || post.media_embed!={}}
     <div class="embed">{post.media_embed.content}</div> -->
 				{:else if post.domain.includes('imgur') && post.url.includes('gifv')}
-					<video
-						src={post.url.replace('gifv', 'mp4')}
-						muted
-						autoplay
-						loop
-						on:click={toggleMute}
-					/>
+					<SimpleVideo src={post.url.replace('gifv', 'mp4')} />
 				{:else if post.is_gallery === true}
 					<ImgGallery
 						metadata={{ items: post.gallery_data.items, media: post.media_metadata }}
-						on:fullImgGall={(event) => fullHeightImage(event)}
+						on:fullImg={(event) => fullHeightImage(event)}
 					/>
 				{:else if post.selftext_html != null}
-					<div id="post">
+					<div class="post">
 						{@html htmlDecode(post.selftext_html)}
 					</div>
 				{:else if post.post_hint == 'link'}
@@ -250,19 +224,12 @@
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
-	video,
-	img,
-	iframe {
-		height: fit-content;
-		max-height: 47vh;
-		max-width: 100%;
-		margin: 0 auto;
-	}
+
 	:global(img.fullHeight) {
 		height: max-content !important;
 		max-height: 80vh !important;
 	}
-	div#post {
+	div.post {
 		overflow: hidden;
 		width: 100%;
 		height: 100%;
@@ -285,5 +252,8 @@
 	}
 	:global(th, td) {
 		padding: 0;
+	}
+	:global(.md p:last-child) {
+		margin-bottom: 0;
 	}
 </style>

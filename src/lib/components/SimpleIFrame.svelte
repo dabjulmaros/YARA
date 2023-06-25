@@ -6,7 +6,6 @@
 <iframe
 	{src}
 	frameborder="0"
-	style="border-radius:15px;overflow:hidden;margin:0 auto;height:47vh"
 	scrolling="no"
 	width="550px"
 	height="511px"
@@ -15,10 +14,13 @@
 />
 
 <style>
-	iframe {
-		height: fit-content;
+	:global(iframe) {
+		display: block;
+		margin: 0 auto;
+		height: 47vh;
 		max-height: 47vh;
 		max-width: 100%;
-		margin: 0 auto;
+		overflow: hidden;
+		border-radius: 15px;
 	}
 </style>

@@ -12,14 +12,11 @@
 	import Comments from '$lib/components/Comments.svelte';
 	import InfiniteScroll from '$lib/components/InfiniteScroll.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
-	import RVideo from '$lib/components/RVideo.svelte';
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
-	import ImgGallery from '$lib/components/ImgGallery.svelte';
 	import Header from '$lib/components/Header.svelte';
+	import MediaElement from '$lib/components/MediaElement.svelte';
 
 	//tools
-	import { htmlDecode } from '$lib/utils/htmlDecode.js';
-	import { getImgSrc } from '$lib/utils/getImgSrc.js';
 	import { getMe } from '$lib/utils/getMe.js';
 
 	//request
@@ -52,16 +49,6 @@
 		// load first batch onMount
 		load();
 	});
-
-	function fetchSelfText(id) {
-		fetch(`https://old.reddit.com/api/expando?link_id=${id}&renderstyle=html`)
-			.then((res) => {
-				if (res.ok) return res.text();
-			})
-			.then((text) => {
-				document.querySelector(`#self_${id}`).innerHTML = htmlDecode(text);
-			});
-	}
 
 	function getComments(event, id) {
 		if (id == lastComments) {
@@ -120,10 +107,7 @@
 	}
 
 	function fullHeightImage(event) {
-		let element;
-		if (event.type == 'dblclick') element = event.target;
-		else if (event.type == 'fullImgGall') element = event.detail.target;
-
+		let element = event.detail.target;
 		// element.classList.toggle("fullHeight");
 		// element.scrollIntoView({ block: "center" });
 		const title = getMe(element, 'article').querySelector('header h2 a');
@@ -146,11 +130,6 @@
 	}
 	function mouseOut(e) {
 		e.target.classList.toggle('linkEllipsis');
-	}
-
-	function toggleMute(e) {
-		e.target.muted = !e.target.muted;
-		e.preventDefault();
 	}
 </script>
 
@@ -230,62 +209,7 @@
 						postData={data}
 						on:collapsePost={(event) => collapsePost(event.detail)}
 					/>
-					<div class={'body'}>
-						<!-- svelte-ignore a11y-click-events-have-key-events -->
-						{#if data.expandoType == 'media'}
-							{#if data.thingDomain == 'v.redd.it'}
-								<RVideo expando={data.expando} />
-							{:else if data.expando.includes('iframe')}
-								<iframe
-									src={'https://' +
-										data.expando.match(/src="([^"]+)/)[1] +
-										'?responsive=true&is_nightmode=true'}
-									frameborder="0"
-									style="border-radius:15px;overflow:hidden;margin:0 auto;height:47vh"
-									scrolling="no"
-									width="550px"
-									height="511px"
-									allowfullscreen=""
-									title={data.title}
-								/>
-							{:else if data.expando.includes('gallery')}
-								<ImgGallery
-									expando={data.expando}
-									on:fullImgGall={(event) => fullHeightImage(event)}
-								/>
-							{:else}
-								<img
-									src={getImgSrc(data.expando)[0]}
-									alt=""
-									loading="lazy"
-									on:dblclick={(event) => fullHeightImage(event)}
-								/>
-							{/if}
-						{:else if data.expandoType == 'text' || data.expandoType == 'crossPost'}
-							<div id={'self_' + data.thingID}>
-								{fetchSelfText(data.thingID)}
-							</div>
-						{:else if data.expandoType == 'none'}
-							{#if data.expando.includes('imgur') && data.expando.includes('gifv')}
-								<video
-									src={data.expando.replace('gifv', 'mp4')}
-									muted
-									autoplay
-									loop
-									controls
-									on:click={toggleMute}
-								/>
-							{:else}
-								<AncherNoreferrer
-									style=""
-									link={data.expando}
-									content={data.expando}
-								/>
-							{/if}
-						{:else}
-							{@html data.expando}
-						{/if}
-					</div>
+					<MediaElement {data} on:fullImg={fullHeightImage} />
 					<footer class="footer">
 						<button on:click={(event) => getComments(event, data.href)}>
 							view {data.comments}
@@ -324,12 +248,6 @@
 		margin-bottom: 0;
 		z-index: 2;
 	}
-	div.body {
-		display: flex;
-		flex-direction: column;
-		margin-top: 1rem;
-		margin-bottom: 1rem;
-	}
 
 	.footer {
 		margin-top: 0;
@@ -359,24 +277,9 @@
 		width: 1.5rem;
 	}
 
-	video,
-	img,
-	iframe {
-		height: fit-content;
-		max-height: 47vh;
-		max-width: 100%;
-		margin: 0 auto;
-	}
 	:global(img.fullHeight) {
 		height: max-content !important;
 		max-height: 80vh !important;
-	}
-	div#post {
-		overflow: hidden;
-		width: 100%;
-		height: 100%;
-		border: dashed 1px var(--muted-border-color);
-		padding: 20px;
 	}
 	div.scroll {
 		overflow-y: auto;

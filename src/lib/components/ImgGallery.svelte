@@ -12,7 +12,7 @@
 
 	const dispatch = createEventDispatcher();
 	function fullHeightImage(e) {
-		dispatch('fullImgGall', {
+		dispatch('fullImg', {
 			target: e.target,
 		});
 	}
