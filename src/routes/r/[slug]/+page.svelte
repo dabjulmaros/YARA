@@ -157,9 +157,8 @@
 						/>
 					</div>
 				</header>
-				<p>
-					<Comments commentsArr={comments[1].data.children} />
-				</p>
+
+				<Comments commentsArr={comments[1].data.children} />
 			</article>
 		</dialog>
 	{/if}
@@ -364,7 +363,7 @@
     right: 77%;
   } */
 	article {
-		max-width: 900px;
+		max-width: 1500px;
 		margin: 1rem auto;
 	}
 	header {

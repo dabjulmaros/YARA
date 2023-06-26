@@ -1,10 +1,11 @@
 <script>
 	import AncherNoreferrer from '$lib/components/AncherNoreferrer.svelte';
+	import MediaQuery from '$lib/components/MediaQuery.svelte';
 
 	export let postData;
 
 	//utils
-	import { getPoints } from '$lib/utils/getPoints';
+	import { shortNum } from '$lib/utils/shortNum';
 	import { getTime } from '$lib/utils/getTime';
 </script>
 
@@ -20,10 +21,14 @@
 			style=""
 			link={'https://old.reddit.com/u/' + postData.author}
 			content={postData.author}
-		/> - {getTime(postData.time, postData.created)} · {getPoints(
-			postData.points,
-			postData.score,
-		)}
+		/>
+		<MediaQuery query="(min-width: 801px)" let:matches>
+			{#if matches}
+				<br />
+			{/if}
+		</MediaQuery>
+
+		{getTime(postData.time, postData.created)} · {shortNum(postData.points, postData.score)} points
 	{:else}
 		<AncherNoreferrer
 			style=""

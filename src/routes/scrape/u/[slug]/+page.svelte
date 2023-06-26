@@ -16,9 +16,11 @@
 	import Header from '$lib/components/Header.svelte';
 	import PostDetails from '$lib/components/PostDetails.svelte';
 	import MediaElement from '$lib/components/MediaElement.svelte';
+	import MediaQuery from '$lib/components/MediaQuery.svelte';
 
 	//tools
 	import { getMe } from '$lib/utils/getMe.js';
+	import { shortNum } from '$lib/utils/shortNum.js';
 
 	//request
 	import { fetchRedditData } from '$lib/utils/fetchRedditData.js';
@@ -139,8 +141,8 @@
 				if (event.target.tagName == 'DIALOG') viewComments = false;
 			}}
 		>
-			<article class="comments">
-				<header style="margin-bottom:0.5rem">
+			<article class="modal">
+				<header>
 					<span
 						aria-label="Close"
 						class="close"
@@ -160,9 +162,7 @@
 						/>
 					</div>
 				</header>
-				<p>
-					<Comments commentsArr={comments[1].data.children} />
-				</p>
+				<Comments commentsArr={comments[1].data.children} />
 			</article>
 		</dialog>
 	{/if}
@@ -177,7 +177,11 @@
 			<article style="display: flex;flex-direction:column;align-items:center;padding:1rem">
 				<header style="width: 100%;margin:-0.5rem 0 .5rem 0;padding: 1rem;">
 					<span aria-label="Close" class="close" on:click={() => (viewImage = false)} />
-					<div class="linkEllipsis">
+					<div
+						class="linkEllipsis"
+						on:mouseenter={(e) => mouseEnter(e)}
+						on:mouseleave={(e) => mouseOut(e)}
+					>
 						<AncherNoreferrer style="" link={postLink} content={postTitle} />
 					</div>
 				</header>
@@ -206,21 +210,44 @@
 						postData={data}
 						on:collapsePost={(event) => collapsePost(event.detail)}
 					/>
-					<PostDetails postData={data} />
-					<MediaElement {data} on:fullImg={fullHeightImage} />
-					<footer class="footer">
-						{#if data.expandoType == 'comment'}
-							<AncherNoreferrer
-								link={data.expando.comment.commentContext}
-								content="context"
-								role="button"
-							/>
-						{:else}
-							<button on:click={(event) => getComments(event, data.href)}>
-								view {data.comments}
-							</button>
+					<div class="body">
+						<MediaElement {data} on:fullImg={fullHeightImage} />
+						<MediaQuery query="(min-width: 801px)" let:matches>
+							{#if matches}
+								<div class="details">
+									<PostDetails postData={data} />
+									{#if data.expandoType == 'comment'}
+										<AncherNoreferrer
+											link={data.expando.comment.commentContext}
+											content="context"
+											role="button"
+										/>
+									{:else}
+										<button on:click={(event) => getComments(event, data.href)}>
+											view {shortNum(null, data.comments.split(' ')[0])} comments
+										</button>
+									{/if}
+								</div>
+							{/if}
+						</MediaQuery>
+					</div>
+					<MediaQuery query="(max-width: 800px)" let:matches>
+						{#if matches}
+							<footer class="footer">
+								{#if data.expandoType == 'comment'}
+									<AncherNoreferrer
+										link={data.expando.comment.commentContext}
+										content="context"
+										role="button"
+									/>
+								{:else}
+									<button on:click={(event) => getComments(event, data.href)}>
+										view {data.comments}
+									</button>
+								{/if}
+							</footer>
 						{/if}
-					</footer>
+					</MediaQuery>
 					<!-- </div> -->
 				</article>
 			{/each}
@@ -245,7 +272,7 @@
 
 <style>
 	article {
-		max-width: 900px;
+		max-width: 1500px;
 		margin: 1rem auto;
 	}
 	header {
@@ -253,6 +280,16 @@
 		position: relative;
 		margin-bottom: 0;
 		z-index: 2;
+	}
+
+	.details {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		width: calc(40% - var(--block-spacing-horizontal));
+		padding: 1rem 0;
+		padding-left: var(--block-spacing-horizontal);
+		border-left: solid 1px var(--accordion-border-color);
 	}
 
 	.footer {
@@ -311,14 +348,23 @@
 	.toggleCode:hover {
 		opacity: 1;
 	}
-	.comments {
+	article.modal {
 		width: 90%;
 		height: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0 1rem 1rem 1rem;
 	}
-	.comments header {
+
+	article.modal header {
 		position: sticky;
-		top: -3rem;
+		top: 0rem;
 		z-index: 1;
+		margin-top: 0rem;
+		margin-bottom: 0.5rem;
+		width: calc(100% + 2rem);
 	}
 	:global(table) {
 		font-size: 0.8rem;
@@ -329,5 +375,13 @@
 	dialog {
 		min-height: calc(100% - 33px);
 		top: 33px;
+	}
+	@media (min-width: 801px) {
+		div.body {
+			display: flex;
+			flex-direction: row;
+			min-height: 30vh;
+			margin-top: 1rem;
+		}
 	}
 </style>

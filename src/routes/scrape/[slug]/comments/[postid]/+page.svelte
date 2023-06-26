@@ -12,10 +12,12 @@
 	import SimpleIFrame from '$lib/components/SimpleIFrame.svelte';
 	import SimpleImg from '$lib/components/SimpleImg.svelte';
 	import SimpleVideo from '$lib/components/SimpleVideo.svelte';
+	import MediaQuery from '$lib/components/MediaQuery.svelte';
 
 	//tools
 	import { htmlDecode } from '$lib/utils/htmlDecode.js';
 	import { getMe } from '$lib/utils/getMe.js';
+	import { shortNum } from '$lib/utils/shortNum.js';
 
 	let status = 200;
 	let error = [];
@@ -97,6 +99,12 @@
 		if (article.classList.contains('collapse')) body.style.display = 'none';
 		else body.style.display = '';
 	}
+	function mouseEnter(e) {
+		e.target.classList.toggle('linkEllipsis');
+	}
+	function mouseOut(e) {
+		e.target.classList.toggle('linkEllipsis');
+	}
 </script>
 
 <div class="scroll">
@@ -108,10 +116,14 @@
 				if (event.target.tagName == 'DIALOG') viewImage = false;
 			}}
 		>
-			<article style="display: flex;flex-direction:column;align-items:center;padding:1rem">
-				<header style="width: 100%;margin:-0.5rem 0 .5rem 0;padding: 1rem;">
+			<article class="modal">
+				<header>
 					<span aria-label="Close" class="close" on:click={() => (viewImage = false)} />
-					<div class="linkEllipsis">
+					<div
+						class="linkEllipsis"
+						on:mouseenter={(e) => mouseEnter(e)}
+						on:mouseleave={(e) => mouseOut(e)}
+					>
 						<AncherNoreferrer style="" link={postLink} content={postTitle} />
 					</div>
 				</header>
@@ -134,53 +146,72 @@
 	{#if comments.length > 0 && post != undefined}
 		<article id="article">
 			<Header postData={post} on:collapsePost={(event) => collapsePost(event.detail)} />
-			<PostDetails postData={post} />
-			<div class={'body'}>
-				{#if post.secure_media_embed && post.secure_media_embed.content}
-					{#if post.secure_media_embed.media_domain_url.includes('www.redditmedia.com')}
-						<SimpleIFrame
-							src={post.secure_media_embed.media_domain_url +
-								'?responsive=true&is_nightmode=true'}
-							title={post.title}
-						/>
-					{:else}
-						<SimpleIFrame
-							src={post.url
-								.replace('watch', 'ifr')
-								.replace('gfycat.com/', 'gfycat.com/ifr/')}
-							title={post.title}
-						/>
-					{/if}
-					<div class="linkEllipsis" title={post.url}>
-						<AncherNoreferrer link={post.url} />
-					</div>
-				{:else if post.secure_media}
-					{#if post.secure_media.reddit_video}
-						<RVideo data={post.secure_media.reddit_video} />
-					{/if}
-				{:else if post.post_hint === 'image'}
-					<SimpleImg src={post.url} on:fullImg={(event) => fullHeightImage(event)} />
 
-					<!-- {:else if post.media_embed!=null || post.media_embed!={}}
-    <div class="embed">{post.media_embed.content}</div> -->
-				{:else if post.domain.includes('imgur') && post.url.includes('gifv')}
-					<SimpleVideo src={post.url.replace('gifv', 'mp4')} />
-				{:else if post.is_gallery === true}
-					<ImgGallery
-						metadata={{ items: post.gallery_data.items, media: post.media_metadata }}
-						on:fullImg={(event) => fullHeightImage(event)}
-					/>
-				{:else if post.selftext_html != null}
-					<div class="post">
-						{@html htmlDecode(post.selftext_html)}
-					</div>
-				{:else if post.post_hint == 'link'}
-					<AncherNoreferrer link={post.url} />
-				{:else}
-					<div class="linkEllipsis" title={post.url}>
+			<div class="body">
+				<MediaQuery query="(min-width: 801px)" let:matches>
+					{#if matches}
+						<div class="details">
+							<PostDetails postData={post} />
+						</div>
+					{/if}
+				</MediaQuery>
+				<div class="media">
+					{#if post.secure_media_embed && post.secure_media_embed.content}
+						{#if post.secure_media_embed.media_domain_url.includes('www.redditmedia.com')}
+							<SimpleIFrame
+								src={post.secure_media_embed.media_domain_url +
+									'?responsive=true&is_nightmode=true'}
+								title={post.title}
+							/>
+						{:else}
+							<SimpleIFrame
+								src={post.url
+									.replace('watch', 'ifr')
+									.replace('gfycat.com/', 'gfycat.com/ifr/')}
+								title={post.title}
+							/>
+						{/if}
+						<div
+							class="linkEllipsis"
+							title={post.url}
+							on:mouseenter={(e) => mouseEnter(e)}
+							on:mouseleave={(e) => mouseOut(e)}
+						>
+							<AncherNoreferrer link={post.url} />
+						</div>
+					{:else if post.secure_media}
+						{#if post.secure_media.reddit_video}
+							<RVideo data={post.secure_media.reddit_video} />
+						{/if}
+					{:else if post.post_hint === 'image' || post.domain == 'i.redd.it'}
+						<SimpleImg src={post.url} on:fullImg={(event) => fullHeightImage(event)} />
+					{:else if post.domain.includes('imgur') && post.url.includes('gifv')}
+						<SimpleVideo src={post.url.replace('gifv', 'mp4')} />
+					{:else if post.is_gallery === true}
+						<ImgGallery
+							metadata={{
+								items: post.gallery_data.items,
+								media: post.media_metadata,
+							}}
+							on:fullImg={(event) => fullHeightImage(event)}
+						/>
+					{:else if post.selftext_html != null}
+						<div class="post">
+							{@html htmlDecode(post.selftext_html)}
+						</div>
+					{:else if post.post_hint == 'link'}
 						<AncherNoreferrer link={post.url} />
-					</div>
-				{/if}
+					{:else}
+						<div
+							class="linkEllipsis"
+							title={post.url}
+							on:mouseenter={(e) => mouseEnter(e)}
+							on:mouseleave={(e) => mouseOut(e)}
+						>
+							<AncherNoreferrer link={post.url} />
+						</div>
+					{/if}
+				</div>
 			</div>
 			<footer class="footer">
 				<Comments commentsArr={comments[1].data.children} />
@@ -197,7 +228,7 @@
 
 <style>
 	article {
-		max-width: 900px;
+		max-width: 1500px;
 		margin: 1rem auto;
 	}
 	header {
@@ -206,7 +237,16 @@
 		margin-bottom: 0;
 		z-index: 2;
 	}
-	div.body {
+	.details {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		width: calc(40% - var(--block-spacing-horizontal));
+		padding: 1rem 0;
+		padding-left: var(--block-spacing-horizontal);
+		border-left: solid 1px var(--accordion-border-color);
+	}
+	div.media {
 		display: flex;
 		flex-direction: column;
 		margin-top: 1rem;
@@ -214,6 +254,25 @@
 		position: relative;
 		z-index: 1;
 	}
+	article.modal {
+		width: 90%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0 1rem 1rem 1rem;
+	}
+
+	article.modal header {
+		position: sticky;
+		top: 0rem;
+		z-index: 1;
+		margin-top: 0rem;
+		margin-bottom: 0.5rem;
+		width: calc(100% + 2rem);
+	}
+
 	.footer {
 		margin-top: 0;
 	}
@@ -257,5 +316,22 @@
 	}
 	:global(.md p:last-child) {
 		margin-bottom: 0;
+	}
+
+	@media (min-width: 801px) {
+		div.media {
+			display: flex;
+			flex-direction: column;
+			margin: 1rem auto;
+			position: relative;
+			z-index: 1;
+			width: 60%;
+		}
+		div.body {
+			display: flex;
+			flex-direction: row-reverse;
+			min-height: 30vh;
+			margin-top: 1rem;
+		}
 	}
 </style>

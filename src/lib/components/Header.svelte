@@ -1,6 +1,8 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
 	import AncherNoreferrer from '$lib/components/AncherNoreferrer.svelte';
+	import PostDetails from '$lib/components/PostDetails.svelte';
+	import MediaQuery from '$lib/components/MediaQuery.svelte';
 
 	export let postData;
 
@@ -40,6 +42,11 @@
       target="_blank">{@html post.title}</a
     > -->
 	</h2>
+	<MediaQuery query="(max-width: 800px)" let:matches>
+		{#if matches}
+			<PostDetails {postData} />
+		{/if}
+	</MediaQuery>
 
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div class="togglePost" on:click={(e) => collapsePost(e)}>▶</div>

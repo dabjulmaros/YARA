@@ -16,9 +16,11 @@
 	import Header from '$lib/components/Header.svelte';
 	import PostDetails from '$lib/components/PostDetails.svelte';
 	import MediaElement from '$lib/components/MediaElement.svelte';
+	import MediaQuery from '$lib/components/MediaQuery.svelte';
 
 	//tools
 	import { getMe } from '$lib/utils/getMe.js';
+	import { shortNum } from '$lib/utils/shortNum.js';
 
 	//request
 	import { fetchRedditData } from '$lib/utils/fetchRedditData.js';
@@ -164,9 +166,7 @@
 						/>
 					</div>
 				</header>
-				<p>
-					<Comments commentsArr={comments[1].data.children} />
-				</p>
+				<Comments commentsArr={comments[1].data.children} />
 			</article>
 		</dialog>
 	{/if}
@@ -181,7 +181,11 @@
 			<article class="modal">
 				<header>
 					<span aria-label="Close" class="close" on:click={() => (viewImage = false)} />
-					<div class="linkEllipsis">
+					<div
+						class="linkEllipsis"
+						on:mouseenter={(e) => mouseEnter(e)}
+						on:mouseleave={(e) => mouseOut(e)}
+					>
 						<AncherNoreferrer style="" link={postLink} content={postTitle} />
 					</div>
 				</header>
@@ -210,17 +214,28 @@
 						postData={data}
 						on:collapsePost={(event) => collapsePost(event.detail)}
 					/>
-					<div>
-						<PostDetails postData={data} />
-						<div>
-							<MediaElement {data} on:fullImg={fullHeightImage} />
+					<div class="body">
+						<MediaElement {data} on:fullImg={fullHeightImage} />
+						<MediaQuery query="(min-width: 801px)" let:matches>
+							{#if matches}
+								<div class="details">
+									<PostDetails postData={data} />
+									<button on:click={(event) => getComments(event, data.href)}>
+										view {shortNum(null, data.comments.split(' ')[0])} comments
+									</button>
+								</div>
+							{/if}
+						</MediaQuery>
+					</div>
+					<MediaQuery query="(max-width: 800px)" let:matches>
+						{#if matches}
 							<footer class="footer">
 								<button on:click={(event) => getComments(event, data.href)}>
 									view {data.comments}
 								</button>
 							</footer>
-						</div>
-					</div>
+						{/if}
+					</MediaQuery>
 					<!-- </div> -->
 				</article>
 			{/each}
@@ -245,7 +260,7 @@
 
 <style>
 	article {
-		max-width: 900px;
+		max-width: 1500px;
 		margin: 1rem auto;
 	}
 	header {
@@ -254,7 +269,15 @@
 		margin-bottom: 0;
 		z-index: 2;
 	}
-
+	.details {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		width: calc(40% - var(--block-spacing-horizontal));
+		padding: 1rem 0;
+		padding-left: var(--block-spacing-horizontal);
+		border-left: solid 1px var(--accordion-border-color);
+	}
 	.footer {
 		margin-top: 0;
 	}
@@ -315,6 +338,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		justify-content: space-between;
 		padding: 0 1rem 1rem 1rem;
 	}
 
@@ -336,5 +360,13 @@
 	dialog {
 		min-height: calc(100% - 33px);
 		top: 33px;
+	}
+	@media (min-width: 801px) {
+		div.body {
+			display: flex;
+			flex-direction: row;
+			min-height: 30vh;
+			margin-top: 1rem;
+		}
 	}
 </style>

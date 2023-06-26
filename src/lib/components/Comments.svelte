@@ -3,7 +3,7 @@
 	import AncherNoreferrer from '$lib/components/AncherNoreferrer.svelte';
 
 	//utils
-	import { getPoints } from '$lib/utils/getPoints';
+	import { shortNum } from '$lib/utils/shortNum';
 	import { getTime } from '$lib/utils/getTime';
 
 	export let commentsArr;
@@ -20,10 +20,8 @@
 						style="width: fit-content;margin: 0.3rem 0;flex-basis: 100%;"
 					/>
 					<small>
-						{getTime(null, comment.data.created)} · {getPoints(
-							null,
-							comment.data.score,
-						)}
+						{getTime(null, comment.data.created)} · {shortNum(null, comment.data.score)}
+						points
 					</small>
 				</summary>
 				<div class="comment border">{@html htmlDecode(comment.data.body_html)}</div>
@@ -38,6 +36,9 @@
 </div>
 
 <style>
+	.parent {
+		width: 100%;
+	}
 	details[open] .border {
 		border: none;
 		border-left: solid 1px var(--accordion-border-color);

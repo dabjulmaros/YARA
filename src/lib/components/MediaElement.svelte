@@ -32,7 +32,7 @@
 	}
 </script>
 
-<div class={'body'}>
+<div class={'media'}>
 	{#if data.expandoType == 'media'}
 		{#if data.thingDomain == 'v.redd.it'}
 			<RVideo expando={data.expando} />
@@ -69,7 +69,7 @@
 </div>
 
 <style>
-	div.body {
+	div.media {
 		display: flex;
 		flex-direction: column;
 		margin-top: 1rem;
@@ -84,5 +84,15 @@
 	}
 	:global(.md p:last-child) {
 		margin-bottom: 0;
+	}
+	@media (min-width: 801px) {
+		div.media {
+			display: flex;
+			flex-direction: column;
+			margin: 1rem auto;
+			position: relative;
+			z-index: 1;
+			width: 60%;
+		}
 	}
 </style>
