@@ -15,10 +15,13 @@
 	function toggleMute(e) {
 		video.muted = !video.muted;
 		audio.muted = video.muted;
+		audio.currentTime = currentTime;
 		e.preventDefault();
 	}
-	function togglePlaying() {
-		if (currentTime == undefined) return;
+	function togglePlaying(override = null) {
+		if (currentTime == undefined) currentTime = 0;
+
+		if (override != null) paused = override;
 
 		if (!paused) {
 			video.play();
@@ -63,16 +66,15 @@
 </script>
 
 <video
-	autoplay
 	muted
 	loop
 	controls
 	use:inView
 	on:enterView={() => {
-		video.play();
+		togglePlaying(false);
 	}}
 	on:exitView={() => {
-		video.pause();
+		togglePlaying(true);
 	}}
 	src={getVideoSrc()}
 	bind:this={video}
