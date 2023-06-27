@@ -1,9 +1,8 @@
-<script context="module">
-	import { htmlDecode } from '$lib/utils/htmlDecode.js';
-</script>
-
 <!-- Need to fix issue where audio loads before video -->
 <script>
+	import { htmlDecode } from '$lib/utils/htmlDecode.js';
+	import inView from '$lib/utils/inView';
+
 	export let expando;
 	export let data;
 	let video;
@@ -64,17 +63,24 @@
 </script>
 
 <video
-	muted
 	autoplay
+	muted
 	loop
 	controls
+	use:inView
+	on:enterView={() => {
+		video.play();
+	}}
+	on:exitView={() => {
+		video.pause();
+	}}
 	src={getVideoSrc()}
 	bind:this={video}
 	bind:paused
 	bind:currentTime
 	on:click={toggleMute}
 >
-	<audio muted autoplay loop bind:this={audio} />
+	<audio muted loop bind:this={audio} />
 </video>
 
 <style>

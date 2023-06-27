@@ -5,6 +5,7 @@
 	import MediaQuery from '$lib/components/MediaQuery.svelte';
 
 	export let postData;
+	export let forceDetails = false;
 
 	const dispatch = createEventDispatcher();
 	function collapsePost(e) {
@@ -43,7 +44,7 @@
     > -->
 	</h2>
 	<MediaQuery query="(max-width: 800px)" let:matches>
-		{#if matches}
+		{#if matches || forceDetails}
 			<PostDetails {postData} />
 		{/if}
 	</MediaQuery>

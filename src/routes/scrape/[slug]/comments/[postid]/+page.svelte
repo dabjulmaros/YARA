@@ -145,15 +145,19 @@
 	<Navbar subNameField={postSlug} />
 	{#if comments.length > 0 && post != undefined}
 		<article id="article">
-			<Header postData={post} on:collapsePost={(event) => collapsePost(event.detail)} />
+			<Header
+				postData={post}
+				forceDetails={true}
+				on:collapsePost={(event) => collapsePost(event.detail)}
+			/>
 
 			<div class="body">
 				<MediaQuery query="(min-width: 801px)" let:matches>
-					{#if matches}
+					<!-- {#if matches}
 						<div class="details">
 							<PostDetails postData={post} />
 						</div>
-					{/if}
+					{/if} -->
 				</MediaQuery>
 				<div class="media">
 					{#if post.secure_media_embed && post.secure_media_embed.content}
@@ -237,7 +241,7 @@
 		margin-bottom: 0;
 		z-index: 2;
 	}
-	.details {
+	/* .details {
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
@@ -245,7 +249,7 @@
 		padding: 1rem 0;
 		padding-left: var(--block-spacing-horizontal);
 		border-left: solid 1px var(--accordion-border-color);
-	}
+	} */
 	div.media {
 		display: flex;
 		flex-direction: column;
