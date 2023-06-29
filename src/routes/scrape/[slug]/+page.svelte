@@ -166,7 +166,9 @@
 						/>
 					</div>
 				</header>
-				<Comments commentsArr={comments[1].data.children} />
+				<div style="height: 100%;width:100%">
+					<Comments commentsArr={comments[1].data.children} />
+				</div>
 			</article>
 		</dialog>
 	{/if}
