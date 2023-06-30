@@ -39,10 +39,7 @@
 	.parent {
 		width: 100%;
 	}
-	details[open] .border {
-		border: none;
-		border-left: solid 1px var(--accordion-border-color);
-	}
+
 	.comment {
 		padding: 0.5rem 0 0 0.5rem;
 		width: 95%;
@@ -57,6 +54,7 @@
 		flex-direction: column;
 		position: relative;
 	}
+
 	details > summary::after {
 		margin: 0;
 		position: absolute;
@@ -64,6 +62,25 @@
 		top: 50%;
 		transform: translate(0px, -50%) rotate(270deg);
 	}
+
+	details summary:focus {
+		color: var(--accordion-close-summary-color);
+	}
+
+	details:last-child {
+		padding: 0;
+	}
+
+	details[open] {
+		border: none;
+		margin-bottom: 0;
+	}
+
+	details[open] .border {
+		border: none;
+		border-left: solid 1px var(--accordion-border-color);
+	}
+
 	details[open] > summary::after {
 		transform: translate(0px, -50%) rotate(360deg);
 	}
@@ -71,14 +88,11 @@
 	details[open] summary:focus {
 		color: var(--accordion-open-summary-color);
 	}
-	details summary:focus {
-		color: var(--accordion-close-summary-color);
-	}
-	details[open] {
-		border: none;
-		margin-bottom: 0;
-	}
+
 	:global(.comment .md p:last-child) {
 		margin-bottom: 0;
+	}
+	:global(.md *) {
+		margin: 0;
 	}
 </style>
