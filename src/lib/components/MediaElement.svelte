@@ -45,6 +45,8 @@
 			/>
 		{:else if data.expando.includes('gallery')}
 			<ImgGallery expando={data.expando} on:fullImg={(event) => fullHeightImage(event)} />
+		{:else if data.thingDomain.includes('imgur') && data.dataUrl.includes('gifv')}
+			<SimpleVideo src={data.dataUrl.replace('gifv', 'mp4')} />
 		{:else}
 			<SimpleImg
 				src={getImgSrc(data.expando)[0]}
