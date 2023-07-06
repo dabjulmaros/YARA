@@ -42,10 +42,6 @@
 	let status = 200;
 	let hasMore = true;
 
-	export let data;
-
-	const subName = data.slug;
-
 	let loadButton;
 
 	onMount(() => {
@@ -81,10 +77,7 @@
 	async function load() {
 		loadButton.setAttribute('aria-busy', true);
 		loadButton.disabled = true;
-		const data = await fetchRedditData(
-			`r/${subName}`,
-			`${nextSet == '' ? '' : 'after=' + nextSet}`,
-		);
+		const data = await fetchRedditData(``, `${nextSet == '' ? '' : 'after=' + nextSet}`);
 		if (data.error || data.length == 0) {
 			console.log(data);
 			if (posts.length > 0) hasMore = false;
@@ -206,7 +199,7 @@
 			</article>
 		</dialog>
 	{/if}
-	<Navbar subNameField={subName} />
+	<Navbar subNameField={''} />
 	{#if postsSuccess}
 		<div>
 			{#each posts as data}

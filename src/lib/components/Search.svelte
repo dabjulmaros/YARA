@@ -4,30 +4,25 @@
 
 	export let inputField;
 	function formSubmit(method = 0) {
-		if (inputField != '') {
-			let cleanInputField = inputField;
+		let cleanInputField = inputField;
 
-			if (cleanInputField.includes('/r/')) cleanInputField = cleanInputField.split('/r/')[1];
+		if (cleanInputField.includes('/r/')) cleanInputField = cleanInputField.split('/r/')[1];
 
-			if (cleanInputField.substr(0, 2) == 'r/') cleanInputField = cleanInputField.substr(2);
+		if (cleanInputField.substr(0, 2) == 'r/') cleanInputField = cleanInputField.substr(2);
 
-			if (cleanInputField.includes('/comments/'))
-				cleanInputField = cleanInputField.match(/([^/]+\/comments\/[^/]+)/)[1];
+		if (cleanInputField.includes('/comments/'))
+			cleanInputField = cleanInputField.match(/([^/]+\/comments\/[^/]+)/)[1];
 
-			if (cleanInputField.includes('reddit.com/'))
-				cleanInputField = cleanInputField.split('reddit.com/')[1];
+		if (cleanInputField.includes('reddit.com/'))
+			cleanInputField = cleanInputField.split('reddit.com/')[1];
 
-			if (window.location.pathname.includes('/scrape/') || method == 2)
-				window.location = `/scrape/${cleanInputField}`;
-			else window.location = `/r/${cleanInputField}`;
-		} else {
-			document.querySelector('input').setAttribute('aria-invalid', 'true');
-			document.querySelector('input').placeholder = 'Please Enter a Sub name';
-			setTimeout(() => {
-				document.querySelector('input').setAttribute('aria-invalid', 'false');
-				document.querySelector('input').placeholder = 'Enter Sub name... no r/ needed';
-			}, 1000);
-		}
+		if (
+			window.location.pathname.includes('/scrape/') ||
+			window.location.pathname == '/scrape' ||
+			method == 2
+		)
+			window.location = `/scrape/${cleanInputField}`;
+		else window.location = `/r/${cleanInputField}`;
 	}
 
 	function keyDown(e) {
