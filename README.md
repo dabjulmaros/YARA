@@ -13,8 +13,6 @@ Laundry List of things that need to be improved:
   - The app builds correctly now, but is still under heavy development. 
   - I still want to commit updates as they are done instead of realasing built updates.
 - make it so videos and other media is not redered while outside of view
-  - videos specially play in the background as I have autoplay on
-  - the easiest fix would be to disable autoplay and have the users click play but thats not my desired behaivor
 - general improvements everywhere
 
 What it does right now.
@@ -26,8 +24,9 @@ What it does right now.
 - Views for subreddits, posts, and users
 - Uses Electron headers to pass cors requirements
 - app builts correctly
+- videos will autoplay when the user scrolls them into view
 
-As to why I'm using Electron for this application and not deploying it in a site somewhere... I wanted to use YARA as the name, and by being an electron app I can use app as tha A :).
+As to why I'm using Electron for this application and not deploying it in a site somewhere... I wanted to use YARA as the name, and by being an electron app I can use app as the A.
 
 I'm working on this as I use it, so for now the development plan is "If I experience an issue or incovenience I will work on it". I know very professional, but hey at least I know Im working on issues that matter.
 
