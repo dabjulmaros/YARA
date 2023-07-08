@@ -87,6 +87,12 @@
 	:global(.md p:last-child) {
 		margin-bottom: 0;
 	}
+	:global(table) {
+		font-size: 0.8rem;
+	}
+	:global(th, td) {
+		padding: 0;
+	}
 	@media (min-width: 801px) {
 		div.media {
 			display: flex;
