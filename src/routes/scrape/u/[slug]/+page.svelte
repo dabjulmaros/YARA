@@ -9,7 +9,6 @@
 	import { onMount } from 'svelte';
 
 	import AncherNoreferrer from '$lib/components/AncherNoreferrer.svelte';
-	import Comments from '$lib/components/Comments.svelte';
 	import InfiniteScroll from '$lib/components/InfiniteScroll.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
@@ -17,6 +16,8 @@
 	import PostDetails from '$lib/components/PostDetails.svelte';
 	import MediaElement from '$lib/components/MediaElement.svelte';
 	import MediaQuery from '$lib/components/MediaQuery.svelte';
+	import FullScreenImg from '$lib/components/FullScreenImg.svelte';
+	import FullScreenComments from '$lib/components/FullScreenComments.svelte';
 
 	//tools
 	import { getMe } from '$lib/utils/getMe.js';
@@ -134,73 +135,14 @@
 
 <div bind:this={scrollElement} class="scroll">
 	{#if viewComments === true}
+		<FullScreenComments {comments} on:viewComments={(e) => (viewComments = e.value)} />
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<dialog
-			open
-			on:click={(event) => {
-				if (event.target.tagName == 'DIALOG') viewComments = false;
-			}}
-		>
-			<article class="modal">
-				<header>
-					<span
-						aria-label="Close"
-						class="close"
-						on:click={() => (viewComments = false)}
-					/>
-					<!-- still using the reddit api -->
-					<div
-						class="linkEllipsis"
-						on:mouseenter={(e) => mouseEnter(e)}
-						on:mouseleave={(e) => mouseOut(e)}
-					>
-						<AncherNoreferrer
-							style=""
-							link={'https://old.reddit.com' +
-								comments[0].data.children[0].data.permalink}
-							content={comments[0].data.children[0].data.title}
-						/>
-					</div>
-				</header>
-				<div style="height: 100%;width:100%">
-					<Comments commentsArr={comments[1].data.children} />
-				</div>
-			</article>
-		</dialog>
 	{/if}
 	{#if viewImage == true}
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<dialog
-			open
-			on:click={(event) => {
-				if (event.target.tagName == 'DIALOG') viewImage = false;
-			}}
-		>
-			<article style="display: flex;flex-direction:column;align-items:center;padding:1rem">
-				<header style="width: 100%;margin:-0.5rem 0 .5rem 0;padding: 1rem;">
-					<span aria-label="Close" class="close" on:click={() => (viewImage = false)} />
-					<div
-						class="linkEllipsis"
-						on:mouseenter={(e) => mouseEnter(e)}
-						on:mouseleave={(e) => mouseOut(e)}
-					>
-						<AncherNoreferrer style="" link={postLink} content={postTitle} />
-					</div>
-				</header>
-				<img src={imageSrc} class="fullHeight" alt="decoration" />
-				<AncherNoreferrer
-					link={imageSrc}
-					content="Open In a New Tab"
-					style="margin-top: .5rem"
-				/>
-				<!-- <a
-          rel="noopener noreferrer"
-          href={imageSrc}
-          target="_blank"
-          style="margin: 0.5rem;">Open In New Tab</a
-        > -->
-			</article>
-		</dialog>
+		<FullScreenImg
+			data={{ postLink, postTitle, imageSrc }}
+			on:viewImage={(e) => (viewImage = e.value)}
+		/>
 	{/if}
 	<Navbar subNameField={'u/' + subName} />
 	{#if postsSuccess}
@@ -277,12 +219,6 @@
 		max-width: 1500px;
 		margin: 1rem auto;
 	}
-	header {
-		text-align: center;
-		position: relative;
-		margin-bottom: 0;
-		z-index: 2;
-	}
 
 	.details {
 		display: flex;
@@ -323,11 +259,6 @@
 		width: 1.5rem;
 	}
 
-	:global(img.fullHeight) {
-		height: max-content !important;
-		max-height: 80vh !important;
-	}
-
 	div.scroll {
 		overflow-y: auto;
 		overflow-x: hidden;
@@ -349,34 +280,6 @@
 	}
 	.toggleCode:hover {
 		opacity: 1;
-	}
-	article.modal {
-		width: 90%;
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: space-between;
-		padding: 0 1rem 1rem 1rem;
-	}
-
-	article.modal header {
-		position: sticky;
-		top: 0rem;
-		z-index: 1;
-		margin-top: 0rem;
-		margin-bottom: 0.5rem;
-		width: calc(100% + 2rem);
-	}
-	:global(table) {
-		font-size: 0.8rem;
-	}
-	:global(th, td) {
-		padding: 0;
-	}
-	dialog {
-		min-height: calc(100% - 33px);
-		top: 33px;
 	}
 	@media (min-width: 801px) {
 		div.body {
