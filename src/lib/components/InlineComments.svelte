@@ -14,10 +14,13 @@
 <style>
 	.header {
 		position: sticky;
-		top: 2rem;
+		top: 10rem;
+		background: var(--card-sectionning-background-color);
+		padding: 0.3rem 1rem;
+		margin: 0.5rem 0;
 	}
 	h2 {
-		margin: 0.5rem 0;
+		margin: 0;
 	}
 	:global(div.body.comments div.media) {
 		width: 30%;

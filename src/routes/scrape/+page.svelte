@@ -79,9 +79,6 @@
 
 		event.target.setAttribute('aria-busy', false);
 		event.target.disabled = false;
-
-		let body = getMe(event.target, 'body', true);
-		body.classList.add('comments');
 	}
 
 	async function getComments(id) {
@@ -168,7 +165,7 @@
 						postData={data}
 						on:collapsePost={(event) => collapsePost(event.detail)}
 					/>
-					<div class="body">
+					<div class={`body ${data.href == inlineCommentsID ? 'comments' : ''}`}>
 						<MediaElement {data} on:fullImg={fullHeightImage} />
 						<MediaQuery query="(min-width: 801px)" let:matches>
 							{#if matches}
