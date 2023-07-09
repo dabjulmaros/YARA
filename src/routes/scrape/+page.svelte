@@ -17,6 +17,7 @@
 	import MediaQuery from '$lib/components/MediaQuery.svelte';
 	import FullScreenImg from '$lib/components/FullScreenImg.svelte';
 	import FullScreenComments from '$lib/components/FullScreenComments.svelte';
+	import InlineComments from '$lib/components/InlineComments.svelte';
 
 	//tools
 	import { getMe } from '$lib/utils/getMe.js';
@@ -28,8 +29,10 @@
 	let posts = [];
 	let nextSet = '';
 	let viewComments = false;
+	let viewInlineComments = false;
 	let comments = [];
 	let lastComments;
+	let inlineCommentsID = '';
 
 	let viewImage = false;
 	let imageSrc;
@@ -57,12 +60,28 @@
 		event.target.setAttribute('aria-busy', true);
 		event.target.disabled = true;
 		await getComments(id);
+		viewComments = true;
 		event.target.setAttribute('aria-busy', false);
 		event.target.disabled = false;
 	}
 
 	async function getInlineComments(event, id) {
+		if (id == lastComments) {
+			viewInlineComments = true;
+			return;
+		}
+		event.target.setAttribute('aria-busy', true);
+		event.target.disabled = true;
 		await getComments(id);
+
+		viewInlineComments = true;
+		inlineCommentsID = id;
+
+		event.target.setAttribute('aria-busy', false);
+		event.target.disabled = false;
+
+		let body = getMe(event.target, 'body', true);
+		body.classList.add('comments');
 	}
 
 	async function getComments(id) {
@@ -71,7 +90,6 @@
 				if (res.ok) return res.json();
 			})
 			.then((json) => {
-				viewComments = true;
 				comments = json;
 				lastComments = id;
 				// comments = [];
@@ -156,12 +174,20 @@
 							{#if matches}
 								<div class="details">
 									<PostDetails postData={data} />
-									<button
-										on:click={(event) =>
-											getFullScreenComments(event, data.href)}
-									>
-										view {shortNum(null, data.comments.split(' ')[0])} comments
-									</button>
+									<div class="comments">
+										{#if viewInlineComments === true && data.href == inlineCommentsID}
+											<InlineComments
+												commentsArr={comments[1].data.children}
+											/>
+										{:else}
+											<button
+												on:click={(event) =>
+													getInlineComments(event, data.href)}
+											>
+												view {shortNum(null, data.comments.split(' ')[0])} comments
+											</button>
+										{/if}
+									</div>
 								</div>
 							{/if}
 						</MediaQuery>
