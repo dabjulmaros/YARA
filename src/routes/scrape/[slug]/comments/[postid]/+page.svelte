@@ -156,7 +156,7 @@
 						</div>
 					{:else if post.secure_media}
 						{#if post.secure_media.reddit_video}
-							<RVideo data={post.secure_media.reddit_video} />
+							<RVideo data={post.secure_media.reddit_video} expando={''} />
 						{/if}
 					{:else if post.post_hint === 'image' || post.domain == 'i.redd.it'}
 						<SimpleImg src={post.url} on:fullImg={(event) => fullHeightImage(event)} />

@@ -35,7 +35,7 @@
 <div class={'media'}>
 	{#if data.expandoType == 'media'}
 		{#if data.thingDomain == 'v.redd.it'}
-			<RVideo expando={data.expando} />
+			<RVideo expando={data.expando} data={''} />
 		{:else if data.expando.includes('iframe')}
 			<SimpleIFrame
 				src={'https://' +
