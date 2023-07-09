@@ -49,14 +49,24 @@
 		load();
 	});
 
-	function getComments(event, id) {
+	async function getFullScreenComments(event, id) {
 		if (id == lastComments) {
 			viewComments = true;
 			return;
 		}
 		event.target.setAttribute('aria-busy', true);
 		event.target.disabled = true;
-		fetch(`${id}.json`)
+		await getComments(id);
+		event.target.setAttribute('aria-busy', false);
+		event.target.disabled = false;
+	}
+
+	async function getInlineComments(event, id) {
+		await getComments(id);
+	}
+
+	async function getComments(id) {
+		await fetch(`${id}.json`)
 			.then((res) => {
 				if (res.ok) return res.json();
 			})
@@ -69,8 +79,6 @@
 				// console.log(comments);
 				// console.log("Cleaner Comments");
 				// commentRecursor(comments, 0);
-				event.target.setAttribute('aria-busy', false);
-				event.target.disabled = false;
 			});
 	}
 
@@ -148,7 +156,10 @@
 							{#if matches}
 								<div class="details">
 									<PostDetails postData={data} />
-									<button on:click={(event) => getComments(event, data.href)}>
+									<button
+										on:click={(event) =>
+											getFullScreenComments(event, data.href)}
+									>
 										view {shortNum(null, data.comments.split(' ')[0])} comments
 									</button>
 								</div>
@@ -158,7 +169,9 @@
 					<MediaQuery query="(max-width: 800px)" let:matches>
 						{#if matches}
 							<footer class="footer">
-								<button on:click={(event) => getComments(event, data.href)}>
+								<button
+									on:click={(event) => getFullScreenComments(event, data.href)}
+								>
 									view {data.comments}
 								</button>
 							</footer>
