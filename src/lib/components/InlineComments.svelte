@@ -29,4 +29,12 @@
 	:global(div.body.comments div.details) {
 		width: calc(70% - var(--block-spacing-horizontal));
 	}
+	@media (max-width: 800px) {
+		:global(div.body.comments div.media) {
+			width: inherit;
+		}
+		:global(div.body.comments div.details) {
+			width: inherit;
+		}
+	}
 </style>

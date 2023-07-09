@@ -68,6 +68,7 @@
 	async function getInlineComments(event, id) {
 		if (id == lastComments) {
 			viewInlineComments = true;
+			inlineCommentsID = id;
 			return;
 		}
 		event.target.setAttribute('aria-busy', true);
