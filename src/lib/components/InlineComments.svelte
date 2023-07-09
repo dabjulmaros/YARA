@@ -18,6 +18,7 @@
 		background: var(--card-sectionning-background-color);
 		padding: 0.3rem 1rem;
 		margin: 0.5rem 0;
+		z-index: 2;
 	}
 	h2 {
 		margin: 0;
