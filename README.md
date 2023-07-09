@@ -26,6 +26,11 @@ What it does right now.
 - app builts correctly
 - videos will autoplay when the user scrolls them into view
 
+Current TODO:
+- Inline comments need polishing. What I know needs wokr so far :
+  - Scroll to the post details when comments are clicked.
+  - Add a close button to the inline comments header.
+  - Remove body comments style when comments are closed
 As to why I'm using Electron for this application and not deploying it in a site somewhere... I wanted to use YARA as the name, and by being an electron app I can use app as the A.
 
 I'm working on this as I use it, so for now the development plan is "If I experience an issue or incovenience I will work on it". I know very professional, but hey at least I know Im working on issues that matter.
