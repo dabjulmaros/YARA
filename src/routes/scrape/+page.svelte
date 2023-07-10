@@ -6,7 +6,7 @@
 */-->
 
 <script>
-	import { onMount } from 'svelte';
+	import { afterUpdate, onMount } from 'svelte';
 
 	import InfiniteScroll from '$lib/components/InfiniteScroll.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
@@ -47,9 +47,20 @@
 
 	let loadButton;
 
+	let scroll = false;
+	let elementToScroll;
+
 	onMount(() => {
 		// load first batch onMount
 		load();
+	});
+
+	afterUpdate(() => {
+		if (scroll) {
+			elementToScroll.scrollIntoView({ block: 'center' });
+
+			scroll = false;
+		}
 	});
 
 	async function getFullScreenComments(event, id) {
@@ -97,6 +108,12 @@
 				// commentRecursor(comments, 0);
 			});
 	}
+	function viewInlineCommentsEvent(e) {
+		viewInlineComments = e.detail.value;
+
+		scroll = true;
+		elementToScroll = getMe(e.detail.target, 'body', true);
+	}
 
 	async function load() {
 		loadButton.setAttribute('aria-busy', true);
@@ -141,19 +158,22 @@
 		const article = getMe(e.target, 'article');
 		article.classList.toggle('collapse');
 		const body = article.querySelector('.body');
-		if (article.classList.contains('collapse')) body.style.display = 'none';
-		else body.style.display = '';
+
+		if (article.classList.contains('collapse')) {
+			body.style.display = 'none';
+			article.scrollIntoView({ block: 'center' });
+		} else body.style.display = '';
 	}
 </script>
 
 <div bind:this={scrollElement} class="scroll">
 	{#if viewComments === true}
-		<FullScreenComments {comments} on:viewComments={(e) => (viewComments = e.value)} />
+		<FullScreenComments {comments} on:viewComments={(e) => (viewComments = e.detail.value)} />
 	{/if}
 	{#if viewImage == true}
 		<FullScreenImg
 			data={{ postLink, postTitle, imageSrc }}
-			on:viewImage={(e) => (viewImage = e.value)}
+			on:viewImage={(e) => (viewImage = e.detail.value)}
 		/>
 	{/if}
 	<Navbar subNameField={''} />
@@ -166,7 +186,13 @@
 						postData={data}
 						on:collapsePost={(event) => collapsePost(event.detail)}
 					/>
-					<div class={`body ${data.href == inlineCommentsID ? 'comments' : ''}`}>
+					<div
+						class={`body ${
+							viewInlineComments === true && data.href == inlineCommentsID
+								? 'comments'
+								: ''
+						}`}
+					>
 						<MediaElement {data} on:fullImg={fullHeightImage} />
 						<MediaQuery query="(min-width: 801px)" let:matches>
 							{#if matches}
@@ -176,6 +202,7 @@
 										{#if viewInlineComments === true && data.href == inlineCommentsID}
 											<InlineComments
 												commentsArr={comments[1].data.children}
+												on:viewInlineComments={viewInlineCommentsEvent}
 											/>
 										{:else}
 											<button
@@ -233,9 +260,11 @@
 		flex-direction: column;
 		justify-content: space-between;
 		width: calc(40% - var(--block-spacing-horizontal));
-		padding: 1rem 0;
+		padding: 2rem 0;
 		padding-left: var(--block-spacing-horizontal);
 		border-left: solid 1px var(--accordion-border-color);
+		background: var(--card-sectionning-background-color);
+		margin: -1rem calc(-1 * var(--block-spacing-horizontal)) -2rem;
 	}
 	.footer {
 		margin-top: 0;

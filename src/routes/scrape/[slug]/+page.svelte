@@ -6,7 +6,7 @@
 */-->
 
 <script>
-	import { onMount } from 'svelte';
+	import { afterUpdate, onMount } from 'svelte';
 
 	import InfiniteScroll from '$lib/components/InfiniteScroll.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
@@ -17,6 +17,7 @@
 	import MediaQuery from '$lib/components/MediaQuery.svelte';
 	import FullScreenImg from '$lib/components/FullScreenImg.svelte';
 	import FullScreenComments from '$lib/components/FullScreenComments.svelte';
+	import InlineComments from '$lib/components/InlineComments.svelte';
 
 	//tools
 	import { getMe } from '$lib/utils/getMe.js';
@@ -28,8 +29,10 @@
 	let posts = [];
 	let nextSet = '';
 	let viewComments = false;
+	let viewInlineComments = false;
 	let comments = [];
 	let lastComments;
+	let inlineCommentsID = '';
 
 	let viewImage = false;
 	let imageSrc;
@@ -48,24 +51,58 @@
 
 	let loadButton;
 
+	let scroll = false;
+	let elementToScroll;
+
 	onMount(() => {
 		// load first batch onMount
 		load();
 	});
 
-	function getComments(event, id) {
+	afterUpdate(() => {
+		if (scroll) {
+			elementToScroll.scrollIntoView({ block: 'center' });
+
+			scroll = false;
+		}
+	});
+
+	async function getFullScreenComments(event, id) {
 		if (id == lastComments) {
 			viewComments = true;
 			return;
 		}
 		event.target.setAttribute('aria-busy', true);
 		event.target.disabled = true;
-		fetch(`${id}.json`)
+		await getComments(id);
+		viewComments = true;
+		event.target.setAttribute('aria-busy', false);
+		event.target.disabled = false;
+	}
+
+	async function getInlineComments(event, id) {
+		if (id == lastComments) {
+			viewInlineComments = true;
+			inlineCommentsID = id;
+			return;
+		}
+		event.target.setAttribute('aria-busy', true);
+		event.target.disabled = true;
+		await getComments(id);
+
+		viewInlineComments = true;
+		inlineCommentsID = id;
+
+		event.target.setAttribute('aria-busy', false);
+		event.target.disabled = false;
+	}
+
+	async function getComments(id) {
+		await fetch(`${id}.json`)
 			.then((res) => {
 				if (res.ok) return res.json();
 			})
 			.then((json) => {
-				viewComments = true;
 				comments = json;
 				lastComments = id;
 				// comments = [];
@@ -73,9 +110,13 @@
 				// console.log(comments);
 				// console.log("Cleaner Comments");
 				// commentRecursor(comments, 0);
-				event.target.setAttribute('aria-busy', false);
-				event.target.disabled = false;
 			});
+	}
+	function viewInlineCommentsEvent(e) {
+		viewInlineComments = e.detail.value;
+
+		scroll = true;
+		elementToScroll = getMe(e.detail.target, 'body', true);
 	}
 
 	async function load() {
@@ -124,20 +165,22 @@
 		const article = getMe(e.target, 'article');
 		article.classList.toggle('collapse');
 		const body = article.querySelector('.body');
-		if (article.classList.contains('collapse')) body.style.display = 'none';
-		else body.style.display = '';
+
+		if (article.classList.contains('collapse')) {
+			body.style.display = 'none';
+			article.scrollIntoView({ block: 'center' });
+		} else body.style.display = '';
 	}
 </script>
 
 <div bind:this={scrollElement} class="scroll">
 	{#if viewComments === true}
-		<FullScreenComments {comments} on:viewComments={(e) => (viewComments = e.value)} />
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<FullScreenComments {comments} on:viewComments={(e) => (viewComments = e.detail.value)} />
 	{/if}
 	{#if viewImage == true}
 		<FullScreenImg
 			data={{ postLink, postTitle, imageSrc }}
-			on:viewImage={(e) => (viewImage = e.value)}
+			on:viewImage={(e) => (viewImage = e.detail.value)}
 		/>
 	{/if}
 	<Navbar subNameField={subName} />
@@ -150,15 +193,33 @@
 						postData={data}
 						on:collapsePost={(event) => collapsePost(event.detail)}
 					/>
-					<div class="body">
+					<div
+						class={`body ${
+							viewInlineComments === true && data.href == inlineCommentsID
+								? 'comments'
+								: ''
+						}`}
+					>
 						<MediaElement {data} on:fullImg={fullHeightImage} />
 						<MediaQuery query="(min-width: 801px)" let:matches>
 							{#if matches}
 								<div class="details">
 									<PostDetails postData={data} />
-									<button on:click={(event) => getComments(event, data.href)}>
-										view {shortNum(null, data.comments.split(' ')[0])} comments
-									</button>
+									<div class="comments">
+										{#if viewInlineComments === true && data.href == inlineCommentsID}
+											<InlineComments
+												commentsArr={comments[1].data.children}
+												on:viewInlineComments={viewInlineCommentsEvent}
+											/>
+										{:else}
+											<button
+												on:click={(event) =>
+													getInlineComments(event, data.href)}
+											>
+												view {shortNum(null, data.comments.split(' ')[0])} comments
+											</button>
+										{/if}
+									</div>
 								</div>
 							{/if}
 						</MediaQuery>
@@ -166,7 +227,9 @@
 					<MediaQuery query="(max-width: 800px)" let:matches>
 						{#if matches}
 							<footer class="footer">
-								<button on:click={(event) => getComments(event, data.href)}>
+								<button
+									on:click={(event) => getFullScreenComments(event, data.href)}
+								>
 									view {data.comments}
 								</button>
 							</footer>
@@ -205,9 +268,11 @@
 		flex-direction: column;
 		justify-content: space-between;
 		width: calc(40% - var(--block-spacing-horizontal));
-		padding: 1rem 0;
+		padding: 2rem 0;
 		padding-left: var(--block-spacing-horizontal);
 		border-left: solid 1px var(--accordion-border-color);
+		background: var(--card-sectionning-background-color);
+		margin: -1rem calc(-1 * var(--block-spacing-horizontal)) -2rem;
 	}
 	.footer {
 		margin-top: 0;
@@ -254,15 +319,6 @@
 	}
 	.toggleCode:hover {
 		opacity: 1;
-	}
-	article.modal {
-		width: 90%;
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: space-between;
-		padding: 0 1rem 1rem 1rem;
 	}
 
 	@media (min-width: 801px) {
