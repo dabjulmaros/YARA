@@ -112,8 +112,11 @@
 		const article = getMe(e.target, 'article');
 		article.classList.toggle('collapse');
 		const body = article.querySelector('.body');
-		if (article.classList.contains('collapse')) body.style.display = 'none';
-		else body.style.display = '';
+
+		if (article.classList.contains('collapse')) {
+			body.style.display = 'none';
+			article.scrollIntoView({ block: 'center' });
+		} else body.style.display = '';
 	}
 
 	function mouseEnter(e) {

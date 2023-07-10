@@ -14,5 +14,7 @@
 	a[role='button'] {
 		min-width: 10rem;
 		margin: 0 auto;
+		display: block;
+		width: fit-content;
 	}
 </style>
