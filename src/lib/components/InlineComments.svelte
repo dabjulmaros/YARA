@@ -58,6 +58,7 @@
 	}
 	:global(div.body.comments div.details) {
 		width: calc(70% - var(--block-spacing-horizontal));
+		justify-content: flex-start;
 	}
 	@media (max-width: 800px) {
 		:global(div.body.comments div.media) {
