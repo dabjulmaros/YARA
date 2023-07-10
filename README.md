@@ -18,6 +18,7 @@ Laundry List of things that need to be improved:
 What it does right now.
 
 - Simple UI that doesnt make me want to pull my eyes out
+- Responsive wide and narrow UI
 - Videos, images, galleries, text post, and iframe all are being rendered
 - Link posts are clickable to the source
 - Allow to opt into content tagged as NSFW
@@ -27,10 +28,7 @@ What it does right now.
 - videos will autoplay when the user scrolls them into view
 
 Current TODO:
-- Inline comments need polishing. What I know needs wokr so far :
-  - Scroll to the post details when comments are clicked.
-  - Add a close button to the inline comments header.
-  - make comment header wider
+- Pick Next TODO
 
 As to why I'm using Electron for this application and not deploying it in a site somewhere... I wanted to use YARA as the name, and by being an electron app I can use app as the A.
 
