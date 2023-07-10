@@ -1,9 +1,11 @@
 <script>
+	import { localStore } from '$lib/utils/storable';
+
 	export let noMargin;
-	export const submitSearch = (method) => formSubmit(method);
+	export const submitSearch = () => formSubmit();
 
 	export let inputField;
-	function formSubmit(method = 0) {
+	function formSubmit() {
 		let cleanInputField = inputField;
 
 		if (cleanInputField.includes('/r/')) cleanInputField = cleanInputField.split('/r/')[1];
@@ -19,7 +21,7 @@
 		if (
 			window.location.pathname.includes('/scrape/') ||
 			window.location.pathname == '/scrape' ||
-			method == 2
+			$localStore.method
 		)
 			window.location = `/scrape/${cleanInputField}`;
 		else window.location = `/r/${cleanInputField}`;

@@ -16,10 +16,10 @@
 	import Search from '$lib/components/Search.svelte';
 	import { localStore } from '$lib/utils/storable';
 
-	let componentSearch: (arg0: number) => void;
+	let componentSearch: () => void;
 
 	function sendSearch() {
-		componentSearch($localStore.method ? 2 : 1);
+		componentSearch();
 	}
 </script>
 
