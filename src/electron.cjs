@@ -39,6 +39,7 @@ function createWindow() {
 		minHeight: 450,
 		minWidth: 500,
 		webPreferences: {
+      // webviewTag: true, //tab-groups
 			enableRemoteModule: true,
 			contextIsolation: true,
 			nodeIntegration: true,
