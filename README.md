@@ -30,7 +30,8 @@ What it does right now.
 Current TODO:
 - Implement:
   - https://www.npmjs.com/package/electron-tabs
-  - https://www.npmjs.com/package/electron-in-page-search
+  - This is not looking good may need to develop from scratch
+    - https://www.npmjs.com/package/electron-in-page-search
 
 As to why I'm using Electron for this application and not deploying it in a site somewhere... I wanted to use YARA as the name, and by being an electron app I can use app as the A.
 

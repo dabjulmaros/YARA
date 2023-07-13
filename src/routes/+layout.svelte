@@ -1,14 +1,21 @@
-<script lang="ts">
+<script>
 	import { onMount } from 'svelte';
 
-	let ready: boolean = false;
+	let ready = false;
+
+	// document.body.addEventListener('keypress', (e) => {
+	// 	if (e.code == 'KeyF' && e.ctrlKey) {
+	// 		console.log('search?');
+	// 	}
+	// });
+
 	onMount(() => (ready = true));
 </script>
 
 <div class="dragbar">
 	<span>🆈ara</span>
-	<span />
 </div>
+<!-- <tab-group new-tab-button="true" /> --><!--tab-groups -->
 
 {#if ready}
 	<slot />
