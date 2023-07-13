@@ -39,7 +39,7 @@
 		if (expando !== undefined && expando !== '') {
 			baseURL = expando.match(/data-seek-preview-url="([^"]+)"/)[1];
 			mpdList = expando.match(/data-mpd-url="([^"]+)"/)[1];
-		} else if (data !== undefined && data === '') {
+		} else if (data !== undefined && data !== '') {
 			baseURL = data.scrubber_media_url;
 			mpdList = data.dash_url;
 		}
