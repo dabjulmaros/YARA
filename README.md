@@ -28,7 +28,9 @@ What it does right now.
 - videos will autoplay when the user scrolls them into view
 
 Current TODO:
-- Pick Next TODO
+- Implement:
+  - https://www.npmjs.com/package/electron-tabs
+  - https://www.npmjs.com/package/electron-in-page-search
 
 As to why I'm using Electron for this application and not deploying it in a site somewhere... I wanted to use YARA as the name, and by being an electron app I can use app as the A.
 
