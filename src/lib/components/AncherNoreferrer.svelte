@@ -1,4 +1,7 @@
 <script>
+	import { localStore } from '$lib/utils/storable';
+	import { searchCleaner } from '$lib/utils/searchCleaner';
+
 	export let link;
 	export let content = link;
 	export let style = '';
@@ -6,9 +9,26 @@
 
 	if (link.substr(0, 3) == '/r/' || link.substr(0, 3) == '/u/')
 		link = 'https://old.reddit.com' + link;
+
+	function testLink(e) {
+		let validLink = true;
+		let link = searchCleaner(e.target.href, $localStore.method, false);
+
+		try {
+			new URL(link);
+		} catch {
+			validLink = false;
+		}
+
+		if (validLink) return;
+		else window.location = link;
+		e.preventDefault();
+	}
 </script>
 
-<a rel="noopener noreferrer" href={link} {style} target="_blank" {role}>{@html content}</a>
+<a rel="noopener noreferrer" href={link} {style} target="_blank" {role} on:click={testLink}>
+	{@html content}
+</a>
 
 <style>
 	a[role='button'] {

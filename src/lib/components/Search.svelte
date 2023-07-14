@@ -1,30 +1,15 @@
 <script>
 	import { localStore } from '$lib/utils/storable';
+	import { searchCleaner } from '$lib/utils/searchCleaner';
 
 	export let noMargin;
 	export const submitSearch = () => formSubmit();
 
 	export let inputField;
 	function formSubmit() {
-		let cleanInputField = inputField;
+		let cleanInputField = searchCleaner(inputField, $localStore.method, true);
 
-		if (cleanInputField.includes('/r/')) cleanInputField = cleanInputField.split('/r/')[1];
-
-		if (cleanInputField.substr(0, 2) == 'r/') cleanInputField = cleanInputField.substr(2);
-
-		if (cleanInputField.includes('/comments/'))
-			cleanInputField = cleanInputField.match(/([^/]+\/comments\/[^/]+)/)[1];
-
-		if (cleanInputField.includes('reddit.com/'))
-			cleanInputField = cleanInputField.split('reddit.com/')[1];
-
-		if (
-			window.location.pathname.includes('/scrape/') ||
-			window.location.pathname == '/scrape' ||
-			$localStore.method
-		)
-			window.location = `/scrape/${cleanInputField}`;
-		else window.location = `/r/${cleanInputField}`;
+		window.location = cleanInputField;
 	}
 
 	function keyDown(e) {
