@@ -32,6 +32,7 @@ Current TODO:
   - https://www.npmjs.com/package/electron-tabs
   - This is not looking good may need to develop from scratch
     - https://www.npmjs.com/package/electron-in-page-search
+- Make self text post and comments links open in yara if appropriate
 
 As to why I'm using Electron for this application and not deploying it in a site somewhere... I wanted to use YARA as the name, and by being an electron app I can use app as the A.
 
