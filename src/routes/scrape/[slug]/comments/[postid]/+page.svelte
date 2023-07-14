@@ -101,12 +101,6 @@
 			article.scrollIntoView({ block: 'center' });
 		} else body.style.display = '';
 	}
-	function mouseEnter(e) {
-		e.target.classList.toggle('linkEllipsis');
-	}
-	function mouseOut(e) {
-		e.target.classList.toggle('linkEllipsis');
-	}
 </script>
 
 <div class="scroll">
@@ -149,12 +143,7 @@
 								title={post.title}
 							/>
 						{/if}
-						<div
-							class="linkEllipsis"
-							title={post.url}
-							on:mouseenter={(e) => mouseEnter(e)}
-							on:mouseleave={(e) => mouseOut(e)}
-						>
+						<div title={post.url}>
 							<AncherNoreferrer link={post.url} />
 						</div>
 					{:else if post.secure_media}
@@ -180,12 +169,7 @@
 					{:else if post.post_hint == 'link'}
 						<AncherNoreferrer link={post.url} />
 					{:else}
-						<div
-							class="linkEllipsis"
-							title={post.url}
-							on:mouseenter={(e) => mouseEnter(e)}
-							on:mouseleave={(e) => mouseOut(e)}
-						>
+						<div title={post.url}>
 							<AncherNoreferrer link={post.url} />
 						</div>
 					{/if}
@@ -234,11 +218,6 @@
 	:global(.collapse .body) {
 		display: none;
 	}
-	.linkEllipsis {
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-	}
 
 	div.post {
 		overflow: hidden;
@@ -280,8 +259,7 @@
 		div.body {
 			display: flex;
 			flex-direction: row-reverse;
-			min-height: 30vh;
-			margin-top: 1rem;
+			margin: 1rem 0;
 		}
 	}
 </style>
