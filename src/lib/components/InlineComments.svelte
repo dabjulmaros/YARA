@@ -1,8 +1,15 @@
 <script>
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import Comments from './Comments.svelte';
 
 	export let commentsArr;
+
+	onMount(() => {
+		document.documentElement.style.setProperty(
+			'--divmediaHeight',
+			`${document.querySelector('div.body.comments div.media').clientHeight}px`,
+		);
+	});
 
 	const dispatch = createEventDispatcher();
 
@@ -55,6 +62,10 @@
 	}
 	:global(div.body.comments div.media) {
 		width: 30%;
+		justify-content: flex-start;
+		position: sticky;
+		top: calc(100vh - 12rem - var(--divmediaHeight));
+		height: fit-content;
 	}
 	:global(div.body.comments div.details) {
 		width: calc(70% - var(--block-spacing-horizontal));
