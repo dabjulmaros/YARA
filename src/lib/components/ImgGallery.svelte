@@ -4,7 +4,7 @@
 	import { htmlDecode } from '$lib/utils/htmlDecode';
 
 	export let expando;
-	export let metadata;
+	export let metadata = '';
 	let srcArr = [];
 	let capArr = [];
 
@@ -20,7 +20,7 @@
 		if (expando !== '' && expando !== undefined) {
 			srcArr = getImgSrc(expando);
 			capArr = getCaptions(expando);
-		} else if (metadata !== undefined) {
+		} else if (metadata !== undefined || metadata !== '') {
 			for (var x of metadata.items) {
 				srcArr.push(htmlDecode(metadata.media[x.media_id].s.u));
 			}

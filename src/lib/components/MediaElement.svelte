@@ -97,6 +97,7 @@
 		div.media {
 			display: flex;
 			flex-direction: column;
+			justify-content: center;
 			margin: 1rem auto;
 			position: relative;
 			z-index: 1;
