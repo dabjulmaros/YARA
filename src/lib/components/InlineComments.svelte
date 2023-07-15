@@ -2,7 +2,7 @@
 	import { createEventDispatcher, onMount } from 'svelte';
 	import Comments from './Comments.svelte';
 
-	export let commentsArr;
+	export let comments;
 
 	onMount(() => {
 		document.documentElement.style.setProperty(
@@ -21,13 +21,16 @@
 	}
 </script>
 
-<div>
+<div style="margin-right: 1rem;">
 	<div class="header">
 		<h2>Comments</h2>
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<span aria-label="Close" class="close" on:click={closeComments} />
 	</div>
-	<Comments {commentsArr} />
+	<Comments
+		commentsArr={comments[1].data.children}
+		opName={comments[0].data.children[0].data.author}
+	/>
 </div>
 
 <style>
@@ -70,6 +73,7 @@
 	:global(div.body.comments div.details) {
 		width: calc(70% - var(--block-spacing-horizontal));
 		justify-content: flex-start;
+		margin-left: 0;
 	}
 	@media (max-width: 800px) {
 		:global(div.body.comments div.media) {

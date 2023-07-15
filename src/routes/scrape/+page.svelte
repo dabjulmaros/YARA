@@ -201,7 +201,7 @@
 									<div class="comments">
 										{#if viewInlineComments === true && data.href == inlineCommentsID}
 											<InlineComments
-												commentsArr={comments[1].data.children}
+												{comments}
 												on:viewInlineComments={viewInlineCommentsEvent}
 											/>
 										{:else}

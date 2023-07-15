@@ -161,7 +161,10 @@
 					</div>
 				</header>
 
-				<Comments commentsArr={comments[1].data.children} />
+				<Comments
+					commentsArr={comments[1].data.children}
+					opName={comments[0].data.children[0].data.author}
+				/>
 			</article>
 		</dialog>
 	{/if}

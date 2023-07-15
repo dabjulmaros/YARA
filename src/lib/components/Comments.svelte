@@ -7,6 +7,7 @@
 	import { getTime } from '$lib/utils/getTime';
 
 	export let commentsArr;
+	export let opName;
 </script>
 
 <div class="parent">
@@ -14,11 +15,16 @@
 		{#if comment.kind !== 'more'}
 			<details open>
 				<summary>
-					<AncherNoreferrer
-						link={`/u/${comment.data.author}`}
-						content={comment.data.author}
-						style="width: fit-content;margin: 0.3rem 0;flex-basis: 100%;"
-					/>
+					<div>
+						{#if comment.data.author === opName}
+							<code>OP</code>
+						{/if}
+						<AncherNoreferrer
+							link={`/u/${comment.data.author}`}
+							content={comment.data.author}
+							style="width: fit-content;margin: 0.3rem 0;flex-basis: 100%;"
+						/>
+					</div>
 					<small>
 						{getTime(null, comment.data.created)} · {shortNum(null, comment.data.score)}
 						points
@@ -27,7 +33,7 @@
 				<div class="comment border">{@html htmlDecode(comment.data.body_html)}</div>
 				{#if comment.data.replies !== '' && comment.data.replies.kind !== 'more'}
 					<div class="child border">
-						<svelte:self commentsArr={comment.data.replies.data.children} />
+						<svelte:self commentsArr={comment.data.replies.data.children} {opName} />
 					</div>
 				{/if}
 			</details>
