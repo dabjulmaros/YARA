@@ -63,7 +63,6 @@
 	afterUpdate(() => {
 		if (scroll) {
 			elementToScroll.scrollIntoView({ block: 'center' });
-
 			scroll = false;
 		}
 	});
