@@ -90,17 +90,6 @@
 		postLink = title.href;
 		viewImage = true;
 	}
-
-	function collapsePost(e) {
-		const article = getMe(e.target, 'article');
-		article.classList.toggle('collapse');
-		const body = article.querySelector('.body');
-
-		if (article.classList.contains('collapse')) {
-			body.style.display = 'none';
-			article.scrollIntoView({ block: 'center' });
-		} else body.style.display = '';
-	}
 </script>
 
 <div class="scroll">
@@ -113,11 +102,7 @@
 	<Navbar subNameField={postSlug} />
 	{#if comments.length > 0 && post != undefined}
 		<article id="article">
-			<Header
-				postData={post}
-				forceDetails={true}
-				on:collapsePost={(event) => collapsePost(event.detail)}
-			/>
+			<Header postData={post} forceDetails={true} hideCollapse={true} />
 
 			<div class="body">
 				<MediaQuery query="(min-width: 801px)" let:matches>

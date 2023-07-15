@@ -6,6 +6,7 @@
 
 	export let postData;
 	export let forceDetails = false;
+	export let hideCollapse = false;
 
 	const dispatch = createEventDispatcher();
 	function collapsePost(e) {
@@ -50,7 +51,9 @@
 	</MediaQuery>
 
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<div class="togglePost" on:click={(e) => collapsePost(e)}>▶</div>
+	{#if !hideCollapse}
+		<div class="togglePost" on:click={(e) => collapsePost(e)}>▶</div>
+	{/if}
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div on:click={() => console.log(postData)} class="toggleCode">⚙️</div>
 </header>
