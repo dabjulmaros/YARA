@@ -5,8 +5,8 @@
 	import MediaQuery from '$lib/components/MediaQuery.svelte';
 
 	export let postData;
-	export let forceDetails = false;
-	export let hideCollapse = false;
+	export let singlePost = false;
+	export let fullTitle = false;
 
 	const dispatch = createEventDispatcher();
 	function collapsePost(e) {
@@ -24,34 +24,43 @@
 </script>
 
 <header style="position:sticky;top:4.5rem">
-	<h2
-		class="linkEllipsis"
-		on:mouseenter={(e) => mouseEnter(e)}
-		on:mouseleave={(e) => mouseOut(e)}
-	>
-		<AncherNoreferrer
-			style=""
-			link={postData.expandoType == 'comment'
-				? postData.expando.post.postUrl
-				: postData.href
-				? postData.href
-				: postData.permalink}
-			content={postData.title}
-		/>
-		<!-- <a
-      rel="noopener noreferrer"
-      href="https://www.reddit.com{post.permalink}"
-      target="_blank">{@html post.title}</a
-    > -->
-	</h2>
+	{#if fullTitle}
+		<h2>
+			<AncherNoreferrer
+				style=""
+				link={postData.expandoType == 'comment'
+					? postData.expando.post.postUrl
+					: postData.href
+					? postData.href
+					: postData.permalink}
+				content={postData.title}
+			/>
+		</h2>
+	{:else}
+		<h2
+			class="linkEllipsis"
+			on:mouseenter={(e) => mouseEnter(e)}
+			on:mouseleave={(e) => mouseOut(e)}
+		>
+			<AncherNoreferrer
+				style=""
+				link={postData.expandoType == 'comment'
+					? postData.expando.post.postUrl
+					: postData.href
+					? postData.href
+					: postData.permalink}
+				content={postData.title}
+			/>
+		</h2>
+	{/if}
 	<MediaQuery query="(max-width: 800px)" let:matches>
-		{#if matches || forceDetails}
+		{#if matches || singlePost}
 			<PostDetails {postData} />
 		{/if}
 	</MediaQuery>
 
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	{#if !hideCollapse}
+	{#if !singlePost}
 		<div class="togglePost" on:click={(e) => collapsePost(e)}>▶</div>
 	{/if}
 	<!-- svelte-ignore a11y-click-events-have-key-events -->

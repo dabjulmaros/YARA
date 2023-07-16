@@ -11,12 +11,12 @@
 	import SimpleIFrame from '$lib/components/SimpleIFrame.svelte';
 	import SimpleImg from '$lib/components/SimpleImg.svelte';
 	import SimpleVideo from '$lib/components/SimpleVideo.svelte';
-	import MediaQuery from '$lib/components/MediaQuery.svelte';
 	import FullScreenImg from '$lib/components/FullScreenImg.svelte';
 
 	//tools
 	import { htmlDecode } from '$lib/utils/htmlDecode.js';
 	import { getMe } from '$lib/utils/getMe.js';
+	import inView from '$lib/utils/inView';
 
 	let status = 200;
 	let error = [];
@@ -28,6 +28,9 @@
 	let imageSrc;
 	let postTitle;
 	let postLink;
+
+	let singlePost = true;
+	let fullTitle = true;
 
 	let postsSuccess = true;
 
@@ -102,16 +105,18 @@
 	<Navbar subNameField={postSlug} />
 	{#if comments.length > 0 && post != undefined}
 		<article id="article">
-			<Header postData={post} forceDetails={true} hideCollapse={true} />
+			<Header postData={post} {fullTitle} {singlePost} />
 
-			<div class="body">
-				<MediaQuery query="(min-width: 801px)" let:matches>
-					<!-- {#if matches}
-						<div class="details">
-							<PostDetails postData={post} />
-						</div>
-					{/if} -->
-				</MediaQuery>
+			<div
+				class="body"
+				use:inView
+				on:enterView={() => {
+					fullTitle = true;
+				}}
+				on:exitView={() => {
+					fullTitle = false;
+				}}
+			>
 				<div class="media">
 					{#if post.secure_media_embed && post.secure_media_embed.content}
 						{#if post.secure_media_embed.media_domain_url.includes('www.redditmedia.com')}
