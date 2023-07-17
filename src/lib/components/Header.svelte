@@ -4,15 +4,25 @@
 	import PostDetails from '$lib/components/PostDetails.svelte';
 	import MediaQuery from '$lib/components/MediaQuery.svelte';
 
+	import inView from '$lib/utils/inView';
+
 	export let postData;
 	export let singlePost = false;
 	export let fullTitle = false;
+
+	let collapsed = !fullTitle;
+	let collapsableTitle;
 
 	const dispatch = createEventDispatcher();
 	function collapsePost(e) {
 		dispatch('collapsePost', {
 			target: e.target,
 		});
+	}
+
+	function collapseTitle(e) {
+		e.target.classList.toggle('collapsedHeader');
+		collapsableTitle.classList.toggle('linkEllipsis');
 	}
 
 	function mouseEnter(e) {
@@ -23,9 +33,17 @@
 	}
 </script>
 
-<header style="position:sticky;top:4.5rem">
+<!-- use:inView
+			on:enterView={() => {
+				collapsed = false;
+			}}
+			on:exitView={() => {
+				collapsed = true;
+			}} -->
+
+<header style={'position:sticky;top:4.5rem'}>
 	{#if fullTitle}
-		<h2>
+		<h2 bind:this={collapsableTitle}>
 			<AncherNoreferrer
 				style=""
 				link={postData.expandoType == 'comment'
@@ -62,6 +80,8 @@
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	{#if !singlePost}
 		<div class="togglePost" on:click={(e) => collapsePost(e)}>▶</div>
+	{:else}
+		<div class="togglePost" on:click={(e) => collapseTitle(e)}>▶</div>
 	{/if}
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div on:click={() => console.log(postData)} class="toggleCode">⚙️</div>
@@ -79,7 +99,7 @@
 		margin: 0 auto;
 		margin-bottom: 0.5rem;
 	}
-	:global(.collapse .togglePost) {
+	:global(.collapse .togglePost, .togglePost.collapsedHeader) {
 		transform: rotate(180deg) !important;
 	}
 	.togglePost {

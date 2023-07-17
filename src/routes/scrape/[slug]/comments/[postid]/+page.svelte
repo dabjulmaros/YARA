@@ -16,7 +16,6 @@
 	//tools
 	import { htmlDecode } from '$lib/utils/htmlDecode.js';
 	import { getMe } from '$lib/utils/getMe.js';
-	import inView from '$lib/utils/inView';
 
 	let status = 200;
 	let error = [];
@@ -107,16 +106,7 @@
 		<article id="article">
 			<Header postData={post} {fullTitle} {singlePost} />
 
-			<div
-				class="body"
-				use:inView
-				on:enterView={() => {
-					fullTitle = true;
-				}}
-				on:exitView={() => {
-					fullTitle = false;
-				}}
-			>
+			<div class="body">
 				<div class="media">
 					{#if post.secure_media_embed && post.secure_media_embed.content}
 						{#if post.secure_media_embed.media_domain_url.includes('www.redditmedia.com')}

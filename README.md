@@ -34,6 +34,7 @@ Current TODO:
     - https://www.npmjs.com/package/electron-in-page-search
 - Make self text post and comments links open in yara if appropriate
 - Find the right values to center in the view the post when viewing comments `InlineComments.svelte:67`
+- Scroll and collapse into a sticky the header of the comments page nicely
 
 As to why I'm using Electron for this application and not deploying it in a site somewhere... I wanted to use YARA as the name, and by being an electron app I can use app as the A.
 
