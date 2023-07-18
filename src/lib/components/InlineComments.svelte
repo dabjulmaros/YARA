@@ -6,7 +6,7 @@
 
 	onMount(() => {
 		document.documentElement.style.setProperty(
-			'--divmediaHeight',
+			'--divMediaHeight',
 			`${document.querySelector('div.body.comments div.media').clientHeight}px`,
 		);
 	});
@@ -67,7 +67,7 @@
 		width: 30%;
 		justify-content: flex-start;
 		position: sticky;
-		top: calc(100vh - 12rem - var(--divmediaHeight));
+		top: calc(50vh - var(--divMediaHeight) + 3rem);
 		height: fit-content;
 	}
 	:global(div.body.comments div.details) {
