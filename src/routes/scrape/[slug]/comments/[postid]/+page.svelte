@@ -104,7 +104,18 @@
 	<Navbar subNameField={postSlug} />
 	{#if comments.length > 0 && post != undefined}
 		<article id="article">
-			<Header postData={post} {fullTitle} {singlePost} />
+			<Header
+				postData={post}
+				{fullTitle}
+				{singlePost}
+				sticky={false}
+				useInView={true}
+				allowToggleTitle={true}
+				on:inView={(e) => (fullTitle = e.detail.value)}
+			/>
+			{#if !fullTitle}
+				<Header postData={post} {fullTitle} {singlePost} sticky={true} />
+			{/if}
 
 			<div class="body">
 				<div class="media">

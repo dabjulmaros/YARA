@@ -3,20 +3,27 @@
 	import AncherNoreferrer from '$lib/components/AncherNoreferrer.svelte';
 	import PostDetails from '$lib/components/PostDetails.svelte';
 	import MediaQuery from '$lib/components/MediaQuery.svelte';
-
 	import inView from '$lib/utils/inView';
 
 	export let postData;
 	export let singlePost = false;
 	export let fullTitle = false;
+	export let sticky = true;
+	export let useInView = false;
+	export let allowToggleTitle = false;
 
-	let collapsed = !fullTitle;
 	let collapsableTitle;
 
 	const dispatch = createEventDispatcher();
 	function collapsePost(e) {
 		dispatch('collapsePost', {
 			target: e.target,
+		});
+	}
+
+	function dispatchInView(value) {
+		dispatch('inView', {
+			value: value,
 		});
 	}
 
@@ -33,15 +40,7 @@
 	}
 </script>
 
-<!-- use:inView
-			on:enterView={() => {
-				collapsed = false;
-			}}
-			on:exitView={() => {
-				collapsed = true;
-			}} -->
-
-<header style={'position:sticky;top:4.5rem'}>
+<header style={sticky ? 'position:sticky;top:4.5rem' : ''}>
 	{#if fullTitle}
 		<h2 bind:this={collapsableTitle}>
 			<AncherNoreferrer
@@ -71,6 +70,17 @@
 			/>
 		</h2>
 	{/if}
+	{#if useInView}
+		<span
+			use:inView
+			on:enterView={() => {
+				dispatchInView(true);
+			}}
+			on:exitView={() => {
+				dispatchInView(false);
+			}}
+		/>
+	{/if}
 	<MediaQuery query="(max-width: 800px)" let:matches>
 		{#if matches || singlePost}
 			<PostDetails {postData} />
@@ -80,7 +90,7 @@
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	{#if !singlePost}
 		<div class="togglePost" on:click={(e) => collapsePost(e)}>▶</div>
-	{:else}
+	{:else if allowToggleTitle}
 		<div class="togglePost" on:click={(e) => collapseTitle(e)}>▶</div>
 	{/if}
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
