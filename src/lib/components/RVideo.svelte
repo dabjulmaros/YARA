@@ -48,7 +48,7 @@
 				if (res.ok) return res.text();
 			})
 			.then((text) => {
-				let audioExists = text.includes('DASH_audio.mp4');
+				let audioExists = text.match(/dash_audio?(_?.+).mp4/gi);
 				let quality = text.match(/DASH_(\d+).mp4/g);
 				// let highest = 0
 				// for(let match of mpd.matchAll(/DASH_(\d+).mp4/g)) if(match[1]>highest) highest = match[1]
@@ -56,9 +56,12 @@
 				//assumes that the mpd file has the highest quality as the last
 				let use = quality[quality.length - 1];
 				video.src = baseURL.replace('DASH_96.mp4', use);
-				if (audioExists) {
+				if (audioExists.length > 0) {
 					const source = document.createElement('source');
-					source.src = baseURL.replace('DASH_96.mp4', 'DASH_audio.mp4');
+					source.src = baseURL.replace(
+						'DASH_96.mp4',
+						audioExists[audioExists.length - 1],
+					);
 					audio.appendChild(source);
 				}
 			});
