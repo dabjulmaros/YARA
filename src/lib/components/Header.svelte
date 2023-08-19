@@ -1,9 +1,10 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
-	import AncherNoreferrer from '$lib/components/AncherNoreferrer.svelte';
-	import PostDetails from '$lib/components/PostDetails.svelte';
-	import MediaQuery from '$lib/components/MediaQuery.svelte';
-	import inView from '$lib/utils/inView';
+	import AncherNoreferrer from '$components/AncherNoreferrer.svelte';
+	import PostDetails from '$components/PostDetails.svelte';
+	import MediaQuery from '$components/MediaQuery.svelte';
+
+	import inView from '$utils/inView';
 
 	export let postData;
 	export let singlePost = false;
@@ -16,6 +17,7 @@
 
 	const dispatch = createEventDispatcher();
 	function collapsePost(e) {
+		e.stopPropagation();
 		dispatch('collapsePost', {
 			target: e.target,
 		});
@@ -29,18 +31,17 @@
 
 	function collapseTitle(e) {
 		e.target.classList.toggle('collapsedHeader');
-		collapsableTitle.classList.toggle('linkEllipsis');
+		toggleTitle();
 	}
 
-	function mouseEnter(e) {
-		e.target.classList.toggle('linkEllipsis');
-	}
-	function mouseOut(e) {
-		e.target.classList.toggle('linkEllipsis');
+	function toggleTitle() {
+		collapsableTitle.classList.toggle('linkEllipsis');
 	}
 </script>
 
-<header style={sticky ? 'position:sticky;top:4.5rem' : ''}>
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<header style={sticky ? 'position:sticky;top:4.5rem' : ''} on:click={toggleTitle}>
 	{#if fullTitle}
 		<h2 bind:this={collapsableTitle}>
 			<AncherNoreferrer
@@ -56,8 +57,9 @@
 	{:else}
 		<h2
 			class="linkEllipsis"
-			on:mouseenter={(e) => mouseEnter(e)}
-			on:mouseleave={(e) => mouseOut(e)}
+			on:mouseenter={toggleTitle}
+			on:mouseleave={toggleTitle}
+			bind:this={collapsableTitle}
 		>
 			<AncherNoreferrer
 				style=""
@@ -89,10 +91,13 @@
 
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	{#if !singlePost}
+		<!-- svelte-ignore a11y-no-static-element-interactions -->
 		<div class="togglePost" on:click={(e) => collapsePost(e)}>▶</div>
 	{:else if allowToggleTitle}
+		<!-- svelte-ignore a11y-no-static-element-interactions -->
 		<div class="togglePost" on:click={(e) => collapseTitle(e)}>▶</div>
 	{/if}
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div on:click={() => console.log(postData)} class="toggleCode">⚙️</div>
 </header>
