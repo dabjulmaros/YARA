@@ -1,7 +1,7 @@
 <!-- Need to fix issue where audio loads before video -->
 <script>
-	import { htmlDecode } from '$lib/utils/htmlDecode.js';
-	import inView from '$lib/utils/inView';
+	import { htmlDecode } from '$utils/htmlDecode.js';
+	import inView from '$utils/inView';
 
 	export let expando;
 	export let data;
@@ -13,8 +13,12 @@
 	$: if (paused != undefined) togglePlaying();
 
 	function toggleMute(e) {
+		if (!video.paused) audio.play();
+		else audio.pause();
+
 		video.muted = !video.muted;
 		audio.muted = video.muted;
+
 		audio.currentTime = currentTime;
 		e.preventDefault();
 	}
@@ -84,6 +88,7 @@
 	bind:paused
 	bind:currentTime
 	on:click={toggleMute}
+	on:touchend={toggleMute}
 >
 	<audio muted loop bind:this={audio} />
 </video>
