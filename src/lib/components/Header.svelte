@@ -32,6 +32,7 @@
 	function collapseTitle(e) {
 		e.target.classList.toggle('collapsedHeader');
 		toggleTitle();
+		e.stopPropagation();
 	}
 
 	function toggleTitle() {
@@ -41,7 +42,10 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<header style={sticky ? 'position:sticky;top:4.5rem' : ''} on:click={toggleTitle}>
+<header
+	style={sticky ? 'position:sticky;top:4.5rem' : ''}
+	on:click={!singlePost ? toggleTitle : ''}
+>
 	{#if fullTitle}
 		<h2 bind:this={collapsableTitle}>
 			<AncherNoreferrer
