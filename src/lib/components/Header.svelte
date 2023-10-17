@@ -43,7 +43,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <header
-	style={sticky ? 'position:sticky;top:4.5rem' : ''}
+	style={sticky ? 'position:sticky;top:4.4rem' : ''}
 	on:click={!singlePost ? toggleTitle : ''}
 >
 	{#if fullTitle}

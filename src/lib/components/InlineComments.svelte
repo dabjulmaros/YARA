@@ -65,10 +65,10 @@
 	}
 	:global(div.body.comments div.media) {
 		width: 30%;
-		justify-content: flex-start;
+		justify-content: center;
 		position: sticky;
-		top: calc(50vh - var(--divMediaHeight) + 3rem);
-		height: fit-content;
+		top: calc(33px + 9.4rem);
+		height: calc(100vh - 33px - 10rem - 2rem);
 	}
 	:global(div.body.comments div.details) {
 		width: calc(70% - var(--block-spacing-horizontal));
