@@ -70,7 +70,7 @@
 </script>
 
 <div bind:this={scrollElement} class="scroll">
-	<Navbar subNameField={search} />
+	<Navbar subNameField={`search/${search}`} />
 	{#if postsSuccess}
 		<SearchPosts items={posts} />
 		<InfiniteScroll hasMore threshold={750} elementScroll={scrollElement} on:loadMore={load} />

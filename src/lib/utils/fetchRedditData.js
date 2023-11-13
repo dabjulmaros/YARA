@@ -63,7 +63,7 @@ function reddit200(html) {
 		return notOver18();
 	const things = htmlDoc.querySelectorAll('.thing:not(.promoted)');
 	const returnArr = [];
-	for (let x of things) {
+	for (const x of things) {
 		let expandoType = 'none';
 		const expandoTypeEle = x.querySelectorAll('.entry .expando-button');
 
@@ -222,7 +222,7 @@ function redditSearch(html) {
 	const returnArr = [];
 
 	if (things.length) {
-		for (let x of things) {
+		for (const x of things) {
 			returnArr.push({
 				thingID: x.getAttribute('data-fullname'),
 				community: x.querySelector('.midcol > span').getAttribute('data-sr_name'),
@@ -237,7 +237,7 @@ function redditSearch(html) {
 		}
 	} else {
 		things = htmlDoc.querySelectorAll('.search-result.search-result-subreddit');
-		for (let x of things) {
+		for (const x of things) {
 			returnArr.push({
 				thingID: x.getAttribute('data-fullname'),
 				community: x
@@ -249,8 +249,8 @@ function redditSearch(html) {
 				title: x.querySelector('.search-result-header')
 					? x.querySelector('.search-result-header').textContent
 					: '',
-				members: x.querySelector('.score.unvoted span')
-					? x.querySelector('.score.unvoted span').textContent
+				members: x.querySelector('span.search-subscribers')
+					? x.querySelector('span.search-subscribers').textContent
 					: '',
 				raw: x.outerHTML,
 				description: x.querySelector('.search-result-body')
