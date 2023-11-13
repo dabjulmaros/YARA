@@ -118,7 +118,7 @@
 	async function load() {
 		loadButton.setAttribute('aria-busy', true);
 		loadButton.disabled = true;
-		const data = await fetchRedditData(``, `${nextSet == '' ? '' : 'after=' + nextSet}`);
+		const data = await fetchRedditData(``, `?${nextSet == '' ? '' : 'after=' + nextSet}`);
 		if (data.error || data.length == 0) {
 			console.log(data);
 			if (posts.length > 0) hasMore = false;

@@ -120,7 +120,7 @@
 		loadButton.disabled = true;
 		const data = await fetchRedditData(
 			`${subName == '""' ? '' : 'user/' + subName}`,
-			`${nextSet == '' ? '' : 'after=' + nextSet}`,
+			`?${nextSet == '' ? '' : 'after=' + nextSet}`,
 		);
 		if (data.error || data.length == 0) {
 			console.log(data);

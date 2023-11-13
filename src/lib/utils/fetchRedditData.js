@@ -10,6 +10,9 @@ export async function fetchRedditData(subName, nextSet) {
 	if (json.url.includes('com/over18')) {
 		return notOver18();
 	}
+	if (json.actualUrl.includes('search?q=') || json.actualUrl.includes('search?type='))
+		return redditSearch(json.html);
+
 	switch (json.status) {
 		case 200:
 			return reddit200(json.html);
@@ -53,10 +56,14 @@ export async function fetchRedditData(subName, nextSet) {
 function reddit200(html) {
 	const htmlDoc = document.createElement('html');
 	htmlDoc.innerHTML = html;
-	if (htmlDoc.querySelector('.pagename') && htmlDoc.querySelector('.pagename').textContent == 'over 18?') return notOver18();
+	if (
+		htmlDoc.querySelector('.pagename') &&
+		htmlDoc.querySelector('.pagename').textContent == 'over 18?'
+	)
+		return notOver18();
 	const things = htmlDoc.querySelectorAll('.thing:not(.promoted)');
 	const returnArr = [];
-	for (var x of things) {
+	for (let x of things) {
 		let expandoType = 'none';
 		const expandoTypeEle = x.querySelectorAll('.entry .expando-button');
 
@@ -79,9 +86,9 @@ function reddit200(html) {
 		returnArr.push({
 			thingID: x.getAttribute('data-fullname'),
 			thingDomain: x.getAttribute('data-domain'),
-      subreddit: x.getAttribute('data-subreddit-prefixed'),
-      dataKind:x.getAttribute('data-kind'),
-      dataUrl:x.getAttribute('data-url'),
+			subreddit: x.getAttribute('data-subreddit-prefixed'),
+			dataKind: x.getAttribute('data-kind'),
+			dataUrl: x.getAttribute('data-url'),
 			title: x.querySelector('a.title') ? x.querySelector('a.title').textContent : '',
 			href: x.querySelector('.flat-list .comments')
 				? x.querySelector('.flat-list .comments').href
@@ -95,7 +102,9 @@ function reddit200(html) {
 			time: x.querySelector('.tagline time')
 				? x.querySelector('.tagline time').textContent
 				: '',
-      points:x.querySelector('.score.unvoted')?x.querySelector('.score.unvoted').textContent:"",
+			points: x.querySelector('.score.unvoted')
+				? x.querySelector('.score.unvoted').textContent
+				: '',
 			expando: expandoReturn,
 			expandoType: expandoType,
 			raw: x.outerHTML,
@@ -159,21 +168,99 @@ function subNotFound() {
 function parseComment(element) {
 	const returnElement = {
 		post: {
-			postTitle: element.querySelector('.parent .title')?element.querySelector('.parent .title').textContent:"",
-			postUrl: element.querySelector('[data-event-action="full_comments"]')?element.querySelector('[data-event-action="full_comments"]').href:"",
-			opName: element.querySelector('.parent .author')?element.querySelector('.parent .author').textContent:"",
-			opUrl: element.querySelector('.parent .author')?element.querySelector('.parent .author').href:"",
-			subName: element.querySelector('.parent .subreddit')?element.querySelector('.parent .subreddit').textContent:"",
-			subUrl: element.querySelector('.parent .subreddit')?element.querySelector('.parent .subreddit').href:"",
+			postTitle: element.querySelector('.parent .title')
+				? element.querySelector('.parent .title').textContent
+				: '',
+			postUrl: element.querySelector('[data-event-action="full_comments"]')
+				? element.querySelector('[data-event-action="full_comments"]').href
+				: '',
+			opName: element.querySelector('.parent .author')
+				? element.querySelector('.parent .author').textContent
+				: '',
+			opUrl: element.querySelector('.parent .author')
+				? element.querySelector('.parent .author').href
+				: '',
+			subName: element.querySelector('.parent .subreddit')
+				? element.querySelector('.parent .subreddit').textContent
+				: '',
+			subUrl: element.querySelector('.parent .subreddit')
+				? element.querySelector('.parent .subreddit').href
+				: '',
 		},
 		comment: {
-			commentOp: element.querySelector('.entry .author ')?element.querySelector('.entry .author ').textContent:"",
-			commentPoint: element.querySelector('.entry .unvoted')?element.querySelector('.entry .unvoted').textContent:"",
-			commentAge: element.querySelector('.entry .live-timestamp')?element.querySelector('.entry .live-timestamp').textContent:"",
-			commentText: element.querySelector('.md')?element.querySelector('.md').textContent:"",
-			commentContext: element.querySelector('[data-event-action="context"]')?element.querySelector('[data-event-action="context"]').href:element.querySelector('[data-event-action="context"]'),
+			commentOp: element.querySelector('.entry .author ')
+				? element.querySelector('.entry .author ').textContent
+				: '',
+			commentPoint: element.querySelector('.entry .unvoted')
+				? element.querySelector('.entry .unvoted').textContent
+				: '',
+			commentAge: element.querySelector('.entry .live-timestamp')
+				? element.querySelector('.entry .live-timestamp').textContent
+				: '',
+			commentText: element.querySelector('.md')
+				? element.querySelector('.md').textContent
+				: '',
+			commentContext: element.querySelector('[data-event-action="context"]')
+				? element.querySelector('[data-event-action="context"]').href
+				: element.querySelector('[data-event-action="context"]'),
 		},
 	};
-	
+
 	return returnElement;
+}
+
+function redditSearch(html) {
+	const htmlDoc = document.createElement('html');
+	htmlDoc.innerHTML = html;
+	if (
+		htmlDoc.querySelector('.pagename') &&
+		htmlDoc.querySelector('.pagename').textContent == 'over 18?'
+	)
+		return notOver18();
+
+	let things = htmlDoc.querySelectorAll('.thing:not(.promoted)');
+	const returnArr = [];
+
+	if (things.length) {
+		for (let x of things) {
+			returnArr.push({
+				thingID: x.getAttribute('data-fullname'),
+				community: x.querySelector('.midcol > span').getAttribute('data-sr_name'),
+				link: x.querySelector('a.title') ? x.querySelector('a.title').href : '',
+				title: x.querySelector('a.title') ? x.querySelector('a.title').textContent : '',
+				members: x.querySelector('.score.unvoted span')
+					? x.querySelector('.score.unvoted span').textContent
+					: '',
+				raw: x.outerHTML,
+				description: x.querySelector('.md') ? x.querySelector('.md').textContent : '',
+			});
+		}
+	} else {
+		things = htmlDoc.querySelectorAll('.search-result.search-result-subreddit');
+		for (let x of things) {
+			returnArr.push({
+				thingID: x.getAttribute('data-fullname'),
+				community: x
+					.querySelector('.search-result-meta > span')
+					.getAttribute('data-sr_name'),
+				link: x.querySelector('a.search-subreddit-link')
+					? x.querySelector('a.search-subreddit-link').href
+					: '',
+				title: x.querySelector('.search-result-header')
+					? x.querySelector('.search-result-header').textContent
+					: '',
+				members: x.querySelector('.score.unvoted span')
+					? x.querySelector('.score.unvoted span').textContent
+					: '',
+				raw: x.outerHTML,
+				description: x.querySelector('.search-result-body')
+					? x.querySelector('.search-result-body').textContent
+					: '',
+			});
+		}
+	}
+
+	if (returnArr.length == 0 && htmlDoc.querySelectorAll('#noresults')) return subNotFound();
+
+	return { type: 'search', items: returnArr };
 }

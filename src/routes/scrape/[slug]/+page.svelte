@@ -18,6 +18,7 @@
 	import FullScreenImg from '$lib/components/FullScreenImg.svelte';
 	import FullScreenComments from '$lib/components/FullScreenComments.svelte';
 	import InlineComments from '$lib/components/InlineComments.svelte';
+	import SearchPosts from '$lib/components/SearchPosts.svelte';
 
 	//tools
 	import { getMe } from '$lib/utils/getMe.js';
@@ -44,6 +45,7 @@
 	let postsSuccess = true;
 	let status = 200;
 	let hasMore = true;
+	let type = '';
 
 	export let data;
 
@@ -124,7 +126,7 @@
 		loadButton.disabled = true;
 		const data = await fetchRedditData(
 			`r/${subName}`,
-			`${nextSet == '' ? '' : 'after=' + nextSet}`,
+			`?${nextSet == '' ? '' : 'after=' + nextSet}`,
 		);
 		if (data.error || data.length == 0) {
 			console.log(data);
@@ -142,9 +144,20 @@
 			posts.push(...data.message);
 			return;
 		}
+
+		if (data.type) {
+			if (data.type == 'search') {
+				type = 'search';
+				posts.push(...data.items);
+				nextSet = data.items[data.items.length - 1].thingID;
+			}
+		} else {
+			posts.push(...data);
+			nextSet = data[data.length - 1].thingID;
+		}
+
 		postsSuccess = true;
-		posts.push(...data);
-		nextSet = data[data.length - 1].thingID;
+
 		posts = posts;
 		loadButton.setAttribute('aria-busy', false);
 		loadButton.disabled = false;
@@ -184,7 +197,7 @@
 		/>
 	{/if}
 	<Navbar subNameField={subName} />
-	{#if postsSuccess}
+	{#if postsSuccess && type !== 'search'}
 		<div>
 			{#each posts as data}
 				<!-- <div class="posts"> -->
@@ -250,6 +263,8 @@
 				</button>
 			{/if}
 		</div>
+	{:else if postsSuccess && type === 'search'}
+		<SearchPosts items={posts} />
 	{:else if status !== 200}
 		<ErrorMessage message={posts} />
 	{:else}
