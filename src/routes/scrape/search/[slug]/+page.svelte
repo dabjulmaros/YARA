@@ -35,7 +35,9 @@
 		loadButton.disabled = true;
 		const data = await fetchRedditData(
 			`search?type=sr&q=${search}`, //type sr forces search to communities only
-			`&${nextSet == '' ? '' : 'after=' + nextSet}`,
+			`${localStorage.over18 == 'true' ? '&include_over_18=on' : ''}${
+				nextSet == '' ? '' : '&after=' + nextSet
+			}`,
 		);
 		if (data.error || data.length == 0) {
 			console.log(data);
@@ -45,8 +47,8 @@
 		}
 		if (data.status == 403 || data.status == 404) {
 			console.log(data);
+			hasMore = false;
 			if (posts.length > 0) {
-				hasMore = false;
 				return;
 			} else postsSuccess = false;
 			status = 403;
