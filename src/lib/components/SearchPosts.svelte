@@ -5,7 +5,7 @@
 	console.log(items);
 </script>
 
-<div>
+<div class="grid">
 	{#each items as data}
 		<!-- filters out users -->
 		{#if data.title !== '' && data.members !== ''}
@@ -14,7 +14,7 @@
 					<h2>
 						<AncherNoreferrer link={`${data.link}`} content={`View ${data.title}`} />
 					</h2>
-					<small>{shortNum(null, data.members)} subscribers</small>
+					<small>{data.community} · {shortNum(null, data.members)} subscribers</small>
 					<p>{data.description}</p>
 				</div>
 			</article>
@@ -23,9 +23,18 @@
 </div>
 
 <style>
-	article {
+	div.grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		grid-template-rows: 1fr;
+		grid-column-gap: 0.5rem;
+		grid-row-gap: 0.5rem;
 		max-width: 1500px;
 		margin: 1rem auto;
+	}
+	article {
+		width: calc(100% - 1rem);
+		margin: 0.5rem 0.5rem;
 	}
 	div.body {
 		display: flex;

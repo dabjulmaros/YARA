@@ -95,4 +95,8 @@
 		height: calc(100vh - 33px);
 		margin-top: 33px;
 	}
+	button {
+		margin: 0 auto;
+		width: fit-content;
+	}
 </style>
