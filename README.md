@@ -65,3 +65,8 @@ In order to eliminate vulnerabilities caused by electron itself, please run `npm
 ## Change Build Targets
 
 In the scripts section of package.json you can update the `build:electron` command and change the flags to set the targets, by default it uses `-mwl` which is Mac, Windows, and Linux
+
+## Other libraries used
+
+- `axios` for web requests
+- `picocss` for minimalistic unified look and feel [github](https://github.com/picocss/pico)
