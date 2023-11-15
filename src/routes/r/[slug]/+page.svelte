@@ -240,7 +240,6 @@
 									src={data.secure_media_embed.media_domain_url +
 										'?responsive=true&is_nightmode=true'}
 									frameborder="0"
-									style="border-radius:15px;overflow:hidden;margin:0 auto;height:47vh"
 									scrolling="no"
 									width="550px"
 									height="511px"
@@ -436,6 +435,7 @@
 		max-height: 47vh;
 		max-width: 100%;
 		margin: 0 auto;
+		border-radius: var(--border-radius);
 	}
 	:global(img.fullHeight) {
 		height: max-content !important;

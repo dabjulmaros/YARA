@@ -21,6 +21,6 @@
 		max-height: 47vh;
 		max-width: 100%;
 		overflow: hidden;
-		border-radius: 15px;
+		border-radius: var(--border-radius);
 	}
 </style>

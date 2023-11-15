@@ -115,5 +115,6 @@
 		max-height: 47vh;
 		max-width: 100%;
 		margin: 0 auto;
+		border-radius: var(--border-radius);
 	}
 </style>
