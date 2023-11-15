@@ -25,11 +25,10 @@
 <style>
 	div.grid {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: repeat(1, 1fr);
 		grid-template-rows: 1fr;
 		grid-column-gap: 0.5rem;
 		grid-row-gap: 0.5rem;
-		max-width: 1500px;
 		margin: 1rem auto;
 	}
 	article {
@@ -44,8 +43,9 @@
 		margin-bottom: 0.5rem;
 	}
 	@media (min-width: 801px) {
-		div.body {
-			min-height: 5vh;
+		div.grid {
+			grid-template-columns: repeat(2, 1fr);
+			max-width: 1500px;
 		}
 	}
 </style>
