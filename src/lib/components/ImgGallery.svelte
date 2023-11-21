@@ -57,12 +57,12 @@
 		<button class="outline" on:click={() => changeImg(-1)}>◀</button>
 		<div class="imgHolder" style="position:relative;">
 			<div class="carousel" style={`transform:translate(-${index * 100}%)`}>
-				{#each srcArr as src}
+				{#each srcArr as src, i}
 					<div>
 						<img
 							{src}
 							alt=""
-							loading="lazy"
+							loading={i == index + 1 ? 'eager' : 'lazy'}
 							on:dblclick={(event) => fullHeightImage(event)}
 						/>
 					</div>
