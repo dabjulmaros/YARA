@@ -2,7 +2,6 @@
 	import { shortNum } from '$lib/utils/shortNum';
 	import AncherNoreferrer from './AncherNoreferrer.svelte';
 	export let items;
-	console.log(items);
 </script>
 
 <div class="grid">

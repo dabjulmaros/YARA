@@ -1,7 +1,6 @@
 export function searchCleaner(search, method = true, isSearch = true) {
-	let cleanInputField = search;
+	let cleanInputField = search.toLowerCase();
 	let returnVal = '';
-	console.log(cleanInputField);
 
 	if (cleanInputField.includes('reddit.com') || isSearch) {
 		if (cleanInputField.includes('/r/')) cleanInputField = cleanInputField.split('/r/')[1];
@@ -13,6 +12,10 @@ export function searchCleaner(search, method = true, isSearch = true) {
 
 		if (cleanInputField.includes('reddit.com/'))
 			cleanInputField = cleanInputField.split('reddit.com/')[1];
+
+		if (cleanInputField.substr(0, 1) == '?') {
+			cleanInputField = cleanInputField.replace('?', 'search/');
+		}
 
 		if (
 			window.location.pathname.includes('/scrape/') ||
