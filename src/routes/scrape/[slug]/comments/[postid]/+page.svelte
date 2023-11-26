@@ -209,7 +209,7 @@
 		margin-top: 0;
 	}
 
-	:global(.collapse .body) {
+	:global(.collapse .body, .collapse footer) {
 		display: none;
 	}
 
