@@ -57,10 +57,10 @@
 
 	function shareLink(e) {
 		e.stopPropagation();
-		let shareLink = link;
+		let shareUrl = link;
 		if (link.substr(0, 3) == '/r/' || link.substr(0, 3) == '/u/')
-			shareLink = 'https://old.reddit.com' + link;
-		navigator.clipboard.writeText(shareLink);
+			shareUrl = 'https://old.reddit.com' + link;
+		navigator.clipboard.writeText(shareUrl);
 		shareButton.dataset.tooltip = 'copied';
 		setTimeout(() => shareButton.removeAttribute('data-tooltip'), 1000);
 	}
