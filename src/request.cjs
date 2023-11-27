@@ -1,14 +1,14 @@
 const axios = require('axios');
 
-const { r, params, over18 } = JSON.parse(process.argv[2]);
-if (r == undefined || params == undefined || over18 == undefined)
-	return { Error: 'Make sure r, params and over18 are present when calling the fuction' };
+const { url, over18 } = JSON.parse(process.argv[2]);
+if (url == undefined || over18 == undefined)
+	return logJson({ Error: 'Make sure url and over18 are present when calling the fuction' });
 const cookies =
 	'loid=000000000cpgoyl63y.2.1685878453258.Z0FBQUFBQmtmSGExaHc2eXdhVUdxTzlKOWd6eDFTbVlzQm83Q0phaVZFNDRYbDlRT251ZVdoaTRNeGp3ZTdHVGRDY1FKemxabU1hNjVnM0ZZSTlISWxBNVBDTV80SG5yMnlXYng1VDBjYVJXUTZyZEpzYk5ndEpVbExjWFRZR3I0ZUl5M3Q2b3NCbDI; csv=2; edgebucket=bbyF2yJ3R9wntuDxoJ; pc=n8; session_tracker=kqppcgrjanlqbiddlb.0.1685878576205.Z0FBQUFBQmtmSGN3dTUwZzA0RU9zM1BJaklkSUljLWg3TkxvXzZIQXpwUkNackZDYkptTTl6OEFMbndVOUhGMzRTTVNmNmhaVzZyMzJMZjdSU09GaUNSTjVPT3VSejZTbF91c1ZSN1R3T0RTcXJsYk1FUmZzdWRDck8zdmptWjY5TXh2dURHTFdkLUk';
 
 let options = {
 	method: 'get',
-	url: `https://old.reddit.com/${r}${params}`,
+	url: url,
 	headers: {
 		'User-Agent':
 			'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',

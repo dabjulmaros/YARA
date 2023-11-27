@@ -1,5 +1,8 @@
 export async function fetchRedditData(subName, nextSet) {
-	const params = JSON.stringify({ r: subName, params: nextSet, over18: localStorage.over18 });
+	const params = JSON.stringify({
+		url: `https://old.reddit.com/${subName}${nextSet}`,
+		over18: localStorage.over18,
+	});
 	const json = await electron.request(params).then((r) => {
 		return JSON.parse(r);
 	});
