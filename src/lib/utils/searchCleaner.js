@@ -3,6 +3,8 @@ export function searchCleaner(search, method = true, isSearch = true) {
 	let returnVal = '';
 
 	if (cleanInputField.includes('reddit.com') || isSearch) {
+		if (cleanInputField == 'hr' || cleanInputField == '!') return '/hr';
+
 		if (cleanInputField.includes('/r/')) cleanInputField = cleanInputField.split('/r/')[1];
 
 		if (cleanInputField.substr(0, 2) == 'r/') cleanInputField = cleanInputField.substr(2);
