@@ -1,6 +1,7 @@
 <script>
 	import inView from '$lib/utils/inView';
 	export let src;
+	export let poster = '';
 	function toggleMute(e) {
 		e.target.muted = !e.target.muted;
 		e.preventDefault();
@@ -11,15 +12,18 @@
 <video
 	use:inView
 	on:enterView={() => {
+		if (poster !== '') return;
 		video.play();
 	}}
 	on:exitView={() => {
+		if (poster !== '') return;
 		video.pause();
 	}}
 	bind:this={video}
 	{src}
-	muted
-	autoplay
+	{poster}
+	muted={(poster = '' ? true : false)}
+	autoplay={(poster = '' ? true : false)}
 	loop
 	controls
 	on:click={toggleMute}
