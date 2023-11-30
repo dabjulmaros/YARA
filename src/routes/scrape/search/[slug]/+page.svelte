@@ -18,9 +18,6 @@
 	let hasMore = true;
 
 	let nextSet = '';
-
-	let scroll = false;
-	let elementToScroll;
 	let scrollElement;
 
 	const search = data.slug;

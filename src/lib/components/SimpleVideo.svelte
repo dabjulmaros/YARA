@@ -34,6 +34,7 @@
 		height: fit-content;
 		max-height: 47vh;
 		max-width: 100%;
+		min-width: 200px;
 		margin: 0 auto;
 	}
 </style>
