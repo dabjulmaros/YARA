@@ -12,10 +12,9 @@ const config = {
 		adapter: adapter({
 			fallback: 'index.html',
 		}),
-    alias:{
-      "$components":"src/lib/components",
-      "$utils":"src/lib/utils"
-    },
+		alias: {
+			$lib: 'src/lib',
+		},
 		prerender: { entries: [] },
 	},
 };

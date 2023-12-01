@@ -1,10 +1,10 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
-	import AncherNoreferrer from '$components/AncherNoreferrer.svelte';
-	import PostDetails from '$components/PostDetails.svelte';
-	import MediaQuery from '$components/MediaQuery.svelte';
+	import AncherNoreferrer from '$lib/components/AncherNoreferrer.svelte';
+	import PostDetails from '$lib/components/PostDetails.svelte';
+	import MediaQuery from '$lib/components/MediaQuery.svelte';
 
-	import inView from '$utils/inView';
+	import inView from '$lib/utils/inView';
 
 	export let postData;
 	export let singlePost = false;

@@ -1,7 +1,7 @@
 <!-- Need to fix issue where audio loads before video -->
 <script>
-	import { htmlDecode } from '$utils/htmlDecode.js';
-	import inView from '$utils/inView';
+	import { htmlDecode } from '$lib/utils/htmlDecode.js';
+	import inView from '$lib/utils/inView';
 
 	export let expando;
 	export let data;
