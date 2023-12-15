@@ -12,9 +12,9 @@
 	import SimpleImg from '$lib/components/SimpleImg.svelte';
 	import SimpleVideo from '$lib/components/SimpleVideo.svelte';
 	import FullScreenImg from '$lib/components/FullScreenImg.svelte';
+	import SelfText from '$lib/components/SelfText.svelte';
 
 	//tools
-	import { htmlDecode } from '$lib/utils/htmlDecode.js';
 	import { getMe } from '$lib/utils/getMe.js';
 
 	let status = 200;
@@ -155,7 +155,10 @@
 						/>
 					{:else if post.selftext_html != null}
 						<div class="post">
-							{@html htmlDecode(post.selftext_html)}
+							<SelfText
+								on:fullImg={(event) => fullHeightImage(event)}
+								postText={post.selftext_html}
+							/>
 						</div>
 					{:else if post.post_hint == 'link'}
 						<AncherNoreferrer link={post.url} />
@@ -168,6 +171,7 @@
 			</div>
 			<footer class="footer">
 				<Comments
+					on:fullImg={fullHeightImage}
 					commentsArr={comments[1].data.children}
 					opName={comments[0].data.children[0].data.author}
 				/>

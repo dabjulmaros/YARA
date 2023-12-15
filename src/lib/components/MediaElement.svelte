@@ -7,22 +7,12 @@
 	import SimpleVideo from '$lib/components/SimpleVideo.svelte';
 	import SimpleIFrame from '$lib/components/SimpleIFrame.svelte';
 	import SimpleImg from '$lib/components/SimpleImg.svelte';
+	import SelfText from '$lib/components/SelfText.svelte';
 
 	//tools
 	import { getImgSrc } from '$lib/utils/getImgSrc.js';
-	import { htmlDecode } from '$lib/utils/htmlDecode.js';
 
 	export let data;
-
-	function fetchSelfText(id) {
-		fetch(`https://old.reddit.com/api/expando?link_id=${id}&renderstyle=html`)
-			.then((res) => {
-				if (res.ok) return res.text();
-			})
-			.then((text) => {
-				document.querySelector(`#self_${id}`).innerHTML = htmlDecode(text);
-			});
-	}
 
 	const dispatch = createEventDispatcher();
 	function fullHeightImage(event) {
@@ -55,7 +45,7 @@
 		{/if}
 	{:else if data.expandoType == 'text' || data.expandoType == 'crossPost'}
 		<div id={'self_' + data.thingID} class="post">
-			{fetchSelfText(data.thingID)}
+			<SelfText on:fullImg={(event) => fullHeightImage(event)} thingID={data.thingID} />
 		</div>
 	{:else if data.expandoType == 'none'}
 		{#if data.expando.includes('imgur') && data.expando.includes('gifv')}

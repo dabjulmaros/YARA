@@ -1,14 +1,23 @@
 <script>
-	import { htmlDecode } from '$lib/utils/htmlDecode.js';
-	import { previewImageParser } from '$lib/utils/previewImageParser.js';
+	import { createEventDispatcher } from 'svelte';
+
 	import AncherNoreferrer from '$lib/components/AncherNoreferrer.svelte';
 
 	//utils
 	import { shortNum } from '$lib/utils/shortNum';
 	import { getTime } from '$lib/utils/getTime';
+	import { htmlDecode } from '$lib/utils/htmlDecode.js';
+	import { previewImageParser } from '$lib/utils/previewImageParser.js';
 
 	export let commentsArr;
 	export let opName;
+
+	const dispatch = createEventDispatcher();
+	function fullHeightImage(event) {
+		dispatch('fullImg', {
+			target: event.detail.target,
+		});
+	}
 </script>
 
 <div class="parent">
@@ -31,7 +40,7 @@
 						points
 					</small>
 				</summary>
-				<div class="comment border">
+				<div on:fullImg={fullHeightImage} class="comment border">
 					{@html previewImageParser(htmlDecode(comment.data.body_html))}
 				</div>
 				{#if comment.data.replies !== '' && comment.data.replies.kind !== 'more'}
