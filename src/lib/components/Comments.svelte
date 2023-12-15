@@ -1,5 +1,6 @@
 <script>
 	import { htmlDecode } from '$lib/utils/htmlDecode.js';
+	import { previewImageParser } from '$lib/utils/previewImageParser.js';
 	import AncherNoreferrer from '$lib/components/AncherNoreferrer.svelte';
 
 	//utils
@@ -30,7 +31,9 @@
 						points
 					</small>
 				</summary>
-				<div class="comment border">{@html htmlDecode(comment.data.body_html)}</div>
+				<div class="comment border">
+					{@html previewImageParser(htmlDecode(comment.data.body_html))}
+				</div>
 				{#if comment.data.replies !== '' && comment.data.replies.kind !== 'more'}
 					<div class="child border">
 						<svelte:self commentsArr={comment.data.replies.data.children} {opName} />
