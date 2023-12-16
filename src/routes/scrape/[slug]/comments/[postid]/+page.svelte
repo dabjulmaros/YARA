@@ -16,6 +16,7 @@
 
 	//tools
 	import { getMe } from '$lib/utils/getMe.js';
+	import { recentCommunities } from '$lib/utils/recentCommunities.js';
 
 	let status = 200;
 	let error = [];
@@ -42,6 +43,7 @@
 	let loadButton;
 
 	onMount(() => {
+		recentCommunities(`r/${subName}`);
 		// load first batch onMount
 		load();
 	});
@@ -225,7 +227,7 @@
 		padding: 20px;
 	}
 	div.scroll {
-		overflow-y: auto;
+		overflow-y: overlay;
 		overflow-x: hidden;
 		height: calc(100vh - 33px);
 		margin-top: 33px;
