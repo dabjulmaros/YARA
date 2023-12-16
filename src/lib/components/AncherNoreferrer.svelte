@@ -12,22 +12,34 @@
 
 	function testLink(e) {
 		let validLink = true;
-		let link = searchCleaner(e.target.href, $localStore.method, false);
+		let vLink = searchCleaner(link, $localStore.method, false);
 
 		try {
-			new URL(link);
+			new URL(vLink);
 		} catch {
 			validLink = false;
 		}
 
 		if (validLink) return;
-		else window.location = link;
+		else window.location = vLink;
 		e.preventDefault();
 	}
 </script>
 
-<a rel="noopener noreferrer" href={link} {style} target="_blank" {role} on:click={testLink}>
-	{@html content}
+<a
+	rel="noopener noreferrer"
+	href={link}
+	{style}
+	target="_blank"
+	{role}
+	on:click={testLink}
+	title={content}
+>
+	{#if Object.keys($$slots).length}
+		<slot />
+	{:else}
+		{@html content}
+	{/if}
 </a>
 
 <style>
