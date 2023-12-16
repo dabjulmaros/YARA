@@ -324,7 +324,7 @@
 	}
 
 	div.scroll {
-		overflow-y: auto;
+		overflow-y: overlay;
 		overflow-x: hidden;
 		height: calc(100vh - 33px);
 		margin-top: 33px;

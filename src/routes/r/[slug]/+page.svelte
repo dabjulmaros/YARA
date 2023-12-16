@@ -486,7 +486,7 @@
 		padding: 20px;
 	}
 	div.scroll {
-		overflow-y: scroll;
+		overflow-y: overlay;
 		overflow-x: hidden;
 		height: 100vh;
 	}
