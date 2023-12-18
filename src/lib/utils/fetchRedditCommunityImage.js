@@ -33,7 +33,7 @@ function parseImages(html, subName) {
 		}
 	if (returnArr.banner !== '' || returnArr.profile !== '') {
 		const localProfiles = JSON.parse(localStorage.communityProfiles);
-		localProfiles[subName.toLowerCase()] = returnArr;
+		localProfiles[subName] = returnArr;
 		localStorage.communityProfiles = JSON.stringify(localProfiles);
 	}
 
