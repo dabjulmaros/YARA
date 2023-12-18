@@ -56,9 +56,9 @@
 
 	let scroll = false;
 	let elementToScroll;
+	let getCommunity = true;
 
 	onMount(() => {
-		recentCommunities(`r/${subName}`);
 		// load first batch onMount
 		load();
 	});
@@ -154,6 +154,11 @@
 				nextSet = data.items[data.items.length - 1].thingID;
 			}
 		} else {
+			// get community name with proper spelling
+			if (getCommunity) {
+				recentCommunities(data[0].subreddit);
+				getCommunity = false;
+			}
 			posts.push(...data);
 			nextSet = data[data.length - 1].thingID;
 		}

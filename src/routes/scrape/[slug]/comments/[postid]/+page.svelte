@@ -42,8 +42,9 @@
 
 	let loadButton;
 
+	let getCommunity = true;
+
 	onMount(() => {
-		recentCommunities(`r/${subName}`);
 		// load first batch onMount
 		load();
 	});
@@ -80,8 +81,13 @@
 			postsSuccess = false;
 			return;
 		}
+		// get community name with proper spelling
 		postsSuccess = true;
 		post = comments[0].data.children[0].data;
+		if (getCommunity) {
+			recentCommunities(`r/${post.subreddit}`);
+			getCommunity = false;
+		}
 	}
 
 	function fullHeightImage(event) {

@@ -1,9 +1,8 @@
 export async function fetchRedditCommunityImage(subName) {
 	if (localStorage.communityProfiles != undefined) {
 		const localProfiles = JSON.parse(localStorage.communityProfiles);
-		if (localProfiles[subName.toLowerCase()] != undefined) {
-			return localProfiles[subName.toLowerCase()];
-		}
+
+		if (localProfiles[subName] != undefined) return localProfiles[subName];
 	} else {
 		localStorage.communityProfiles = '{}';
 	}
