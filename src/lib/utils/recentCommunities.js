@@ -1,4 +1,4 @@
-export function recentCommunities(community = '') {
+export function recentCommunities(community = '', remove = false) {
 	const recentCommunities = [];
 	if (localStorage.recentCommunities) {
 		const storedArray = JSON.parse(localStorage.recentCommunities);
@@ -11,9 +11,11 @@ export function recentCommunities(community = '') {
 			recentCommunities.splice(index, 1);
 		}
 
-		recentCommunities.unshift(community);
+		if (!remove) {
+			recentCommunities.unshift(community);
 
-		recentCommunities.splice(10);
+			recentCommunities.splice(10);
+		}
 
 		localStorage.recentCommunities = JSON.stringify(recentCommunities);
 	}
