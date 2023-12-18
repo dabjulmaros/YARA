@@ -14,7 +14,7 @@ export function recentCommunities(community = '', remove = false) {
 		if (!remove) {
 			recentCommunities.unshift(community);
 
-			recentCommunities.splice(10);
+			recentCommunities.splice(20);
 		}
 
 		localStorage.recentCommunities = JSON.stringify(recentCommunities);
