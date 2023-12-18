@@ -7,7 +7,6 @@
 	const recentCommunitiesArr = recentCommunities();
 
 	async function getProfile(community) {
-		console.log(community);
 		const profile = await fetchRedditCommunityImage(community);
 		if (profile.profile == '') {
 			throw new Error(`No ${community} Community pfp`);
@@ -17,7 +16,6 @@
 	function removeRecent(e) {
 		e.preventDefault();
 		const recent = recentCommunities(e.target.dataset.remove, true);
-		console.log(recent);
 		recentCommunitiesArr.length = 0;
 		recentCommunitiesArr.push(...recent);
 	}
@@ -41,6 +39,7 @@
 					/>
 					<AncherNoreferrer
 						link={'/' + data}
+						content={data}
 						style="display: flex;flex-direction: column;align-items: center;justify-content: center;"
 					>
 						{#await getProfile(data)}
