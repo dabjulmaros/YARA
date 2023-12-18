@@ -15,7 +15,7 @@ export async function fetchRedditCommunityImage(subName) {
 		return JSON.parse(r);
 	});
 	if (json.html == undefined || json.status !== 200) {
-		console.log(json);
+		console.error(json);
 		return { error: 'Image could not be retrieved' };
 	} else return parseImages(json.html, subName);
 }

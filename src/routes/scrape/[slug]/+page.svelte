@@ -109,11 +109,6 @@
 			.then((json) => {
 				comments = json;
 				lastComments = id;
-				// comments = [];
-				// comments.push(...json[1].data.children);
-				// console.log(comments);
-				// console.log("Cleaner Comments");
-				// commentRecursor(comments, 0);
 			});
 	}
 	function viewInlineCommentsEvent(e) {
@@ -131,13 +126,13 @@
 			`?${nextSet == '' ? '' : 'after=' + nextSet}`,
 		);
 		if (data.error || data.length == 0) {
-			console.log(data);
+			console.error(data);
 			if (posts.length > 0) hasMore = false;
 			else postsSuccess = false;
 			return;
 		}
 		if (data.status == 403 || data.status == 404) {
-			console.log(data);
+			console.error(data);
 			if (posts.length > 0) {
 				hasMore = false;
 				return;

@@ -7,7 +7,7 @@ export async function fetchRedditData(subName, nextSet) {
 		return JSON.parse(r);
 	});
 	if (json.html == undefined) {
-		console.log(json);
+		console.error(json);
 		return { error: 'bad stuff happened' };
 	}
 	if (json.url.includes('com/over18')) {

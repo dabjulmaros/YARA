@@ -67,11 +67,6 @@
 				viewComments = true;
 				comments = json;
 				lastComments = id;
-				// comments = [];
-				// comments.push(...json[1].data.children);
-				// console.log(comments);
-				// console.log("Cleaner Comments");
-				// commentRecursor(comments, 0);
 				event.target.setAttribute('aria-busy', false);
 				event.target.disabled = false;
 			});

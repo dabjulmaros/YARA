@@ -64,7 +64,7 @@
 
 		loadButton.remove();
 		if (status == 403 || status == 404) {
-			console.log(comments);
+			console.error(comments);
 			error.push(comments.error, comments.message);
 			error = error;
 			postsSuccess = false;
@@ -74,10 +74,10 @@
 			error.push('Server Error', 'We are having trouble getting data.');
 			error = error;
 			postsSuccess = false;
-			console.log(error);
+			console.error(error);
 			return;
 		} else if (comments.length == 0) {
-			console.log(comments);
+			console.error(comments);
 			postsSuccess = false;
 			return;
 		}

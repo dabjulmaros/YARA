@@ -24,7 +24,6 @@ axios
 	.request(options)
 	.then(async function (response) {
 		//remove script tags and content
-		// console.log(response);
 		let cleanHtml = response.data;
 		let x = 0;
 		let json = {
@@ -56,7 +55,7 @@ axios
 					);
 				cleanHtml = temp;
 				if (x == 500) {
-					// console.log('500s cycle reached. Break');
+					// console.error('500s cycle reached. Break');
 					break;
 				}
 			}
@@ -76,7 +75,7 @@ axios
 					);
 				cleanHtml = temp;
 				if (x == 500) {
-					// console.log('500s cycle reached. Break');
+					// console.error('500s cycle reached. Break');
 					break;
 				}
 			}
