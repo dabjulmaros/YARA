@@ -21,43 +21,45 @@
 	}
 </script>
 
-<article>
-	<header>
-		<h5>Recently Visited Communities</h5>
-	</header>
-	<body>
-		{#each recentCommunitiesArr as data, index}
-			{#if index < 6}
-				<div class="gridItems">
-					<a
-						href="#close"
-						aria-label="Close"
-						class="close"
-						on:click={removeRecent}
-						data-remove={data}
-						title={`Remove ${data} from Recent`}
-					/>
-					<AncherNoreferrer
-						link={'/' + data}
-						content={data}
-						style="display: flex;flex-direction: column;align-items: center;justify-content: center;"
-					>
-						{#await getProfile(data)}
-							<span class="profileImg background pending" />
-						{:then src}
-							<img {src} alt="decorative" loading="lazy" />
-						{:catch error}
-							<span class="profileImg background noImage" data={error} />
-						{/await}
-						<span class="communityName">
-							{data}
-						</span>
-					</AncherNoreferrer>
-				</div>
-			{/if}
-		{/each}
-	</body>
-</article>
+{#if recentCommunitiesArr.length}
+	<article>
+		<header>
+			<h5>Recently Visited Communities</h5>
+		</header>
+		<body>
+			{#each recentCommunitiesArr as data, index}
+				{#if index < 6}
+					<div class="gridItems">
+						<a
+							href="#close"
+							aria-label="Close"
+							class="close"
+							on:click={removeRecent}
+							data-remove={data}
+							title={`Remove ${data} from Recent`}
+						/>
+						<AncherNoreferrer
+							link={'/' + data}
+							content={data}
+							style="display: flex;flex-direction: column;align-items: center;justify-content: center;"
+						>
+							{#await getProfile(data)}
+								<span class="profileImg background pending" />
+							{:then src}
+								<img {src} alt="decorative" loading="lazy" />
+							{:catch error}
+								<span class="profileImg background noImage" data={error} />
+							{/await}
+							<span class="communityName">
+								{data}
+							</span>
+						</AncherNoreferrer>
+					</div>
+				{/if}
+			{/each}
+		</body>
+	</article>
+{/if}
 
 <style>
 	header {
