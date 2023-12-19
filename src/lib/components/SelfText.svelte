@@ -15,10 +15,10 @@
 				if (res.ok) return res.text();
 			})
 			.then((text) => {
-				document.querySelector(`#self_${id}`).innerHTML = parseHtml(text);
+				return parseHtml(text);
 			})
 			.catch((e) => {
-				document.querySelector(`#self_${id}`).innerHTML = 'Error: ' + e;
+				return 'Error: ' + e;
 			});
 		return data;
 	}
@@ -35,7 +35,11 @@
 
 <div on:fullImg={fullHeightImage}>
 	{#if thingID !== ''}
-		{@html fetchSelfText(thingID)}
+		{#await fetchSelfText(thingID)}
+			...Loading
+		{:then data}
+			{@html data}
+		{/await}
 	{:else if postText !== ''}
 		{@html parseHtml(postText)}
 	{:else}
