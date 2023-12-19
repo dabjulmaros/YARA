@@ -3,6 +3,7 @@ const { app, BrowserWindow, shell, dialog } = require('electron');
 const contextMenu = require('electron-context-menu');
 const serve = require('electron-serve');
 const path = require('path');
+const { exec } = require('child_process');
 
 try {
 	require('electron-reloader')(module);
@@ -125,7 +126,8 @@ contextMenu({
 			},
 		},
 	],
-	append: () => [
+
+	append: (defaultActions, parameters, browserWindow) => [
 		{
 			label: 'Show Over 18 Content',
 			visible: over18 == false,
@@ -138,6 +140,21 @@ contextMenu({
 			visible: over18 == true,
 			click: () => {
 				appOver18();
+			},
+		},
+		{
+			label: 'Open In Incognito',
+			visible: parameters.linkURL !== '',
+			click: () => {
+				try {
+					exec(`start chrome.exe ${parameters.linkURL} --incognito`);
+				} catch (e) {
+					dialog.showMessageBoxSync({
+						message: `Open ${url} in external browser?`,
+						type: 'error',
+						title: 'Error Opening link in incognito chrome',
+					});
+				}
 			},
 		},
 	],
