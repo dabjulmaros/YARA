@@ -4,23 +4,24 @@
 	import { htmlDecode } from '$lib/utils/htmlDecode.js';
 	import { previewImageParser } from '$lib/utils/previewImageParser.js';
 
+	//request
+	import { fetchJsonData } from '$lib/utils/fetchJsonData.js';
+
 	export let thingID = '';
 	export let postText = '';
 
 	async function fetchSelfText(id) {
-		const data = await fetch(
+		const data = await fetchJsonData(
 			`https://old.reddit.com/api/expando?link_id=${id}&renderstyle=html`,
-		)
-			.then((res) => {
-				if (res.ok) return res.text();
-			})
-			.then((text) => {
-				return parseHtml(text);
-			})
-			.catch((e) => {
-				return 'Error: ' + e;
-			});
-		return data;
+		);
+
+		try {
+			if (data.status == 200) {
+				return parseHtml(data.response);
+			} else throw new Error(`Data Error: ${JSON.stringify(data)}`);
+		} catch (e) {
+			return 'Error: ' + e;
+		}
 	}
 	function parseHtml(text) {
 		return previewImageParser(htmlDecode(text));

@@ -25,6 +25,7 @@
 
 	//request
 	import { fetchRedditData } from '$lib/utils/fetchRedditData.js';
+	import { fetchJsonData } from '$lib/utils/fetchJsonData.js';
 
 	let posts = [];
 	let nextSet = '';
@@ -93,14 +94,13 @@
 	}
 
 	async function getComments(id) {
-		await fetch(`${id}.json`)
-			.then((res) => {
-				if (res.ok) return res.json();
-			})
-			.then((json) => {
-				comments = json;
-				lastComments = id;
-			});
+		const data = await fetchJsonData(`${id}.json`);
+		status = data.status;
+		if (data.response === undefined || data.status !== 200) comments = [];
+		else {
+			comments = data.response;
+			lastComments = id;
+		}
 	}
 	function viewInlineCommentsEvent(e) {
 		viewInlineComments = e.detail.value;

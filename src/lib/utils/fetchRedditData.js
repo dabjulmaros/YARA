@@ -6,7 +6,7 @@ export async function fetchRedditData(subName, nextSet) {
 	const json = await electron.request(params).then((r) => {
 		return JSON.parse(r);
 	});
-	if (json.html == undefined) {
+	if (json.response == undefined) {
 		console.error(json);
 		return { error: 'bad stuff happened' };
 	}
@@ -14,15 +14,15 @@ export async function fetchRedditData(subName, nextSet) {
 		return notOver18();
 	}
 	if (json.actualUrl.includes('search?q=') || json.actualUrl.includes('search?type='))
-		return redditSearch(json.html);
+		return redditSearch(json.response);
 
 	switch (json.status) {
 		case 200:
-			return reddit200(json.html);
+			return reddit200(json.response);
 		case 403:
-			return reddit403(json.html);
+			return reddit403(json.response);
 		case 404:
-			return reddit404(json.html);
+			return reddit404(json.response);
 	}
 	// return await fetch('/api', {
 	// 	method: 'POST',
@@ -37,7 +37,7 @@ export async function fetchRedditData(subName, nextSet) {
 	// })
 	// 	.then((r) => {return r.json()})
 	// 	.then((json) => {
-	// 		if (json.html == undefined) {
+	// 		if (json.response == undefined) {
 	// 			console.log(json);
 	// 			return { error: 'bad stuff happened' };
 	// 		}
@@ -47,11 +47,11 @@ export async function fetchRedditData(subName, nextSet) {
 	//     }
 	// 		switch (json.status) {
 	// 			case 200:
-	// 				return reddit200(json.html);
+	// 				return reddit200(json.response);
 	// 			case 403:
-	// 				return reddit403(json.html);
+	// 				return reddit403(json.response);
 	// 			case 404:
-	// 				return reddit404(json.html);
+	// 				return reddit404(json.response);
 	// 		}
 	// 	});
 }

@@ -18,6 +18,9 @@
 	import { getMe } from '$lib/utils/getMe.js';
 	import { recentCommunities } from '$lib/utils/recentCommunities.js';
 
+	//request
+	import { fetchJsonData } from '$lib/utils/fetchJsonData.js';
+
 	let status = 200;
 	let error = [];
 
@@ -52,15 +55,12 @@
 	async function load() {
 		loadButton.setAttribute('aria-busy', true);
 		loadButton.disabled = true;
-		await fetch(`https://old.reddit.com/r/${postSlug}.json`)
-			.then((res) => {
-				status = res.status;
-				return res.json();
-			})
-			.then((json) => {
-				if (json === undefined) comments = [];
-				else comments = json;
-			});
+
+		const data = await fetchJsonData(`https://old.reddit.com/r/${postSlug}.json`);
+		console.log(data);
+		status = data.status;
+		if (data.response === undefined) comments = [];
+		else comments = data.response;
 
 		loadButton.remove();
 		if (status == 403 || status == 404) {

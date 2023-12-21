@@ -83,8 +83,8 @@ axios
 			// console.error('Error:Scripts not removed \n', e);
 			clean = false;
 		}
-		if (clean) json['html'] = cleanHtml;
-		else json['html'] = response.data;
+		if (clean) json['response'] = cleanHtml;
+		else json['response'] = response.data;
 
 		json['cycles'] = x;
 		logJson(json);

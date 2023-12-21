@@ -7,7 +7,7 @@
 	<nav>
 		<ul style="margin: 0;width: 100%;">
 			<li style="padding:0;padding-left:2rem;">
-				<a href="/" class="secondary home" />
+				<a href="/" class="secondary home"><span /></a>
 			</li>
 
 			<li style="text-align:center;padding:0 2rem;width:100%">

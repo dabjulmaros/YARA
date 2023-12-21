@@ -14,10 +14,10 @@ export async function fetchRedditCommunityImage(subName) {
 	const json = await electron.request(params).then((r) => {
 		return JSON.parse(r);
 	});
-	if (json.html == undefined || json.status !== 200) {
+	if (json.response == undefined || json.status !== 200) {
 		console.error(json);
 		return { error: 'Image could not be retrieved' };
-	} else return parseImages(json.html, subName);
+	} else return parseImages(json.response, subName);
 }
 
 function parseImages(html, subName) {

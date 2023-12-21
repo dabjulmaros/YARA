@@ -3,7 +3,7 @@
 	import { getImgSrc } from '$lib/utils/getImgSrc';
 	import { htmlDecode } from '$lib/utils/htmlDecode';
 
-	export let expando;
+	export let expando = '';
 	export let metadata = '';
 	let srcArr = [];
 	let capArr = [];
@@ -26,6 +26,8 @@
 			}
 			//svelte quirk it wont refresh the page after array push if the array is not set to itself
 			srcArr = srcArr;
+		} else {
+			console.error('Gallery not properly decoded');
 		}
 	});
 
@@ -46,12 +48,7 @@
 
 <div class="gallery">
 	{#if srcArr.length > 0}
-		<mark
-			style="position: absolute; z-index:1;opacity:.4;right:0;bottom:0"
-			class="mark"
-			data-tooltip={capArr[index]}
-			data-placement="left"
-		>
+		<mark class="mark" data-tooltip={capArr[index]} data-placement="left">
 			{index + 1}/{srcArr.length}
 		</mark>
 		<button class="outline" on:click={() => changeImg(-1)}>
@@ -80,13 +77,12 @@
 <style>
 	button {
 		cursor: pointer;
-		margin: 1rem;
+		margin: 0.7rem;
 		border: none;
-		height: 2.2rem;
-		width: 2.7rem;
+		aspect-ratio: 1;
+		height: 40px;
+		width: 40px;
 		z-index: 1;
-		line-height: 1rem;
-		font-size: 1.4rem;
 		padding: 0rem;
 		outline: var(--primary-focus) solid 2px;
 	}
@@ -130,6 +126,13 @@
 		display: flex;
 		flex: 0 0 auto;
 		width: 100%;
+	}
+	.mark {
+		position: absolute;
+		z-index: 1;
+		opacity: 0.4;
+		right: 0;
+		bottom: 0;
 	}
 	img {
 		height: fit-content;
