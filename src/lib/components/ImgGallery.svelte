@@ -54,7 +54,9 @@
 		>
 			{index + 1}/{srcArr.length}
 		</mark>
-		<button class="outline" on:click={() => changeImg(-1)}>◀</button>
+		<button class="outline" on:click={() => changeImg(-1)}>
+			<span class="chevron left" />
+		</button>
 		<div class="imgHolder" style="position:relative;">
 			<div class="carousel" style={`transform:translate(-${index * 100}%)`}>
 				{#each srcArr as src, i}
@@ -69,7 +71,9 @@
 				{/each}
 			</div>
 		</div>
-		<button class="outline" on:click={() => changeImg(1)}>▶</button>
+		<button class="outline" on:click={() => changeImg(1)}>
+			<span class="chevron right" />
+		</button>
 	{/if}
 </div>
 
@@ -84,6 +88,23 @@
 		line-height: 1rem;
 		font-size: 1.4rem;
 		padding: 0rem;
+		outline: var(--primary-focus) solid 2px;
+	}
+	.chevron {
+		--icon-size: 100%;
+		display: inline-block;
+		cursor: pointer;
+		padding: 0;
+		border: none;
+		height: var(--icon-size);
+		width: var(--icon-size);
+		background-size: var(--icon-size);
+	}
+	.right {
+		background-image: var(--rightChevron);
+	}
+	.left {
+		background-image: var(--leftChevron);
 	}
 	.gallery {
 		width: 100%;
