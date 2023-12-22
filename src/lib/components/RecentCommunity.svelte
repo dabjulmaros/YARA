@@ -93,6 +93,12 @@
 		background-position: center;
 		background-color: #11191f;
 	}
+	.pending {
+		background-image: var(--pending);
+	}
+	.noImage {
+		background-image: var(--noImage);
+	}
 	.communityName {
 		max-width: 100%;
 		overflow: hidden;

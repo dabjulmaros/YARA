@@ -77,6 +77,12 @@
 		background-position: center;
 		background-color: #11191f;
 	}
+	.pending {
+		background-image: var(--pending);
+	}
+	.noImage {
+		background-image: var(--noImage);
+	}
 
 	@media (min-width: 801px) {
 		div.grid {
