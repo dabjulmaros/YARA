@@ -45,7 +45,11 @@
 				</div>
 				{#if comment.data.replies !== '' && comment.data.replies.kind !== 'more'}
 					<div class="child border">
-						<svelte:self commentsArr={comment.data.replies.data.children} {opName} />
+						<svelte:self
+							on:fullImg={fullHeightImage}
+							commentsArr={comment.data.replies.data.children}
+							{opName}
+						/>
 					</div>
 				{/if}
 			</details>
