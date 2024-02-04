@@ -19,6 +19,17 @@
 			target: ele.target,
 		});
 	}
+
+	function fullHeightImage(event) {
+		let element = event.detail.target;
+		// element.classList.toggle("fullHeight");
+		// element.scrollIntoView({ block: "center" });
+		const title = getMe(element, 'article').querySelector('header h2 a');
+		imageSrc = element.src;
+		postTitle = title.text;
+		postLink = title.href;
+		viewImage = true;
+	}
 </script>
 
 <div style="margin-right: 1rem;">
@@ -28,6 +39,7 @@
 		<span aria-label="Close" class="close" on:click={closeComments} />
 	</div>
 	<Comments
+		on:fullImg={fullHeightImage}
 		commentsArr={comments[1].data.children}
 		opName={comments[0].data.children[0].data.author}
 	/>

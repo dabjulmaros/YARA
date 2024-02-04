@@ -224,6 +224,7 @@
 										{#if viewInlineComments === true && data.href == inlineCommentsID}
 											<InlineComments
 												{comments}
+												on:fullImg={fullHeightImage}
 												on:viewInlineComments={viewInlineCommentsEvent}
 											/>
 										{:else}
