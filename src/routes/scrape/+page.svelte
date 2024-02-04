@@ -162,7 +162,11 @@
 
 <div bind:this={scrollElement} class="scroll">
 	{#if viewComments === true}
-		<FullScreenComments {comments} on:viewComments={(e) => (viewComments = e.detail.value)} />
+		<FullScreenComments
+			on:fullImg={fullHeightImage}
+			{comments}
+			on:viewComments={(e) => (viewComments = e.detail.value)}
+		/>
 	{/if}
 	{#if viewImage == true}
 		<FullScreenImg
@@ -195,6 +199,7 @@
 									<div class="comments">
 										{#if viewInlineComments === true && data.href == inlineCommentsID}
 											<InlineComments
+												on:fullImg={fullHeightImage}
 												{comments}
 												on:viewInlineComments={viewInlineCommentsEvent}
 											/>
