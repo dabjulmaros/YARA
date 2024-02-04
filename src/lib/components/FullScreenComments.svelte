@@ -20,14 +20,9 @@
 		});
 	}
 	function fullHeightImage(event) {
-		let element = event.detail.target;
-		// element.classList.toggle("fullHeight");
-		// element.scrollIntoView({ block: "center" });
-		const title = getMe(element, 'article').querySelector('header h2 a');
-		imageSrc = element.src;
-		postTitle = title.text;
-		postLink = title.href;
-		viewImage = true;
+		dispatch('fullImg', {
+			target: event.detail.target,
+		});
 	}
 </script>
 
@@ -38,11 +33,11 @@
 		if (event.target.tagName == 'DIALOG') fullHeightComments();
 	}}
 >
-	<article class="modal">
+	<article class="modal" id="article">
 		<header>
 			<span aria-label="Close" class="close" on:click={fullHeightComments} />
 			<!-- still using the reddit api -->
-			<div
+			<h2
 				class="linkEllipsis"
 				on:mouseenter={(e) => mouseEnter(e)}
 				on:mouseleave={(e) => mouseOut(e)}
@@ -52,7 +47,7 @@
 					link={'https://old.reddit.com' + comments[0].data.children[0].data.permalink}
 					content={comments[0].data.children[0].data.title}
 				/>
-			</div>
+			</h2>
 		</header>
 		<div style="height: 100%;width:100%">
 			<Comments
@@ -76,6 +71,8 @@
 		z-index: 2;
 	}
 	.linkEllipsis {
+		margin: 0;
+		font-size: 1.3rem;
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;

@@ -21,14 +21,9 @@
 	}
 
 	function fullHeightImage(event) {
-		let element = event.detail.target;
-		// element.classList.toggle("fullHeight");
-		// element.scrollIntoView({ block: "center" });
-		const title = getMe(element, 'article').querySelector('header h2 a');
-		imageSrc = element.src;
-		postTitle = title.text;
-		postLink = title.href;
-		viewImage = true;
+		dispatch('fullImg', {
+			target: event.detail.target,
+		});
 	}
 </script>
 

@@ -190,7 +190,11 @@
 
 <div bind:this={scrollElement} class="scroll">
 	{#if viewComments === true}
-		<FullScreenComments {comments} on:viewComments={(e) => (viewComments = e.detail.value)} />
+		<FullScreenComments
+			on:fullImg={fullHeightImage}
+			{comments}
+			on:viewComments={(e) => (viewComments = e.detail.value)}
+		/>
 	{/if}
 	{#if viewImage == true}
 		<FullScreenImg
