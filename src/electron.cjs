@@ -125,6 +125,13 @@ contextMenu({
 				shell.openExternal(parameters.linkURL);
 			},
 		},
+		{
+			label: 'Open In Browser',
+			visible: parameters.mediaType == 'image',
+			click: () => {
+				shell.openExternal(parameters.srcURL);
+			},
+		},
 	],
 
 	append: (defaultActions, parameters, browserWindow) => [
