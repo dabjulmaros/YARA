@@ -158,6 +158,7 @@
 							metadata={{
 								items: post.gallery_data.items,
 								media: post.media_metadata,
+								selfText: post.selftext_html,
 							}}
 							on:fullImg={(event) => fullHeightImage(event)}
 						/>

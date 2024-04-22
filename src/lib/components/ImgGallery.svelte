@@ -7,6 +7,7 @@
 	export let metadata = '';
 	let srcArr = [];
 	let capArr = [];
+	let postText = '';
 
 	let index = 0;
 
@@ -20,7 +21,13 @@
 		if (expando !== '' && expando !== undefined) {
 			srcArr = getImgSrc(expando);
 			capArr = getCaptions(expando);
+			const selftextMatch = expando.match(
+				/\<\!\-\- SC_OFF \-\-\>([\s\S]*)\<\!\-\- SC_ON \-\-\>/,
+			);
+
+			postText = selftextMatch ? selftextMatch[1] : '';
 		} else if (metadata !== undefined || metadata !== '') {
+			postText = htmlDecode(metadata.selfText) ?? '';
 			for (var x of metadata.items) {
 				srcArr.push(htmlDecode(metadata.media[x.media_id].s.u));
 				capArr.push(x.caption ?? '');
@@ -63,37 +70,40 @@
 	}
 </script>
 
-<div class="gallery">
-	{#if srcArr.length > 0}
-		{#if capArr[index] !== ''}
-			<mark class="mark" data-tooltip={capArr[index]} data-placement="left">
-				{index + 1}/{srcArr.length}
-			</mark>
-		{:else}<mark class="mark">
-				{index + 1}/{srcArr.length}
-			</mark>
-		{/if}
-		<button class="outline" on:click={() => changeImg(-1)}>
-			<span class="chevron left" />
-		</button>
-		<div class="imgHolder" style="position:relative;">
-			<div class="carousel" style={`transform:translate(-${index * 100}%)`}>
-				{#each srcArr as src, i}
-					<div>
-						<img
-							{src}
-							alt=""
-							loading={i == index + 1 ? 'eager' : 'lazy'}
-							on:dblclick={(event) => fullHeightImage(event)}
-						/>
-					</div>
-				{/each}
+<div>
+	<div class="gallery">
+		{#if srcArr.length > 0}
+			{#if capArr[index] !== ''}
+				<mark class="mark" data-tooltip={capArr[index]} data-placement="left">
+					{index + 1}/{srcArr.length}
+				</mark>
+			{:else}<mark class="mark">
+					{index + 1}/{srcArr.length}
+				</mark>
+			{/if}
+			<button class="outline" on:click={() => changeImg(-1)}>
+				<span class="chevron left" />
+			</button>
+			<div class="imgHolder" style="position:relative;">
+				<div class="carousel" style={`transform:translate(-${index * 100}%)`}>
+					{#each srcArr as src, i}
+						<div>
+							<img
+								{src}
+								alt=""
+								loading={i == index + 1 ? 'eager' : 'lazy'}
+								on:dblclick={(event) => fullHeightImage(event)}
+							/>
+						</div>
+					{/each}
+				</div>
 			</div>
-		</div>
-		<button class="outline" on:click={() => changeImg(1)}>
-			<span class="chevron right" />
-		</button>
-	{/if}
+			<button class="outline" on:click={() => changeImg(1)}>
+				<span class="chevron right" />
+			</button>
+		{/if}
+	</div>
+	{@html postText}
 </div>
 
 <style>
