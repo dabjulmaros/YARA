@@ -12,8 +12,7 @@ Laundry List of things that need to be improved:
   - I still want to commit updates as they are done instead of realizing built updates.
 - make it so videos and other media is not rendered while outside of view
 - general improvements everywhere
-- fix the order of the captions in the community view
-- make it so the tooltip doesnt overflow out of the screen
+
 
 What it does right now.
 

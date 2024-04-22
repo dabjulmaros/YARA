@@ -23,6 +23,7 @@
 		} else if (metadata !== undefined || metadata !== '') {
 			for (var x of metadata.items) {
 				srcArr.push(htmlDecode(metadata.media[x.media_id].s.u));
+				capArr.push(x.caption ?? '');
 			}
 			//svelte quirk it wont refresh the page after array push if the array is not set to itself
 			srcArr = srcArr;
@@ -38,9 +39,25 @@
 	}
 	function getCaptions(expando) {
 		const returnArr = [];
+		const tempArr = [];
+		let previews = expando.matchAll(/class="gallery-preview"/g);
 		let captions = expando.matchAll(/Caption: ([^<]+) </g);
+
+		for (const match of previews) {
+			tempArr.push(match.index);
+			returnArr.push('');
+		}
+		tempArr.push(expando.length);
+
 		for (const match of captions) {
-			returnArr.push(match[1]);
+			let count = 0;
+			for (let arrPos = 0; arrPos < tempArr.length; arrPos++) {
+				if (match.index > tempArr[arrPos] && match.index < tempArr[arrPos + 1]) break;
+
+				count++;
+			}
+
+			returnArr[count] = htmlDecode(match[1]);
 		}
 		return returnArr;
 	}
@@ -48,9 +65,14 @@
 
 <div class="gallery">
 	{#if srcArr.length > 0}
-		<mark class="mark" data-tooltip={capArr[index]} data-placement="left">
-			{index + 1}/{srcArr.length}
-		</mark>
+		{#if capArr[index] !== ''}
+			<mark class="mark" data-tooltip={capArr[index]} data-placement="left">
+				{index + 1}/{srcArr.length}
+			</mark>
+		{:else}<mark class="mark">
+				{index + 1}/{srcArr.length}
+			</mark>
+		{/if}
 		<button class="outline" on:click={() => changeImg(-1)}>
 			<span class="chevron left" />
 		</button>

@@ -24,6 +24,21 @@ https://dev.to/jonosellier/easy-overlay-scrollbars-variable-width-1mbh
 	opacity: 0.3;
 	border-radius: 1rem;
 }
+[data-tooltip][data-placement='left']:after {
+	transform: translate(0.25rem, -50%);
+}
+[data-tooltip]::before {
+	word-wrap: initial;
+	word-break: initial;
+	white-space: break-spaces;
+	width: max-content;
+	max-width: 30ch;
+	pointer-events: none;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 4;
+	overflow: hidden;
+}
 
 :root {
 	--rightChevron: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAAXNSR0IArs4c6QAAAh1JREFUeF7t3DFOI2EQROEeDkEIhyAjgAguxRGIiSAh5QYgUhDRrvYoewAYZFkkSMgEIL2ufo4tq1yfyw7+8SzlA9XAgkpjmBIE9iEQRBBYA7A4LkQQWAOwOC5EEFgDsDguRBBYA7A4LkQQWAOwOC5EEFgDsDguRBBYA7A4LkQQWAOwOC5EEFgDsDguRBBYA7A4LkQQWAOwOPiFPL78PavX9fJtWa/Pj4+uYP39eBw0yAZjfVtvquqgqv6vtV6ko2BBPmF8fBLjUZAgX2CMQMGB7MCIR0GBPDz/OV2qbqvq8Bu/lpFfXyiQ+6d/+3vL611VnVR960LwOBQUyGYV01FwINNRkCCTUbAgU1HQIBNR8CDTUFqATEJpAzIFpRXIBJR2IOkoLUGSUdqCpKK0BklEaQ+ShhIBkoQSA5KCEgWSgBIH0h1FkO3hPeYoOA6k+xFwFEh3jM1UY0ASMGJAUjAiQJIw2oOkYbQGScRoC5KK0RIkGaMdSDpGK5AJGG1ApmC0AJmEgQeZhoEGmYiBBZmKgQSZjIEDmY6BA/Fv0cADKm8csD3kRz28tQaKYxvGm8/wUTCX6vxmVfiLHLyB2W/y+9o7G8AvZOc7CHuCIDBQQQSBNQCL40IEgTUAi+NCBIE1AIvjQgSBNQCL40IEgTUAi+NCBIE1AIvjQgSBNQCL40IEgTUAi+NCBIE1AIvjQgSBNQCL40IEgTUAi/MOuvvQdMEpk9IAAAAASUVORK5CYII=);
