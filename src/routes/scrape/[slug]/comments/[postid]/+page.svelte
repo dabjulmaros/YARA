@@ -91,7 +91,9 @@
 	}
 
 	function fullHeightImage(event) {
+		console.log(event);
 		let element = event.detail.target;
+
 		// element.classList.toggle("fullHeight");
 		// element.scrollIntoView({ block: "center" });
 		const title = getMe(element, 'article').querySelector('header h2 a');

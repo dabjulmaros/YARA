@@ -36,9 +36,7 @@
 	let inlineCommentsID = '';
 
 	let viewImage = false;
-	let imageSrc;
-	let postTitle;
-	let postLink;
+	let fullImageData;
 
 	let scrollElement;
 
@@ -142,9 +140,12 @@
 		// element.classList.toggle("fullHeight");
 		// element.scrollIntoView({ block: "center" });
 		const title = getMe(element, 'article').querySelector('header h2 a');
-		imageSrc = element.src;
-		postTitle = title.text;
-		postLink = title.href;
+		fullImageData = {
+			imageSrc: element.src,
+			postTitle: title.text,
+			postLink: title.href,
+		};
+
 		viewImage = true;
 	}
 
@@ -169,10 +170,7 @@
 		/>
 	{/if}
 	{#if viewImage == true}
-		<FullScreenImg
-			data={{ postLink, postTitle, imageSrc }}
-			on:viewImage={(e) => (viewImage = e.detail.value)}
-		/>
+		<FullScreenImg data={fullHeightImage} on:viewImage={(e) => (viewImage = e.detail.value)} />
 	{/if}
 	<Navbar subNameField={''} />
 	{#if postsSuccess}

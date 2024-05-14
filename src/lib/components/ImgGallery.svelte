@@ -13,19 +13,24 @@
 
 	const dispatch = createEventDispatcher();
 	function fullHeightImage(e) {
+		let fullImageText = '';
+		if (capArr[index] !== '') fullImageText = capArr[index];
+		else if (postText !== '') fullImageText = postText;
+
 		dispatch('fullImg', {
 			target: e.target,
+			fullImageText,
 		});
 	}
 	onMount(() => {
 		if (expando !== '' && expando !== undefined) {
 			srcArr = getImgSrc(expando);
 			capArr = getCaptions(expando);
-			const selftextMatch = expando.match(
+			const selfTextMatch = expando.match(
 				/\<\!\-\- SC_OFF \-\-\>([\s\S]*)\<\!\-\- SC_ON \-\-\>/,
 			);
 
-			postText = selftextMatch ? selftextMatch[1] : '';
+			postText = selfTextMatch ? selfTextMatch[1] : '';
 		} else if (metadata !== undefined || metadata !== '') {
 			postText = htmlDecode(metadata.selfText) ?? '';
 			for (var x of metadata.items) {
@@ -103,7 +108,11 @@
 			</button>
 		{/if}
 	</div>
-	{@html postText}
+	{#if postText !== ''}
+		<div>
+			{@html postText}
+		</div>
+	{/if}
 </div>
 
 <style>
@@ -158,6 +167,8 @@
 		display: flex;
 		flex: 0 0 auto;
 		width: 100%;
+		min-height: 200px;
+		align-items: center;
 	}
 	.mark {
 		position: absolute;

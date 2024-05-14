@@ -3,6 +3,7 @@
 	import AncherNoreferrer from './AncherNoreferrer.svelte';
 
 	export let data;
+	console.log(data);
 
 	function mouseEnter(e) {
 		e.target.classList.toggle('linkEllipsis');
@@ -39,6 +40,9 @@
 			</div>
 		</header>
 		<img src={data.imageSrc} class="fullHeight" alt="decoration" />
+		{#if data.description}
+			<p>{data.description}</p>
+		{/if}
 		<AncherNoreferrer
 			link={data.imageSrc}
 			content="Open In a New Tab"
