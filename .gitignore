@@ -15,5 +15,4 @@ pnpm-lock.yaml
 
 .DS_Store
 vite.config.js.*
-src/lib/hr/*
-src/routes/hr/*
+src/*/hr/*
