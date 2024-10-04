@@ -17,12 +17,14 @@
 	import RecentCommunity from '$lib/components/RecentCommunity.svelte';
 
 	import { localStore } from '$lib/utils/storable';
+	// import { fetchTestData } from '$lib/test/fetchTestData';
 
 	let componentSearch;
 
 	function sendSearch() {
 		componentSearch();
 	}
+	// fetchTestData();
 </script>
 
 <!-- <main> -->
