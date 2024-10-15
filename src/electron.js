@@ -1,25 +1,40 @@
-const windowStateManager = require('electron-window-state');
-const { app, BrowserWindow, shell, dialog } = require('electron');
-const contextMenu = require('electron-context-menu');
-const serve = require('electron-serve');
-const path = require('path');
-const { exec } = require('child_process');
+// const windowStateManager = require('electron-window-state');
+import windowStateManager from "electron-window-state";
+// const { app, BrowserWindow, shell, dialog } = require('electron');
+import { app, BrowserWindow, shell, dialog } from "electron";
+// const contextMenu = require('electron-context-menu').default;
+import contextMenu from 'electron-context-menu';
+// const serve = require('electron-serve');
+import serve from "electron-serve"
+// const path = require('path');  
+import path from "path";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+// const { exec } = require('child_process');
+import { exec } from "child_process";
 
-
+import { hrValues } from "./lib/hr/utils/hrValues.js";
 let values = null;
 try {
-  const { hrValues } = require('./lib/hr/utils/hrValues.cjs');
+  // const { hrValues } = require('./lib/hr/utils/hrValues.js');
   values = hrValues;
   console.log("cdn = " + values);
 } catch (error) {
   console.error(error);
 }
 
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
 try {
   require('electron-reloader')(module);
 } catch (e) {
   console.error(e);
 }
+// const path = require('path');
+// const serve = require('electron-serve');
+// const windowStateManager = require('electron-window-state');
 
 const serveURL = serve({ directory: '.' });
 const port = process.env.PORT || 5173;

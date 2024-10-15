@@ -1,16 +1,16 @@
 {
-	"appId": "com.yara.app",
-	"productName": "YARA",
-	"directories": {
-		"output": "dist"
-	},
-	"files": [
-		"src/electron.cjs",
-		"src/preload.cjs",
+  "appId": "com.yara.app",
+  "productName": "YARA",
+  "directories": {
+    "output": "dist"
+  },
+  "files": [
+    "src/electron.js",
+    "src/preload.cjs",
     "src/request.cjs",
-		{
-			"from": "build",
-			"to": ""
-		}
-	]
+    {
+      "from": "build",
+      "to": ""
+    }
+  ]
 }

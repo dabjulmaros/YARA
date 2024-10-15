@@ -8,4 +8,5 @@
 		}
 	},
 	"exclude": ["node_modules", "build", "dist"]
+	// "extends": "./.svelte-kit/tsconfig.json"
 }

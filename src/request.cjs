@@ -13,6 +13,7 @@ let options = {
     'User-Agent':
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 OPR/113.0.0.0',
     Cookie: over18 == 'true' ? cookies + ' over18=1;' : cookies,
+    Referer: url
   },
   validateStatus: function (status) {
     return status < 500; // Resolve only if the status code is less than 500

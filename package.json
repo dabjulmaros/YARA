@@ -1,65 +1,65 @@
 {
-	"name": "yara",
-	"version": "0.0.1",
-	"private": true,
-	"description": "YARA build using SvelteKit + Electron",
-	"main": "src/electron.cjs",
-	"type": "module",
-	"author": "Dabjulmaros",
-	"scripts": {
-		"dev": "cross-env NODE_ENV=dev npm run dev:all",
-		"dev:all": "concurrently -n=svelte,electron -c='#ff3e00',blue \"npm run dev:vite\" \"npm run dev:electron\"",
-		"dev:vite": "vite dev",
-		"dev:electron": "electron src/electron.cjs",
-		"build": "cross-env NODE_ENV=production npm run build:vite && npm run build:electron",
-		"build:vite": "vite build",
-		"build:electron": "electron-builder --config build.config.json"
-	},
-	"engines": {
-		"npm": ">=7",
-		"yarn": "use npm - https://github.com/FractalHQ/sveltekit-electron/issues/12#issuecomment-1068399385"
-	},
-	"browserslist": [
-		"Chrome 89"
-	],
-	"dependencies": {
-		"@vespaiach/axios-fetch-adapter": "^0.3.1",
-		"axios": "^1.4.0",
-		"cors": "^2.8.5",
-		"electron-context-menu": "^3.6.1",
-		"electron-reloader": "^1.2.3",
-		"electron-serve": "^1.1.0",
-		"electron-tabs": "^1.0.1",
-		"electron-window-state": "^5.0.3",
-		"express": "^4.21.0"
-	},
-	"devDependencies": {
-		"@sveltejs/adapter-node": "^1.2.4",
-		"@sveltejs/adapter-static": "2.0.1",
-		"@sveltejs/kit": "^1.20.2",
-		"concurrently": "^7.6.0",
-		"cross-env": "^7.0.3",
-		"dotenv": "^16.0.3",
-		"electron": "^32.1.2",
-		"electron-builder": "^24.4.0",
-		"electron-connect": "^0.6.1",
-		"electron-packager": "^17.1.1",
-		"electron-updater": "^6.3.9",
-		"eslint": "^8.36.0",
-		"eslint-config-prettier": "^8.8.0",
-		"eslint-plugin-svelte3": "^4.0.0",
-		"npm-run-all": "^4.1.5",
-		"prettier": "^2.8.7",
-		"prettier-plugin-svelte": "^2.10.0",
-		"sass": "^1.60.0",
-		"svelte": "^3.57.0",
-		"svelte-check": "^3.1.4",
-		"svelte-preprocess": "^5.0.3",
-		"vite": "^4.0.4"
-	},
-	"overrides": {
-		"electron": {
-			"got": "^12.5.1"
-		}
-	}
+  "name": "yara",
+  "version": "0.0.1",
+  "private": true,
+  "description": "YARA build using SvelteKit + Electron",
+  "main": "src/electron.js",
+  "type": "module",
+  "author": "Dabjulmaros",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=dev npm run dev:all",
+    "dev:all": "concurrently -n=svelte,electron -c='#ff3e00',blue \"npm run dev:vite\" \"npm run dev:electron\"",
+    "dev:vite": "vite dev",
+    "dev:electron": "electron src/electron.js",
+    "build": "cross-env NODE_ENV=production npm run build:vite && npm run build:electron",
+    "build:vite": "vite build",
+    "build:electron": "electron-builder --config build.config.json"
+  },
+  "engines": {
+    "npm": ">=7",
+    "yarn": "use npm - https://github.com/FractalHQ/sveltekit-electron/issues/12#issuecomment-1068399385"
+  },
+  "browserslist": [
+    "Chrome 89"
+  ],
+  "dependencies": {
+    "@vespaiach/axios-fetch-adapter": "^0.3.1",
+    "axios": "^1.4.0",
+    "cors": "^2.8.5",
+    "electron-context-menu": "4.0.4",
+    "electron-reloader": "^1.2.3",
+    "electron-serve": "2.1.1",
+    "electron-tabs": "^1.0.1",
+    "electron-window-state": "^5.0.3",
+    "express": "5.0.1"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-node": "5.2.7",
+    "@sveltejs/adapter-static": "3.0.5",
+    "@sveltejs/kit": "2.7.1",
+    "concurrently": "9.0.1",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.3",
+    "electron": "33.0.0",
+    "electron-builder": "25.1.8",
+    "electron-connect": "^0.6.1",
+    "electron-packager": "^17.1.1",
+    "electron-updater": "^6.3.9",
+    "eslint": "9.12.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-svelte3": "^4.0.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "3.3.3",
+    "prettier-plugin-svelte": "3.2.7",
+    "sass": "^1.60.0",
+    "svelte": "4.2.19",
+    "svelte-check": "4.0.5",
+    "svelte-preprocess": "6.0.3",
+    "vite": "5.4.9"
+  },
+  "overrides": {
+    "electron": {
+      "got": "^12.5.1"
+    }
+  }
 }
